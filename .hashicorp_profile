@@ -498,3 +498,8 @@ function _terraform-docs_yaml {
 # installed to $GOPATH/.
 # AWS TE cli in go
 alias tecli='tecli-darwin-amd64'
+
+# tfscan <https://github.com/wils0ns/tfscan>
+# git clone https://github.com/wils0ns/tfscan.git
+# cd tfscan
+# go install
