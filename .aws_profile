@@ -2,7 +2,7 @@
 
  export AWS_PROFILE=tg_user
  export AWS_DEFAULT_REGION=eu-west-2
- export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credential
+ export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
 
 function aws_export() {
 	if test -z  "$AWS_PROFILE"
