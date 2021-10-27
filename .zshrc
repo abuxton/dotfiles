@@ -146,7 +146,7 @@ export CHTSH_CONF='~/.cht.sh.conf'
 
 PT=`env TZ=US/Pacific date`
 KR=`env TZ=Europe/Berlin date`
-IN=`env TZ=Asia/Kolkata date`
+IN=`env TZ=Asia/Calcutta date`
 UT=`env TZ=Etc/GMT date`
 AU=`env LC_TIME=C TZ=Australia/Sydney date`
 echo “SFO:     $PT”
