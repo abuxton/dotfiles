@@ -83,7 +83,9 @@ HIST_STAMPS="dd/mm/yyyy"
 plugins=(aws
 		docker
 		git
+		gcloud
 		helm
+		kubectl
 		terraform
 		thefuck
 		vagrant
