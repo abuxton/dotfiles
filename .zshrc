@@ -86,6 +86,7 @@ plugins=(aws
 		gcloud
 		helm
 		kubectl
+		podman
 		terraform
 		thefuck
 		vagrant
