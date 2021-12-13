@@ -503,3 +503,121 @@ alias tecli='tecli-darwin-amd64'
 # git clone https://github.com/wils0ns/tfscan.git
 # cd tfscan
 # go install
+
+compdef _doormat doormat
+
+function _doormat {
+  local -a commands
+
+  _arguments -C \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:' \
+    '(-r --refresh)'{-r,--refresh}'[Get new or refresh your Doormat auth credentials]' \
+    '(-s --skip-upgrade-check)'{-s,--skip-upgrade-check}'[Skip checking for version upgrade]' \
+    '--smoke-test[Verify if your Doormat auth credentials are valid]' \
+    '(-v --version)'{-v,--version}'[Prints the Doormat CLI version]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "aws:Get AWS Credentials for an account"
+      "completion:Generate completion script"
+      "help:Help about any command"
+      "session:Get a remote session on a server"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  aws)
+    _doormat_aws
+    ;;
+  completion)
+    _doormat_completion
+    ;;
+  help)
+    _doormat_help
+    ;;
+  session)
+    _doormat_session
+    ;;
+  esac
+}
+
+
+function _doormat_aws {
+  local -a commands
+
+  _arguments -C \
+    '(-a --account)'{-a,--account}'[Account name that you would like credentials for]:' \
+    '--console[Launch AWS Console for given role/account]' \
+    '(-l --list)'{-l,--list}'[Lists your eligible roles]' \
+    '(-m --manage-aws)'{-m,--manage-aws}'[Add available credentials to your AWS credentials config (destructive)]' \
+    '(-r --role)'{-r,--role}'[ARN of the Role you would like credentials for]:' \
+    '--tf-hostname[TFC/TFE hostname]:' \
+    '--tf-local[Load the TFC/TFE remote backend from configuration]' \
+    '--tf-local-dir[Path containing initialised configuration]:' \
+    '--tf-organization[TFC/TFE organization name]:' \
+    '--tf-push[Push creds to TF workspace]' \
+    '--tf-workspace[TFC/TFE workspace(s) (allows multiple workspaces seperated by commas)]:' \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "cred-server:Get AWS Credentials for an account using a local cred server"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  cred-server)
+    _doormat_aws_cred-server
+    ;;
+  esac
+}
+
+function _doormat_aws_cred-server {
+  _arguments \
+    '--bind-link-local[Enable server to listen on 169.254.170.2 (docker)]' \
+    '--port[Port for credential server endpoint]:' \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:'
+}
+
+function _doormat_completion {
+  _arguments \
+    '(-h --help)'{-h,--help}'[help for completion]' \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:' \
+    '1: :("bash" "zsh" "fish" "powershell")'
+}
+
+function _doormat_help {
+  _arguments \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:'
+}
+
+function _doormat_session {
+  _arguments \
+    '--account[Account instances are configured in]:' \
+    '--break-glass[Use local AWS creds instead of JIT Doormat Creds (Break Glass Scenarios)]' \
+    '--external[Call SSH yourself with ProxyCommand to doormat (Requires --target and --region to be set)]' \
+    '(-i --identity)'{-i,--identity}'[[optional] identity file path, ex) $HOME/.doormat/id_rsa_doormat]:' \
+    '--port[Port for SSH listener (Default: 22) Used when passing --ssh]:' \
+    '--port-forward[Start port forwarded session <local_port>:<remote_port>]:' \
+    '--region[Region instances are in]:' \
+    '--ssh[Create native SSH shell]' \
+    '--target[Instance you are targeting]:' \
+    '--user[User to SSH as (Default: ubuntu)]:' \
+    '(-c --cred-file)'{-c,--cred-file}'[aws credentials file (default is $HOME/.aws/.credentials)]:' \
+    '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:'
+}
