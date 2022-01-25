@@ -185,3 +185,4 @@ alias ec="$EDITOR $HOME/.zshrc"
 alias sc="source $HOME/.zshrc"
 alias skip-pre-commit="echo '#skip=thething git commit -m example how to skip with pre-commit' "
 alias gitsshtest='ssh -T git@github.com'
+alias notepad='open https://browserpad.org'
