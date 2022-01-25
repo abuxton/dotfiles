@@ -186,3 +186,5 @@ alias sc="source $HOME/.zshrc"
 alias skip-pre-commit="echo '#skip=thething git commit -m example how to skip with pre-commit' "
 alias gitsshtest='ssh -T git@github.com'
 alias notepad='open https://browserpad.org'
+alias osx-softwareupdate='softwareupdate --all --install --force'
+alias osx-install-xcode='sudo xcode-select --install'
