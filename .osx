@@ -1,1 +1,4 @@
 # 301 https://github.com/mathiasbynens/dotfiles/blob/master/.macos
+
+alias osx-softwareupdate='softwareupdate --all --install --force'
+alias osx-install-xcode='sudo xcode-select --install'
