@@ -137,7 +137,7 @@ test -x /usr/local/bin/archey && archey
 
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
+
 source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # cheat.sh support

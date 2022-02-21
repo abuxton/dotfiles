@@ -1,3 +1,5 @@
+
+
 function hashiqube() {
 cd ~/hashiqube
 vagrant up && vagrant up --provision-with terraform-enterprise
@@ -47,10 +49,10 @@ fi
 alias tfp-filter='terraform plan | grep "#" '
 alias tfp-verbose='TF_LOG=trace terraform plan'
 
-# nomad -autocomplete-install
+# auto complete products -autocomplete-install
 complete -C /usr/local/bin/consul consul
 complete -C /usr/local/bin/nomad nomad
-# complete -C /usr/local/bin/vault vault
+complete -C /usr/local/bin/vault vault
 
 # bulk association
 alias -s {tf,tfvars,json,hcl}=code
