@@ -198,7 +198,8 @@ function cheat() {
 # Modified from https://stackoverflow.com/a/60607145/172272
 function brew-list-formulas
 {
-  if (( $# == 0 )) then
+  if (( $# == 0 ))
+  then
     echo "Please specify one or more taps whose formulas you want listed.";
     echo "  e.g.: brew-list-formulas tap/tap othertap/othertap";
     echo "";
