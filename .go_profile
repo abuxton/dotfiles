@@ -12,15 +12,15 @@ export PATH=$PATH:$GOPATH/bin:$GOBIN
 
 # https://github.com/golang/lint
 if ! [ -x "$(command -v golint)" ]; then
-	go get -u golang.org/x/lint/golint
+	go install golang.org/x/lint/golint@latest
 fi
 # https://github.com/mattn/gom
 if ! [ -x "$(command -v gom)" ]; then
-  go get github.com/mattn/gom
+  go install github.com/mattn/gom@latest
 fi
 # https://github.com/brianshumate/hashii
 if ! [ -x "$(command -v hashii)" ]; then
-	go get -u github.com/brianshumate/hashii
+	go install github.com/brianshumate/hashii@latest
 fi
 # https://github.com/ericchiang/pup
 # if ! [ -x "$(command -v pup)" ]; then
