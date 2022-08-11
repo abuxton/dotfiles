@@ -1,4 +1,12 @@
+##
+# various helpers for hashicorp products and related material
+##
 
+# dependabot
+export DEPENDABOT_NATIVE_HELPERS_PATH="Users/$(whoami)/.dependabot/native-helpers"
+export PATH=$PATH:$DEPENDABOT_NATIVE_HELPERS_PATH
+export PATH="$PATH:$DEPENDABOT_NATIVE_HELPERS_PATH/terraform/bin:$DEPENDABOT_NATIVE_HELPERS_PATH/python/bin:$DEPENDABOT_NATIVE_HELPERS_PATH/go_modules/bin:$DEPENDABOT_NATIVE_HELPERS_PATH/dep/bin"
+export MIX_HOME="$DEPENDABOT_NATIVE_HELPERS_PATH/hex/mix"
 
 function hashiqube() {
 cd ~/hashiqube
