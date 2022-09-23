@@ -57,6 +57,7 @@ fi
 alias tfp-filter='terraform plan | grep "#" '
 alias tfp-verbose='TF_LOG=trace terraform plan'
 alias tf-token-helper="export TF_TOKEN=$(cat ~/.terraform.d/credentials.tfrc.json | jq -r '.credentials."app.terraform.io".token' )"
+alias tf-yolo=" terraform apply -auto-approve"
 # auto complete products -autocomplete-install
 complete -C /usr/local/bin/consul consul
 complete -C /usr/local/bin/nomad nomad
