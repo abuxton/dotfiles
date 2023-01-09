@@ -84,18 +84,19 @@ HIST_STAMPS="dd/mm/yyyy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(aws
-		docker
-		git
-		gcloud
-		helm
-		kubectl
-		terraform
-		thefuck
-		vagrant
-		vault
-		vscode
-		z
-		)
+    docker
+    git
+    gcloud
+    helm
+    jq
+    kubectl
+    terraform
+    thefuck
+    vagrant
+    vault
+    vscode
+    z
+)
 export ZSH_PLUGINS=$plugins
 source $ZSH/oh-my-zsh.sh
 
@@ -129,7 +130,7 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 for file in ~/.{path,exports,aliases,functions,extras}; do
-	[ -r "${file}" ] && [ -f "${file}" ] && source "${file}";
+    [ -r "${file}" ] && [ -f "${file}" ] && source "${file}";
 done;
 unset file;
 
