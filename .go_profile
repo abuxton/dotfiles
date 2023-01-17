@@ -12,21 +12,21 @@ export PATH=$PATH:$GOPATH/bin:$GOBIN
 
 # https://github.com/golang/lint
 if ! [ -x "$(command -v golint)" ]; then
-	go install golang.org/x/lint/golint@latest
+    go install golang.org/x/lint/golint@latest
 fi
 # https://github.com/mattn/gom
 if ! [ -x "$(command -v gom)" ]; then
-  go install github.com/mattn/gom@latest
+    go install github.com/mattn/gom@latest
 fi
 # https://github.com/brianshumate/hashii
-if ! [ -x "$(command -v hashii)" ]; then
-	go install github.com/brianshumate/hashii@latest
-fi
+# if ! [ -x "$(command -v hashii)" ]; then
+# 	go install github.com/brianshumate/hashii@latest
+# fi
 # https://github.com/ericchiang/pup
 # if ! [ -x "$(command -v pup)" ]; then
 # 	go get -u github.com/ericchiang/pup
 # fi
 alias go_gup="${GOBIN}/gup"
 if ! [ -x "$(command -v go-gup)" ]; then
-	go install github.com/nao1215/gup@latest
+    go install github.com/nao1215/gup@latest
 fi
