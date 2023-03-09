@@ -30,3 +30,8 @@ alias go_gup="${GOBIN}/gup"
 if ! [ -x "$(command -v go-gup)" ]; then
     go install github.com/nao1215/gup@latest
 fi
+# go get -u github.com/gulyasm/jsonui
+#alias jsonui="${GOBIN}/jsonui"
+if ! [ -x "$(command -v jsonui)" ]; then
+    go install github.com/gulyasm/jsonui@latest
+fi
