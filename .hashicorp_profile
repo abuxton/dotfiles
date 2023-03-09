@@ -643,5 +643,5 @@ fi
 # `brew install rust` dependancy for `cargo` to install lazycli
 # `cargo install --locked lazycli`
 
-export $PATH="/Users/abuxton/.cargo/bin:${PATH}"
+export PATH="/Users/abuxton/.cargo/bin:${PATH}"
 alias lctf="lazycli -- terraform"
