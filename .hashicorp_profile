@@ -638,10 +638,3 @@ function _doormat_session {
 if ! [ -x "$(command -v tfx)" ]; then
 	go install github.com/straubt1/tfx@latest
 fi
-
-# lazycli for various hashicorp tool https://github.com/jesseduffield/lazycli
-# `brew install rust` dependancy for `cargo` to install lazycli
-# `cargo install --locked lazycli`
-
-export PATH="/Users/abuxton/.cargo/bin:${PATH}"
-alias lctf="lazycli -- terraform"
