@@ -30,6 +30,7 @@ vault read sys/license
 terraform version
 
 }
+
 # export CONSUL_HTTP_ADDR=https://10.9.99.10:8501
 # export CONSUL_CACERT=/etc/consul.d/tls/consul-agent-ca.pem
 # export CONSUL_CLIENT_CERT=/etc/consul.d/tls/na2-client-vault-1.pem
@@ -637,3 +638,10 @@ function _doormat_session {
 if ! [ -x "$(command -v tfx)" ]; then
 	go install github.com/straubt1/tfx@latest
 fi
+
+# lazycli for various hashicorp tool https://github.com/jesseduffield/lazycli
+# `brew install rust` dependancy for `cargo` to install lazycli
+# `cargo install --locked lazycli`
+
+export $PATH="/Users/abuxton/.cargo/bin:${PATH}"
+alias lctf="lazycli -- terraform"
