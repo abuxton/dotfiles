@@ -149,7 +149,8 @@ source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 fpath=(~/.zsh.d/ $fpath)
 export CHTSH_CONF='~/.cht.sh.conf'
 
-
+pyenv version
+rbenv version
 
 PT=`env TZ=US/Pacific date`
 KR=`env TZ=Europe/Berlin date`
