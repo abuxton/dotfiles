@@ -161,4 +161,5 @@ echo “Berlin: $KR”
 echo “India:  $IN”
 echo “NSW:  $AU”
 
+#https://github.com/junegunn/fzf#using-homebrew
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
