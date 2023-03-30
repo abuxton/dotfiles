@@ -160,3 +160,5 @@ echo “UTC:    $UT”
 echo “Berlin: $KR”
 echo “India:  $IN”
 echo “NSW:  $AU”
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
