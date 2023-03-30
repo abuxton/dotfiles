@@ -1,8 +1,0 @@
-[core]
-account = buxton.adam@gmail.com
-project = lv-426-277007
-
-[compute]
-zone = europe-west2-a
-
-[container]
