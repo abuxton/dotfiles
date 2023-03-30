@@ -15,3 +15,6 @@ Thumbs.db
 
 #node module
 node_modules
+
+/.config/gcloud/
+/.config/gh
