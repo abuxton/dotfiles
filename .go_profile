@@ -1,11 +1,18 @@
 #/usr/local/bin/go
 #https://gist.github.com/vsouza/77e6b20520d07652ed7d
 export GOPATH=$HOME/golang
-export GOROOT=/usr/local/opt/go/libexec
+#export GOROOT=/usr/local/opt/go/libexec
 export GOBIN=$GOROOT/bin
-export PATH=$PATH:$GOPATH/bin:$GOBIN
+#export PATH=$PATH:$GOPATH/bin:$GOBIN
 
-
+#export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+# Homebrew
+export GOROOT="$(brew --prefix golang)/libexec"
+# Manual install
+# export GOROOT=/usr/local/go
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
 
 #export GOPATH='/usr/local/bin/go
 #export PATH=${GOPATH//://bin:}/bin:$PATH
