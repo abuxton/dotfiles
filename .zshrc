@@ -138,7 +138,8 @@ unset file;
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-test -x /Users/abuxton/.pyenv/shims/archey && zsh -c archey
+#test -x /Users/abuxton/.pyenv/shims/archey && zsh -c archey
+test -x $(brew --prefix)/opt/archey4/bin/archey && zsh -c archey
 
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 autoload -U +X bashcompinit && bashcompinit
