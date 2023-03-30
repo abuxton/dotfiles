@@ -83,7 +83,7 @@ HIST_STAMPS="dd/mm/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws
+plugins=(aws 
     docker
     git
     gcloud
@@ -142,7 +142,7 @@ test -x /usr/local/bin/archey && zsh -c archey
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 autoload -U +X bashcompinit && bashcompinit
 
-source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
+source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # cheat.sh support
 fpath=(~/.zsh.d/ $fpath)
