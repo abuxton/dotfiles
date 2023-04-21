@@ -43,7 +43,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Enable aliases to be sudo’ed
-alias sudo='sudo '
+alias sudo='no correct sudo '
 
 # Get week number
 alias week='date +%V'
