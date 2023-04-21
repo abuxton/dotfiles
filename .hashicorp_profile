@@ -27,6 +27,12 @@ export PATH="$PATH:/usr/local/opt/instruqt/"
 export PATH="$PATH:/usr/local/opt/tfm/"
 alias tfm='tfm-darwin-arm64'
 
+# https://github.com/jsiebens/hashi-up
+# my way due to preference
+
+export PATH="$PATH:/usr/local/opt/hashi-up/"
+alias hashi-up='hashi-up-darwin'
+
 function hashiqube() {
 cd ~/hashiqube
 vagrant up && vagrant up --provision-with terraform-enterprise
