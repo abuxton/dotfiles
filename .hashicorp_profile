@@ -24,8 +24,8 @@ export PATH="$PATH:/usr/local/opt/instruqt/"
 # chmod +x tfm-darwin-arm
 # alt alias tfm='tfm-darwin-arm64' 
 # export path
-export PATH="$PATH:/usr/local/opt/tfm/"
-alias tfm='tfm-darwin-arm64'
+# export PATH="$PATH:/usr/local/opt/tfm/"
+# alias tfm='tfm-darwin-arm64'
 
 # https://github.com/jsiebens/hashi-up
 # my way due to preference

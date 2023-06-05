@@ -2,3 +2,6 @@
 export PATH="/usr/local/opt/helm@2/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
 alias brew-dump='brew bundle dump --describe'
+
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
