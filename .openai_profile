@@ -1,1 +1,4 @@
 export OPENAI_API_KEY=$(cat ~/Dropbox/profile/openai/.openai.key)
+
+# ChatGP-Tea https://github.com/hwixley/ChatGP-Tea
+alias gptea="source /Users/abuxton/src/ChatGP-Tea/gptea.sh"
