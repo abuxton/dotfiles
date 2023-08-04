@@ -41,4 +41,8 @@ if [[ -f ~/.kubectl_completion ]]; then
 #   echo "kubectl!"
    source ~/.kubectl_completion
 fi
+if [ -f ~/.openai_profile ]; then
+# 	  echo "openai!"
+	source ~/.openai_profile
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
