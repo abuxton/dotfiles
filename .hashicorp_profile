@@ -30,10 +30,12 @@ export PATH="$PATH:/usr/local/opt/instruqt/"
 # https://github.com/jsiebens/hashi-up
 # my way due to preference
 
-export PATH="$PATH:/usr/local/opt/hashi-up/"
+export PATH="/usr/local/opt/hashi-up/:${PATH}"
 export HASHIPATH="/Users/$(whoami)/src/releases.hashicorp.com"
-export consulversion="consul_1.16.1+ent"
-export PATH=$HASHIPATH/consul/$consulversion:$PATH
+export CONSULVERSION="1.16.1+ent"
+alias consul-ent="${HASHIPATH}/consul/${CONSULVERSION}/consul_${CONSULVERSION}"
+export PATH="${HASHIPATH}/consul/${CONSULVERSION}:${PATH}"
+
 alias hashi-up='hashi-up-darwin'
 
 function hashiqube() {
