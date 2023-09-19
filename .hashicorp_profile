@@ -31,7 +31,7 @@ export PATH="$PATH:/usr/local/opt/instruqt/"
 # my way due to preference
 
 export PATH="$PATH:/usr/local/opt/hashi-up/"
-export HASHIPATH="~/src/releases.hashicorp.com/"
+export HASHIPATH="/Users/$(whoami)/src/releases.hashicorp.com"
 export consulversion="consul_1.16.1+ent"
 export PATH=$HASHIPATH/consul/$consulversion:$PATH
 alias hashi-up='hashi-up-darwin'
