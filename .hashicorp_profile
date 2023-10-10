@@ -10,19 +10,19 @@ export MIX_HOME="$DEPENDABOT_NATIVE_HELPERS_PATH/hex/mix"
 
 # instruqt
 # https://github.com/instruqt/cli/releases install to /usr/local/opt/instruqt
-# chmod +x 
+# chmod +x
 # add to path
 export PATH="$PATH:/usr/local/opt/instruqt/"
 
 # add tfm to path
 # version="x.x.x"
-# mkdir /usr/local/opt/tfm && cd !$ 
+# mkdir /usr/local/opt/tfm && cd !$
 # curl -L -o tfm "https://github.com/hashicorp-services/tfm/download/${version}/tfm_darwin_amd64"
 # chmod +x tfm
 # alternatively
 # curl -L "https://github.com/hashicorp-services/tfm/download/${version}/tfm_darwin_amd64"
 # chmod +x tfm-darwin-arm
-# alt alias tfm='tfm-darwin-arm64' 
+# alt alias tfm='tfm-darwin-arm64'
 # export path
 # export PATH="$PATH:/usr/local/opt/tfm/"
 # alias tfm='tfm-darwin-arm64'
@@ -35,6 +35,7 @@ export HASHIPATH="/Users/$(whoami)/src/releases.hashicorp.com"
 export CONSULVERSION="1.16.1+ent"
 alias consul-ent="${HASHIPATH}/consul/${CONSULVERSION}/consul_${CONSULVERSION}"
 export PATH="${HASHIPATH}/consul/${CONSULVERSION}:${PATH}"
+export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/hashi-github-pat)"
 
 alias hashi-up='hashi-up-darwin'
 
