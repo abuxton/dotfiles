@@ -1,0 +1,1 @@
+export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/github-pat)"

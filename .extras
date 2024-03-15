@@ -2,47 +2,51 @@
 #   source ~/.puppet_profile
 # fi
 if [ -f ~/.docker_profile ]; then
-# 	  echo "docker!"
-	source ~/.docker_profile
+    # 	  echo "docker!"
+    source ~/.docker_profile
 fi
 if [ -f ~/.python_profile ]; then
-# 	  echo "python!"
-	source ~/.python_profile
+    # 	  echo "python!"
+    source ~/.python_profile
 fi
 if [ -f ~/.vagrant_profile ]; then
-# 	  echo "vagrant!"
-	source ~/.vagrant_profile
+    # 	  echo "vagrant!"
+    source ~/.vagrant_profile
 fi
 if [ -f ~/.go_profile ]; then
-#     echo "go!"
-	source ~/.go_profile
+    #     echo "go!"
+    source ~/.go_profile
 fi
 if [ -f ~/.ruby_profile ]; then
-#     echo "ruby!"
+    #     echo "ruby!"
     source ~/.ruby_profile
 fi
 if [ -f ~/.instruqt_profile ]; then
-# 	  echo "instruqt!"
-	source ~/.instruqt_profile
+    # 	  echo "instruqt!"
+    source ~/.instruqt_profile
 fi
 if [ -f ~/.aws_profile ]; then
-# 	  echo "aws!"
-	source ~/.aws_profile
+    # 	  echo "aws!"
+    source ~/.aws_profile
 fi
 if [[ -f ~/.brew_profile ]]; then
-#   echo "Brew!"
-   source ~/.brew_profile
+    #   echo "Brew!"
+    source ~/.brew_profile
 fi
 if [[ -f ~/.hashicorp_profile ]]; then
-#   echo "hashicorp!"
-   source ~/.hashicorp_profile
+    #   echo "hashicorp!"
+    source ~/.hashicorp_profile
 fi
 if [[ -f ~/.kubectl_completion ]]; then
-#   echo "kubectl!"
-   source ~/.kubectl_completion
+    #   echo "kubectl!"
+    source ~/.kubectl_completion
 fi
 if [ -f ~/.openai_profile ]; then
-# 	  echo "openai!"
-	source ~/.openai_profile
+    # 	  echo "openai!"
+    source ~/.openai_profile
+fi
+if [ -f ~/.github_profile ]; then
+    # 	  echo "github!"
+    source ~/.github_profile
 fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

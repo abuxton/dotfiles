@@ -35,7 +35,7 @@ export HASHIPATH="/Users/$(whoami)/src/releases.hashicorp.com"
 export CONSULVERSION="1.16.1+ent"
 alias consul-ent="${HASHIPATH}/consul/${CONSULVERSION}/consul_${CONSULVERSION}"
 export PATH="${HASHIPATH}/consul/${CONSULVERSION}:${PATH}"
-export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/hashi-github-pat)"
+# export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/hashi-github-pat)"
 
 alias hashi-up='hashi-up-darwin'
 
