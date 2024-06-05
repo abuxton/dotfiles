@@ -49,4 +49,8 @@ if [ -f ~/.github_profile ]; then
     # 	  echo "github!"
     source ~/.github_profile
 fi
+if [ -f ~/.gcloud_profile ]; then
+    # 	  echo "gcloud!"
+    source ~/.gcloud_profile
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
