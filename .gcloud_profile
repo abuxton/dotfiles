@@ -1,3 +1,3 @@
 export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json
-export GOOGLE_CREDENTIALS=cat $(GOOGLE_APPLICATION_CREDENTIALS) | tr -s '\n' ' '
-alias glcoud_credentials_helper="echo # cat $(GOOGLE_APPLICATION_CREDENTIALS) | tr -s '\n' ' '"
+export GOOGLE_CREDENTIALS=$(cat ${GOOGLE_APPLICATION_CREDENTIALS} | tr -s '\n' ' ')
+alias glcoud_credentials_helper="echo # cat $GOOGLE_APPLICATION_CREDENTIALS| tr -s '\n' ' ' "
