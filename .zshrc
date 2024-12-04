@@ -153,7 +153,8 @@ test -x $(brew --prefix)/opt/archey4/bin/archey && zsh -c archey
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 autoload -U +X bashcompinit && bashcompinit
 
-source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
+source ${ZSH}/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+#source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # cheat.sh support
 fpath=(~/.zsh.d/ $fpath)
