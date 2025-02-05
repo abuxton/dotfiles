@@ -11,7 +11,6 @@ eval "$(pyenv init --path)"
 
 # eval "$(pyenv init -)"
 
-eval $(thefuck --alias)
 
 alias gitdir='python3 ~/src/gitdir/gitdir.py $(git remote get-url origin)'
 alias octoprint-serve='~/src/abuxton/fork/OctoPrint/venv/bin/octoprint'
