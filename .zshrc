@@ -107,6 +107,8 @@ plugins=(
     vscode
     z
 )
+export ZPLUG_HOME=/opt/homebrew/opt/zplug
+source $ZPLUG_HOME/init.zsh
 export ZSH_PLUGINS=$plugins
 source $ZSH/oh-my-zsh.sh
 
@@ -162,7 +164,6 @@ export CHTSH_CONF='~/.cht.sh.conf'
 
 pyenv version
 rbenv version
-
 PT=`env TZ=US/Pacific date`
 KR=`env TZ=Europe/Berlin date`
 IN=`env TZ=Asia/Calcutta date`

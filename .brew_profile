@@ -1,5 +1,5 @@
-# Brew_profile for additional paths etc from Brew/Cask etc
-export PATH="/usr/local/opt/helm@2/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+# Brew_profile for addiitional paths etc from Brew/Cask etc
+export PATH="/opt/homebrew/sbin/opt/homebrew/bin:/usr/local/opt/helm@2/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
 alias brew-dump='brew bundle dump --describe'
 
