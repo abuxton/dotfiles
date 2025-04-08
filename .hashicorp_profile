@@ -668,6 +668,13 @@ function _doormat_session {
     '(-p --profile)'{-p,--profile}'[(optional) If you have multiple AWS profiles, it is one of profiles (default is set to AWS_PROFILE environment variable or default)]:'
 }
 
+function hashicorp_ipv6_disable {
+	networksetup -listallnetworkservices \
+  | tail -n +2 \
+  | tr '\n' '\0' \
+  | xargs -0 -n 1 networksetup -setv6off
+}
+
 # https://github.com/straubt1/tfx
 if ! [ -x "$(command -v tfx)" ]; then
 	go install github.com/straubt1/tfx@latest
