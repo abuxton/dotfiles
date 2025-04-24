@@ -44,3 +44,4 @@ alias octoprint='open http://127.0.0.1:5000'
 #fi
 
 alias pip-install="echo '# pip install ~/.pip_requirements' "
+source ~/.uv_profile # for uv
