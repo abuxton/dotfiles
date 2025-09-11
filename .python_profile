@@ -6,6 +6,9 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:/Users/abuxton/.local/bin:$PATH"
 eval "$(pyenv init --path)"
 autoload -U compinit && compinit
+# https://pypi.org/project/argcomplete/
+# pip install argcomplete
+# activate-global-python-argcomplete
 eval "$(register-python-argcomplete pipx)"
 
 # Load pyenv into the shell by adding
