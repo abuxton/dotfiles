@@ -43,4 +43,4 @@ alias docker-rmid=drmid-fn
 alias docker-run=drun-fn
 alias docker-sr=dsr-fn
 #
-docker-ps
+#docker-ps
