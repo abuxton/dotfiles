@@ -88,7 +88,13 @@ fi
 
 alias tfp-filter='terraform plan | grep "#" '
 alias tfp-verbose='TF_LOG=trace terraform plan'
-alias tf-token-helper="export TF_TOKEN=$(cat ~/.terraform.d/credentials.tfrc.json | jq -r '.credentials."app.terraform.io".token' )"
+#alias tf-token-helper="export TF_TOKEN=$(cat ~/.terraform.d/credentials.tfrc.json | jq -r '.credentials."app.terraform.io".token' ) && echo $TF_TOKEN"
+function tf-token-helper() {
+	local TF_TOKEN=$(cat ~/.terraform.d/credentials.tfrc.json | jq -r '.credentials."app.terraform.io".token' )
+	export TFE_TOKEN=$TF_TOKEN
+	export TF_VAR_tfe_token=$TF_TOKEN
+	echo "TF_VAR_tfe_token && TFE_TOKEN set as ${TF_TOKEN}"
+}
 alias tf-yolo="terraform apply -auto-approve"
 alias tfp-debug="TF_LOG=DEBUG terraform plan"
 alias tfa-debug="TF_LOG=DEBUG terraform apply"
