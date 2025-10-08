@@ -5,7 +5,7 @@
 	co     = checkout
 	c      = commit
 	cm     = commit -m
-	cl     = clone 
+	cl     = clone
 	ca     = commit -a
 	cam    = commit -a -m
 	pom    = push origin master
@@ -98,6 +98,8 @@
 
 	# Show the user email for the current repository.
 	whoami = config user.email
+	ignored = ls-files --others --ignored --exclude-standard
+	root = rev-parse --show-toplevel
 
 [apply]
 
