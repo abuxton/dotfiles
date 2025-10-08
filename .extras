@@ -57,4 +57,8 @@ if [ -f ~/.gcloud_profile ]; then
     # 	  echo "gcloud!"
     source ~/.gcloud_profile
 fi
+if [ -f ~/.vscode_profile ]; then
+    # 	  echo "vscode!"
+    source ~/.vscode_profile
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

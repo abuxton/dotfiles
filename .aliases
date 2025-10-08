@@ -170,8 +170,7 @@ alias envs='env | sort'
 alias atom='open . -a atom'
 alias envs='env | sort'
 alias osx-reset='killall Dock'
-#alias vcs='open . -a "Visual Studio Code"' #https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line
-alias open-code='code .'
+
 alias abc-netstat='netstat tulpn'
 alias weather='open http://wttr.in/London'
 alias glr="curl -s https://api.github.com/users/abuxton/repos | jq '.[]|.html_url\' "

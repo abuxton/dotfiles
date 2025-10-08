@@ -1,0 +1,4 @@
+
+alias vsc='open . -a "Visual Studio Code"' #https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line
+alias open-code='code .'
+alias vcse='code --list-extensions' #export list of extensions
