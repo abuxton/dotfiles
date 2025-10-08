@@ -1,3 +1,9 @@
+if [ -d $HOME/.rd/bin ]; then
+	# Add Rancher Desktop CLI tools to PATH
+    export PATH=$HOME/.rd/bin:$PATH
+fi
+
+
 alias docker-up='open /Applications/docker.app'
 alias docker-volumerm='docker volume ls -q|xargs docker volume rm'
 alias docker-stop='docker ps -aq|xargs docker stop'
