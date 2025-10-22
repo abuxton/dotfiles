@@ -4,7 +4,7 @@ if [ -d $HOME/.rd/bin ]; then
 fi
 
 
-alias docker-up='open /Applications/docker.app'
+#alias docker-up='open /Applications/docker.app'
 alias docker-volumerm='docker volume ls -q|xargs docker volume rm'
 alias docker-stop='docker ps -aq|xargs docker stop'
 alias docker-rm='docker ps -aq|xargs docker rm -f'
@@ -48,5 +48,4 @@ alias docker-rmc=drmc-fn
 alias docker-rmid=drmid-fn
 alias docker-run=drun-fn
 alias docker-sr=dsr-fn
-#
 docker-ps
