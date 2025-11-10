@@ -190,3 +190,4 @@ alias osx-install-xcode='sudo xcode-select --install'
 alias chromeIgnoreSSL="echo '# type: thisisunsafe into the Chrome browser tab in focus' "
 #https://medium.com/idomongodb/chrome-bypassing-ssl-certificate-check-18b35d2a19fd
 alias chromeNOSSL='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
+alias make='make --makefile=$( git rev-parse --show-toplevel || echo ~ )/Makefile'
