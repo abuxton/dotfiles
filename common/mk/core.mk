@@ -1,7 +1,7 @@
 # https://github.com/krisnova/Makefile/blob/main/Makefile
 
 -include .env
-REPO_TOP=$(shell git rev-parse --show-toplevel)
+REPO_TOP=$(shell git rev-parse --show-toplevel 2>/dev/null || echo ${HOME} )
 CORE=${REPO_TOP}/common/mk/core.mk
 BIN_DIR=${REPO_TOP}/common/bin
 
