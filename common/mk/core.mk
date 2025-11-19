@@ -14,10 +14,30 @@ aws-env: ## generate AWS environment
 	env | grep AWS_ | sort >> .env
 	echo "source .env after review || edit."
 	cat .env
+
 whoami: ## show current user
 	@echo "You are: $$(whoami)"
 	@echo 'Digital Adept:'
 	npx digitaladept
+
+asciinema: ## show asciinema help
+	@if command -v asciinema >/dev/null 2>&1; then \
+		echo "asciinema is installed. Showing help:"; \
+		command asciinema --help; \
+	else \
+		echo "asciinema is not installed. Please install it from https://asciinema.org/"; \
+		exit 1; \
+	fi
+
+
+agg: ## show aag help
+	@if ! command -v agg >/dev/null 2>&1; then \
+		echo "agg is not installed. Please install it from https://github.com/asciinema/agg"; \
+		exit 1; \
+	else \
+		echo "agg is installed. Showing help:"; \
+		command agg --help; \
+	fi
 
 .PHONY: help
 
