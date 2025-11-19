@@ -14,8 +14,12 @@ aws-env: ## generate AWS environment
 	env | grep AWS_ | sort >> .env
 	echo "source .env after review || edit."
 	cat .env
-
+whoami: ## show current user
+	@echo "You are: $$(whoami)"
+	@echo 'Digital Adept: npx digitaladept'
+	npx digitaladept
 
 .PHONY: help
+
 help:  ## Show help messages for make targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(firstword $(CORE)) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
