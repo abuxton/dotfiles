@@ -16,7 +16,7 @@ aws-env: ## generate AWS environment
 	cat .env
 whoami: ## show current user
 	@echo "You are: $$(whoami)"
-	@echo 'Digital Adept: npx digitaladept'
+	@echo 'Digital Adept:'
 	npx digitaladept
 
 .PHONY: help
