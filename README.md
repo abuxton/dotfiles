@@ -100,10 +100,12 @@ Suggestions/improvements
 
 ## Author
 
-| Adam Buxton <https://github.com/abuxton> |  `npx digitaladept` |
-|---| --- |
-| forked from [Mathias Bynens](https://mathiasbynens.be/) |
+- Adam Buxton
+- <https://github.com/abuxton>
+- `npx digitaladept`
+
 
 ## Thanks to…
 
+* forked from [Mathias Bynens](https://mathiasbynens.be/)
 * <https://github.com/abuxton/awesome-dotfiles> [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
