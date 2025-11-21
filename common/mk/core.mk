@@ -29,6 +29,9 @@ asciinema: ## show asciinema help
 		exit 1; \
 	fi
 
+cheat: ## show cheat sheet h
+	path=":help"
+	@curl -q https://cheat.sh/${path}
 
 agg: ## show aag help
 	@if ! command -v agg >/dev/null 2>&1; then \
