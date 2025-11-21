@@ -151,12 +151,6 @@ alias path='echo -e ${PATH//:/\\n}'
 ####
 
 alias icanhazip="curl http://ipv4.icanhazip.com/"
-alias gg="env GIT_SSL_NO_VERIFY=true"
-#alias g="git" #cos I is lazy!
-alias gb='export BRANCH=$(git rev-parse --abbrev-ref HEAD)'
-alias g="hub" #cos I is lazy!
-alias galias='cat ~/.gitconfig'
-alias git-delete='echo "#delete local git branch -d localBranchName  #delete remote git push origin --delete remoteBranchName" '
 alias cask="brew cask"
 alias newhope="telnet towel.blinkenlights.nl"
 alias abc-date='date +"%d-%m-%y" '

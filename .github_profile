@@ -1,3 +1,10 @@
 export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/github-pat)"
 export GITHUB_USER=$(whoami)
 
+alias gg="env GIT_SSL_NO_VERIFY=true"
+alias gp="PAGER= hub"
+#alias g="git" #cos I is lazy!
+alias gb='export BRANCH=$(git rev-parse --abbrev-ref HEAD)'
+alias g="hub" #cos I is lazy!
+alias galias='cat ~/.gitconfig'
+alias git-delete='echo "#delete local git branch -d localBranchName  #delete remote git push origin --delete remoteBranchName" '
