@@ -61,4 +61,8 @@ if [ -f ~/.vscode_profile ]; then
     # 	  echo "vscode!"
     source ~/.vscode_profile
 fi
+if [ -f ~/.rust_profile ]; then
+    # 	  echo "rust!"
+    source ~/.rust_profile
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
