@@ -113,6 +113,7 @@ plugins=(
 	nomad
 	podman
 	pyenv
+	rust
     terraform
 	tmux
 	tmuxinator
