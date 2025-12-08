@@ -186,8 +186,9 @@ alias chromeIgnoreSSL="echo '# type: thisisunsafe into the Chrome browser tab in
 alias chromeNOSSL='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
 alias make='make --makefile=$( git rev-parse --show-toplevel 2>/dev/null || echo $HOME )/Makefile'
 
-if [ -x "$(command -v ghtmlq)" ]; then
-	alias binday="export BIN_DATE=$(date +"%Y/%m/%d") && curl -sL \"https://sms-wrp.whitespacews.com/mop.php?Track=${BIN_DATE}/QEIG1LTU9V40Z&serviceID=A&seq=3&pIndex=1\" | htmlq   -tpw '#scheduled-collections' "
+if [ -x "$(command -v htmlq)" ]; then
+    export BIN_DATE=$(date +"%Y/%m/%d")
+	alias binday="curl -sL \"https://sms-wrp.whitespacews.com/mop.php?Track=${BIN_DATE}/QEIG1LTU9V40Z&serviceID=A&seq=3&pIndex=1\" | htmlq   -tpw '#scheduled-collections' "
 else
 	alias binday="echo 'brew htmlq not installed, cannot fetch bin day'"
 fi
