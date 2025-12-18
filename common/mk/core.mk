@@ -4,6 +4,7 @@
 REPO_TOP=$(shell git rev-parse --show-toplevel 2>/dev/null || echo ${HOME} )
 CORE=${REPO_TOP}/common/mk/core.mk
 BIN_DIR=${REPO_TOP}/common/bin
+MK_DIR=${REPO_TOP}/common/mk
 
 all: help
 
