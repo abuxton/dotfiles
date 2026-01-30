@@ -191,5 +191,7 @@ echo “Berlin: $KR”
 echo “India:  $IN”
 echo “NSW:  $AU”
 
+BMOTD # Bob quote of the day
+
 #https://github.com/junegunn/fzf#using-homebrew
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
