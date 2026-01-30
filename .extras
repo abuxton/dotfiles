@@ -1,6 +1,3 @@
-# if [[ -f ~/.puppet_profile ]]; then
-#   source ~/.puppet_profile
-# fi
 
 function binday() {
 # 	local BIN_DATE=$(date +"%Y/%m/%d")
@@ -21,7 +18,10 @@ function binday() {
   echo "This function has been disabled."
   open "https://sms-wrp.whitespacews.com/mop.php"
 }
-
+if [ -f ~/.bob_profile ]; then
+    # 	  echo "bob!"
+    source ~/.bob_profile
+fi
 if [ -f ~/.docker_profile ]; then
     # 	  echo "docker!"
     source ~/.docker_profile

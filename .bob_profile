@@ -1,0 +1,9 @@
+export BOBSHELL_API_KEY=$(cat  ~/Dropbox/work/ibm/bob.api.key)
+
+BMOTD() {
+  if [ -x "$(command -v bob)" ]; then
+    bob -p 'Bob, What is your quote of the day?'
+  else
+    echo "Bob CLI not installed. To install, run: go install github.com/whitespace-llc/bob@latest"
+  fi
+}
