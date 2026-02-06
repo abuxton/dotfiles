@@ -1,0 +1,10 @@
+function claude_profile() {
+
+  if [ ! -x "$(command -v claude)" ]; then
+	echo 'Error: claude is not installed.' >&2
+  else
+    echo "Claude CLI is installed. Installed plugins:"
+	echo $( cat ~/.claude/plugins/installed_plugins.json | jq -r '.plugins | keys[] ' )
+  fi
+}
+
