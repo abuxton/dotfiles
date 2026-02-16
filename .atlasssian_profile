@@ -29,18 +29,17 @@ else
 	echo "jira cli not found, skipping jira completion"
 fi
 
-alias jira-helper="jira init --installation cloud --server <SERVER_URL> --login <LOGIN> --auth-type basic  --project <PROJECT_KEY> --force --debug"
+alias jira-helper="echo '#jira init --installation cloud --server <SERVER_URL> --login <LOGIN> --auth-type basic  --project <PROJECT_KEY> --force --debug' "
 
 function jira-init() {
 	# server, login, project key should be set in .jira/.config.yml
 	echo "Initializing jira profile configuration"
 
-  $JIRA_CONFIG << EOF
-	# export JIRA_SERVER=$(cat ~/Dropbox/profile/atlassian/.jira/.config.yml | grep server: | awk '{print $2}') /
-	# export JIRA_LOGIN=$(cat ~/Dropbox/profile/atlassian/.jira/.config.yml | grep login: | awk '{print $2}') /
-	# export JIRA_PROJECT_KEY=$(cat  ~/Dropbox/profile/atlassian/.jira/HDM.config.yml | yaml2json | jq .project.key -r) /
-	# jira init --installation cloud --server $JIRA_SERVER --login $JIRA_LOGIN --auth-type basic  --project $JIRA_PROJECT_KEY --force --debug
-EOF
-export JIRA_CONFIG=$(JIRA_CONFIG)
+	export JIRA_SERVER=$(cat ~/Dropbox/profile/atlassian/.jira/.config.yml |  yaml2json | jq .servers.atlassian.url -r)
+	export JIRA_LOGIN=$(cat ~/Dropbox/profile/atlassian/.jira/.config.yml |  yaml2json | jq .servers.atlassian.email -r)
+	export JIRA_PROJECT_KEY=$(cat  ~/Dropbox/profile/atlassian/.jira/HDM.config.yml | yaml2json | jq .project.key -r)
+	export JIRA_INIT="#jira init --installation cloud --server $JIRA_SERVER --login $JIRA_LOGIN --auth-type basic  --project $JIRA_PROJECT_KEY --force --debug"
 
+echo "Jira profile configuration initialized"
+echo "run '$JIRA_INIT ' to see the jira init with the current configuration"
 }
