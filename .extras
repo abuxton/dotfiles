@@ -18,6 +18,10 @@ function binday() {
   echo "This function has been disabled."
   open "https://sms-wrp.whitespacews.com/mop.php"
 }
+if [ -f ~/.atlasssian_profile ]; then
+    # 	  echo "jira!"
+    source ~/.atlasssian_profile
+fi
 if [ -f ~/.bob_profile ]; then
     # 	  echo "bob!"
     source ~/.bob_profile

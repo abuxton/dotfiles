@@ -1,0 +1,27 @@
+#
+
+export JIRA_API_TOKEN=$(cat ~/Dropbox/profile/atlassian/jira_api_token.txt)
+
+if 	[ -x "$(command -v jira)" ]; then
+	# 	  echo "jira!"
+	jira completion zsh > ~/config/.jira/.jira_completion
+	source ~/config/.jira/.jira_completion
+else
+	echo "jira cli not found, skipping jira completion"
+fi
+
+function atlassian_profile() {
+  export JIRA_API_TOKEN=$(cat ~/Dropbox/profile/atlassian/jira_api_token.txt)
+cat > ~/config/.jira/config.yml <<EOF
+{
+  "servers": {
+	"atlassian": {
+	  "url": "https://abuxton.atlassian.net",
+	  "email": "abuxton@ibm.com",
+	  "token": "$JIRA_API_TOKEN"
+	}
+  }
+}
+EOF
+
+}
