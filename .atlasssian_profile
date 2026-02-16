@@ -4,15 +4,18 @@ export JIRA_API_TOKEN=$(cat ~/Dropbox/profile/atlassian/jira_api_token.txt)
 
 if 	[ -x "$(command -v jira)" ]; then
 	# 	  echo "jira!"
-	jira completion zsh > ~/config/.jira/.jira_completion
-	source ~/config/.jira/.jira_completion
+	atlassian_profile
+
 else
 	echo "jira cli not found, skipping jira completion"
 fi
 
 function atlassian_profile() {
-  export JIRA_API_TOKEN=$(cat ~/Dropbox/profile/atlassian/jira_api_token.txt)
-cat > ~/config/.jira/config.yml <<EOF
+
+  mkdir -p ~/config/.jira
+  jira completion zsh > ~/config/.jira/.jira_completion
+  source ~/config/.jira/.jira_completion
+cat > ~/config/.jira/.config.yml <<EOF
 {
   "servers": {
 	"atlassian": {
