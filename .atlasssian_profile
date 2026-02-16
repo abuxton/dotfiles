@@ -12,7 +12,11 @@ function atlassian_profile() {
   jira completion zsh > ~/.config/.jira/.jira_completion
   source ~/.config/.jira/.jira_completion
   echo "Generating jira config file"
-  cat ~/Dropbox/profile/atlassian/.jira/.config.yml > ~/.config/.jira/.config.yml
+  if [ ! -f ~/.config/.jira/.config.yml ]; then
+		touch ~/.config/.jira/.config.yml
+		cat ~/Dropbox/profile/atlassian/.jira/.config.yml > ~/.config/.jira/.config.yml
+	fi
+
 
   echo "Atlassian profile setup complete"
 }
