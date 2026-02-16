@@ -42,3 +42,5 @@ function jira-init() {
 	# jira init --installation cloud --server $JIRA_SERVER --login $JIRA_LOGIN --auth-type basic  --project $JIRA_PROJECT_KEY --force --debug
 EOF
 export JIRA_CONFIG=$(JIRA_CONFIG)
+
+}
