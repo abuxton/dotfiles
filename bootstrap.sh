@@ -13,6 +13,7 @@ function doIt() {
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
 		--exclude "brew.sh" \
+		--exclude "*.md" \
 		-avh --no-perms . ~;
 	#source ~/.bash_profile;
 	source ~/.zshrc;

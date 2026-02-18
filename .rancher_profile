@@ -1,0 +1,18 @@
+# Rancher/Docker configuration
+
+# Ensure ~/.docker/cli-plugins directory exists
+mkdir -p ~/.docker/cli-plugins
+
+# Update docker-buildx symlink to point to ~/.rd/bin/docker-buildx
+if [ ! -L "$HOME/.docker/cli-plugins/docker-buildx" ] || [ "$(readlink "$HOME/.docker/cli-plugins/docker-buildx")" != "$HOME/.rd/bin/docker-buildx" ]; then
+	rm -f "$HOME/.docker/cli-plugins/docker-buildx"
+	ln -s "$HOME/.rd/bin/docker-buildx" "$HOME/.docker/cli-plugins/docker-buildx"
+fi
+
+# Update docker-compose symlink to point to ~/.rd/bin/docker-compose
+if [ ! -L "$HOME/.docker/cli-plugins/docker-compose" ] || [ "$(readlink "$HOME/.docker/cli-plugins/docker-compose")" != "$HOME/.rd/bin/docker-compose" ]; then
+	rm -f "$HOME/.docker/cli-plugins/docker-compose"
+	ln -s "$HOME/.rd/bin/docker-compose" "$HOME/.docker/cli-plugins/docker-compose"
+fi
+
+alias rancher-context="docker context use rancher-desktop"

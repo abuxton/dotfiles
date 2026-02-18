@@ -90,6 +90,10 @@ if [ -f ~/.rust_profile ]; then
     # 	  echo "rust!"
     source ~/.rust_profile
 fi
+if [ -f ~/.rancher_profile ]; then
+    # 	  echo "rancher!"
+    source ~/.rancher_profile
+fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 

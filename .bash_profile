@@ -49,5 +49,7 @@ complete -W "NSGlobalDomain" defaults;
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
 
-
-
+# Add `~/.rd/bin` to the `$PATH` if not already present
+if ! echo $PATH | grep -q ".rd/bin"; then
+	export PATH="$HOME/.rd/bin:$PATH"
+fi;

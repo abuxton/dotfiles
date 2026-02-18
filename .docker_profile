@@ -10,6 +10,7 @@ alias docker-stop='docker ps -aq|xargs docker stop'
 alias docker-rm='docker ps -aq|xargs docker rm -f'
 alias docker-kill='docker ps -q | xargs docker kill '
 alias docker-ld='lazydocker'
+alias docker-context="docker context use default"
 
 
  function dex-fn {
