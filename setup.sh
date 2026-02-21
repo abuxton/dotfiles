@@ -154,12 +154,67 @@ main() {
   fi
   echo ""
 
+  # Step 6: Optional Homebrew setup
+  echo ""
+  read -p "Install Homebrew packages from Brewfile? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [ -f "$DOTFILES_DIR/brewfile-setup.sh" ]; then
+      log_info "Setting up Homebrew packages..."
+      # Source the brewfile setup script
+      # shellcheck disable=SC1090
+      source "$DOTFILES_DIR/brewfile-setup.sh"
+
+      # Initialize BREW_HOME by cloning homebrew-brewfile repo
+      log_info "Initializing Homebrew environment..."
+      if brew_initialize_home; then
+        log_success "Homebrew environment ready at: $BREW_HOME"
+      else
+        log_warn "Failed to initialize Homebrew environment - continuing with local setup"
+      fi
+
+      # Check/install Homebrew if needed
+      if ! brew_is_installed; then
+        log_info "Homebrew not yet installed"
+        read -p "Install Homebrew now? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          brew_install_homebrew silent
+        else
+          log_warn "Skipping Homebrew installation"
+        fi
+      fi
+
+      # Install packages from Brewfile if Homebrew is available
+      if brew_is_installed && [ -f "$BREWFILE" ]; then
+        read -p "Install all packages from Brewfile? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+          brew_install_from_file || log_warn "Some packages failed to install"
+        fi
+      fi
+    else
+      log_warn "brewfile-setup.sh not found in $DOTFILES_DIR"
+    fi
+  else
+    log_info "Skipping Homebrew setup"
+  fi
+  echo ""
+
+  # Step 7: Run comprehensive validation if script exists
+  if [ -f "$DOTFILES_DIR/validate-dotfiles.sh" ]; then
+    log_info "Running comprehensive validation..."
+    bash "$DOTFILES_DIR/validate-dotfiles.sh" > /dev/null 2>&1 && log_success "Validation script passed" || log_warn "Validation script found issues - run: ./validate-dotfiles.sh"
+  fi
+  echo ""
+
   echo -e "${GREEN}✅ Setup complete!${NC}"
   echo ""
   echo "Next steps:"
   echo "  1. Edit ~/.bash_secrets with your credentials"
   echo "  2. Source your shell: exec zsh (or bash)"
-  echo "  3. Verify setup: validate-dotfiles.sh"
+  echo "  3. Verify setup: ./validate-dotfiles.sh"
+  [ -f "$DOTFILES_DIR/brewfile-setup.sh" ] && echo "  4. Manage packages: brewfile-setup.sh help"
   echo ""
 }
 

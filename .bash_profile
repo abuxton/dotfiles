@@ -18,6 +18,9 @@ for func_file in ~/.functions.d/*.sh; do
 done;
 unset func_file;
 
+# Load secrets file (environment variables, credentials)
+[ -r "$HOME/.bash_secrets" ] && [ -f "$HOME/.bash_secrets" ] && source "$HOME/.bash_secrets";
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
 
