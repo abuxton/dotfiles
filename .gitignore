@@ -18,3 +18,13 @@ node_modules
 
 /.config/gcloud/
 /.config/gh
+# User-customized function files (but track the defaults)
+# Only ignore files that aren't in the repo already
+# Use: git add -f .functions.d/customfile.sh to force-add custom files if needed
+
+# Secrets files (should never be committed)
+.bash_secrets
+!.bash_secrets.template
+
+# Backups from setup script
+.dotfiles.backup/

@@ -3,11 +3,20 @@ export PATH="$HOME/bin:$PATH";
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+# * ~/.exports contains common environment variables
+# * ~/.aliases contains common aliases
+# * ~/.functions.d/ contains modular shell functions
+# * ~/.extra can be used for other settings you don't want to commit.
+for file in ~/.{path,bash_prompt,exports,aliases,extra}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+
+# Load modular functions from ~/.functions.d/
+for func_file in ~/.functions.d/*.sh; do
+	[ -r "$func_file" ] && [ -f "$func_file" ] && source "$func_file";
+done;
+unset func_file;
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;

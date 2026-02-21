@@ -162,6 +162,12 @@ for file in ~/.{path,exports,aliases,functions,extras}; do
 done;
 unset file;
 
+# Load modular functions from ~/.functions.d/
+for func_file in ~/.functions.d/*.sh; do
+    [ -r "${func_file}" ] && [ -f "${func_file}" ] && source "${func_file}";
+done;
+unset func_file;
+
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

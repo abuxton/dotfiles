@@ -2,110 +2,93 @@
 
 [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
+**Optimized for macOS/BSD with ZSH as primary shell and simplified Bash support.**
+
 [![dotfiles cast](./assets/asciinema/dotfiles-session.gif)](./assets/asciinema/dotfiles-session.gif)
+
+## Quick Start
+
+```bash
+git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+source setup.sh
+./validate-dotfiles.sh
+```
+
+That's it! `setup.sh` handles everything:
+- Creating required directories (`~/.functions.d/`, `~/.config/`)
+- Setting up symlinks for all dotfiles
+- Creating `.bash_secrets` with secure permissions (600)
+- Installing function modules
+- Backing up existing configurations
 
 ## Installation
 
-**Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don’t want or need. Don’t blindly use my settings unless you know what that entails. Use at your own risk!
+**Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don't want or need. Don't blindly use my settings unless you know what that entails. Use at your own risk!
 
-### Using Git and the bootstrap script
+### Using setup.sh (Recommended)
 
-You can clone the repository wherever you want. (I like to keep it in `~/Projects/dotfiles`, with `~/dotfiles` as a symlink.) The bootstrapper script will pull in the latest version and copy the files to your home folder.
-
-```bash
-git clone https://github.com/abuxton/dotfiles.git && cd dotfiles && source bootstrap.sh
-```
-
-To update, `cd` into your local `dotfiles` repository and then:
+The easiest way to set up these dotfiles:
 
 ```bash
-source bootstrap.sh
+git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+source setup.sh
 ```
 
-Alternatively, to update while avoiding the confirmation prompt:
+The `setup.sh` script is fully **idempotent** - running it multiple times is safe and produces the same result.
+
+### Verify Installation
+
+After installation, verify everything is configured:
 
 ```bash
-set -- -f; source bootstrap.sh
+./validate-dotfiles.sh
 ```
 
-<!-- ### Git-free install
+## Configuration
 
-To install these dotfiles without Git:
+### Secrets Management
+
+Create `~/.bash_secrets` for sensitive environment variables (API keys, tokens):
 
 ```bash
-cd; curl -#L https://github.com/abuxton/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,bootstrap.sh,.osx,LICENSE-MIT.txt}
+# Template is created automatically by setup.sh
+# Edit to add your secrets
+vim ~/.bash_secrets
+
+# Verify permissions are secure (600)
+ls -la ~/.bash_secrets
 ```
- -->
-To update later on,the boostrap commoand is aliased in $PATH `bootstrap`
 
-### Specify the `$PATH`
+### Shell Configuration
 
-If `~/.path` exists, it will be sourced along with the other files, before any feature testing
+- **ZSH (Primary)**: Full feature support with Oh My ZSH, Powerlevel10k theme
+- **Bash (Simplified)**: Same core functionality with simpler setup
+
+### Function Modules
+
+Shell functions are organized in `~/.functions.d/`:
+- **git.sh** - Git helpers
+- **system.sh** - System utilities
+- **productivity.sh** - Productivity tools
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## Troubleshooting
+
+Run the validation script to diagnose issues:
 
 ```bash
-export PATH="/usr/local/bin:$PATH"
+./validate-dotfiles.sh
 ```
 
-### Add custom commands without creating a new fork
+See README section for common issues and solutions.
 
-If `~/.extra` exists, it will be sourced along with the other files. You can use this to add a few custom commands without the need to fork this entire repository, or to add commands you don’t want to commit to a public repository.
+## Contributing
 
-My `~/.extra` looks something like this [.extras](./.extras) as I use a `.<name>_profile` to extend the idea and contain sprawl.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines and POSIX-compatible shell patterns.
 
-```bash
-...
-if [ -f ~/.github_profile ]; then
-    #     echo "github!"
-    source ~/.github_profile
-fi
-if [ -f ~/.gcloud_profile ]; then
-    #     echo "gcloud!"
-    source ~/.gcloud_profile
-fi
-if [ -f ~/.vscode_profile ]; then
-    #     echo "vscode!"
-    source ~/.vscode_profile
-fi
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+## License
 
-```
-
-You could also use `~/.extra` to override settings, functions and aliases from my dotfiles repository. It’s probably better to [fork this repository](https://github.com/abuxton/dotfiles/fork) instead, though.
-
-### Sensible macOS defaults
-
-When setting up a new Mac, you may want to set some sensible macOS defaults:
-
-```bash
-# currently excluded
-./.macos
-```
-
-### Install Homebrew formulae
-
-When setting up a new Mac, you may want to install some common [Homebrew](https://brew.sh/) formulae (after installing Homebrew, of course):
-I go as far as using brew dump and an external homebrew repo for this <https://github.com/abuxton/homebrew-brewfile>[![Awesome](https://awesome.re/badge.svg)](https://awesome.re) .
-
-```bash
-# currently excluded
-./brew.sh
-```
-
-Some of the functionality of these dotfiles depends on formulae installed by `brew.sh`. If you don’t plan to run `brew.sh`, you should look carefully through the script and manually install any particularly important ones. A good example is Bash/Git completion: the dotfiles use a special version from Homebrew.
-
-## Feedback
-
-Suggestions/improvements
-[welcome](https://github.com/abuxton/dotfiles/issues)!
-
-## Author
-
-- Adam Buxton
-- <https://github.com/abuxton>
-- `npx digitaladept`
-
-
-## Thanks to…
-
-* forked from [Mathias Bynens](https://mathiasbynens.be/)
-* <https://github.com/abuxton/awesome-dotfiles> [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+MIT © Adam Buxton
