@@ -1,0 +1,387 @@
+# Working with OpenSpec - Agent-Agnostic Guide
+
+This guide explains how to work with OpenSpec in this repository, regardless of which agent interface you're using (GitHub Copilot, OpenCode, Claude, or any other agent with OpenSpec skills).
+
+## Overview
+
+OpenSpec is an artifact-driven workflow system that structures development work into well-defined artifacts (proposal, specs, design, tasks, implementation, etc.). The workflow enables methodical progression through changes from planning to completion.
+
+### Key Concepts
+
+- **Change**: A unit of work (feature, fix, refactor) organized in `openspec/changes/<change-name>/`
+- **Artifact**: Structured documents that guide implementation (proposal, specs, design, tasks)
+- **Schema**: A workflow template that defines which artifacts are needed and their sequence
+- **Skills**: Agent-specific instructions for performing OpenSpec operations
+
+## Available Skills
+
+All skills are available in agent-specific locations but follow the same conceptual pattern:
+
+### 🎯 Primary Skills
+
+#### `openspec-new-change`
+**Start a new change with the artifact-driven workflow**
+
+Use when: Creating a new feature, fix, or significant modification
+
+Flow:
+1. Optionally provide a change name (kebab-case) or describe what you want to build
+2. System infers the schema (defaults to spec-driven)
+3. Agent creates scaffolding at `openspec/changes/<name>/`
+4. Agent shows first artifact template and stops for your input
+
+#### `openspec-apply-change`
+**Implement tasks from an existing change**
+
+Use when: You have an active change and need to implement the work
+
+Flow:
+1. Provide an optional change name (auto-detects if only one active change)
+2. Agent reads the change context (proposal, specs, design)
+3. Agent displays current task status
+4. Agent works through tasks, making code changes and marking them complete
+5. On completion, suggests archiving
+
+#### `openspec-continue-change`
+**Create the next artifact in a change**
+
+Use when: Current artifact(s) complete but design incomplete (e.g., proposal done, need specs)
+
+Flow:
+1. Provide the change name or context
+2. Agent determines which artifacts are complete and which are ready to create
+3. Agent shows the template for the next artifact
+4. Agent waits for your input/approval before creating
+
+#### `openspec-explore`
+**Think through ideas before or during a change**
+
+Use when: You need to explore/investigate before committing to a design
+
+Flow:
+1. Provide your question/problem/context
+2. Agent acts as a thinking partner, discussing options
+3. You can refine ideas before creating formal artifacts
+
+#### `openspec-verify-change`
+**Validate implementation matches artifacts**
+
+Use when: Want to ensure implementation is complete and coherent before archiving
+
+Flow:
+1. Provide the change name
+2. Agent reads all artifacts and current implementation
+3. Agent checks: completeness, correctness, coherence
+4. Agent reports findings and suggests fixes if needed
+
+### 📦 Advanced Skills
+
+#### `openspec-ff-change`
+**Fast-forward through artifact creation**
+
+Use when: You want to quickly create all needed artifacts rather than stepping through one-by-one
+
+Flow:
+1. Provide the change name
+2. Agent rapidly creates proposal, specs, design - flowing to implementation tasks
+3. Agent stops at implementation ready state
+
+#### `openspec-archive-change`
+**Archive a completed change to history**
+
+Use when: Change implementation is complete and verified
+
+Flow:
+1. Provide the change name
+2. Agent validates completion
+3. Agent moves `openspec/changes/<name>` → `openspec/changes/archive/<name>`
+4. Agent prepares summary
+
+#### `openspec-bulk-archive-change`
+**Archive multiple completed changes at once**
+
+Use when: Several changes are ready to archive simultaneously
+
+Flow:
+1. List multiple change names or confirm all completion-ready changes
+2. Agent archives all and provides summary
+
+#### `openspec-sync-specs`
+**Sync delta specs to main specs without archiving**
+
+Use when: You want to update main spec files with changes from a delta spec
+
+Flow:
+1. Provide the change name
+2. Agent merges delta specs into main specs
+3. Change remains active (not archived)
+
+#### `openspec-onboard`
+**Guided onboarding for OpenSpec**
+
+Use when: First time using OpenSpec or wanting to learn the workflow
+
+Flow:
+1. Agent walks through a complete workflow cycle
+2. Creates real change in the repository
+3. Demonstrates each step with narrative
+4. You learn by doing
+
+## Workflow Patterns
+
+### Pattern 1: Step-by-Step (Careful)
+Best for complex changes or when you need explicit approval at each stage:
+
+```
+new-change → show proposal template
+→ you approve/revise
+→ continue-change → show specs template
+→ you approve/revise
+→ continue-change → show design template
+→ you approve/revise
+→ continue-change → show tasks
+→ apply-change → implement
+→ verify-change
+→ archive-change
+```
+
+### Pattern 2: Fast-Forward (Rapid)
+Best for straightforward changes or when you know what you're building:
+
+```
+ff-change → creates all artifacts
+→ apply-change → implement
+→ verify-change
+→ archive-change
+```
+
+### Pattern 3: Explore-First (Thoughtful)
+Best for uncertain or complex changes needing investigation:
+
+```
+explore → discuss ideas/options
+→ new-change → create scaffolding
+→ continue-change → create artifact(s) informed by exploration
+→ apply-change → implement
+→ verify-change
+→ archive-change
+```
+
+## Directory Structure
+
+```
+openspec/
+├── config.yaml          # Schema definition and project context
+├── specs/               # Main specification files (synced from changes)
+├── changes/
+│   ├── <change-name>/   # Active changes
+│   │   ├── proposal.md  # Initial concept and rationale
+│   │   ├── specs.md     # Technical specifications
+│   │   ├── design.md    # Architecture and design decisions
+│   │   └── tasks.md     # Implementation tasks (with checkboxes)
+│   └── archive/         # Completed changes
+│       └── <change-name>/
+└── [any other schema files]
+```
+
+## Communication with Agents
+
+### Providing Clear Input
+
+- **Change name**: Use kebab-case (e.g., `add-user-auth`, `fix-memory-leak`)
+- **Descriptions**: Be specific about what/why/who-benefits
+- **Overrides**: Most skills accept optional parameters to specify which change to use
+
+### Asking for Help
+
+- If you're unsure what skill to use, describe what you're trying to do
+  - Agent determines appropriate skill
+  - If multiple options exist, agent asks you to choose
+
+- If a task is unclear during implementation:
+  - Say so - agent either clarifies or suggests updating the artifact
+
+- If you want to switch patterns mid-change:
+  - You can pause implementation
+  - Use `explore` to think through a problem
+  - Resume with `apply-change`
+
+### Handling Conflicts or Issues
+
+- **Change already exists**: Agent detects and suggests continuing instead of recreating
+- **Missing dependencies**: Agent shows what artifact(s) must be created first
+- **Implementation blockers**: Agent reports and waits for guidance
+
+## Configuration
+
+OpenSpec configuration lives in `openspec/config.yaml`:
+
+```yaml
+schema: spec-driven
+# Additional context can be added here to inform AI agents
+# Examples: tech stack, conventions, style guides, domain knowledge
+```
+
+## Tips for Effective Use
+
+1. **Use appropriate skill for your need** - don't force everything through apply-change
+2. **Be specific in descriptions** - helps agents create better artifacts
+3. **Use explore when uncertain** - better to think through first than fix later
+4. **Review artifacts before impl** - agents draft, you guide
+5. **Mark tasks as you complete them** - keeps progress clear
+6. **Archive regularly** - keeps active changes focused
+
+## Integration with Development
+
+OpenSpec changes integrate with your Git workflow:
+
+- Each change creates a directory you can reference
+- Implementation happens in your regular codebase
+- Artifacts serve as documentation and validation
+- Archive keeps project history organized
+
+When ready to commit work:
+
+1. Run `verify-change` to ensure completeness
+2. Update necessary documentation from change artifacts
+3. Commit implementation
+4. Archive the change
+5. Sync specs if updating main specifications
+
+## Agent-Specific Notes
+
+### GitHub Copilot (VS Code)
+- Skills accessible via chat commands
+- Tight integration with editor - can apply-change while editing
+- Visual diff support during implementation
+
+### Claude
+- Skills loaded as part of system context
+- Full conversation history available
+- Can explore ideas extensively before choosing skill
+
+### OpenCode
+- Skills in `.opencode/commands/` for CLI integration
+- Can chain skills in workflows
+- CLI-first approach
+
+## Common Workflows
+
+### Adding a New Feature
+1. `openspec-new-change add-feature-name`
+2. Create proposal (what/why/acceptance criteria)
+3. `openspec-continue-change add-feature-name` for specs
+4. Create specs (API, UI, database changes)
+5. `openspec-continue-change add-feature-name` for design
+6. Create architecture/design decisions
+7. `openspec-continue-change add-feature-name` for tasks
+8. Create implementation tasks
+9. `openspec-apply-change add-feature-name`
+10. Implement, verify, archive
+
+### Fixing a Bug
+1. `openspec-explore` - discuss root cause and solution approaches
+2. `openspec-new-change fix-bug-description`
+3. `openspec-ff-change fix-bug-description` - create all artifacts rapidly
+4. `openspec-apply-change fix-bug-description` - implement
+5. `openspec-verify-change fix-bug-description` - ensure fix is complete
+6. `openspec-archive-change fix-bug-description`
+
+### Large Refactor
+1. `openspec-new-change refactor-component-name`
+2. Carefully build proposal + specs + design (use step-by-step pattern)
+3. `openspec-apply-change refactor-component-name` - break into focused tasks
+4. Implement methodically, pausing if design issues emerge
+5. `openspec-verify-change refactor-component-name`
+6. `openspec-archive-change refactor-component-name`
+
+## Extended Skills
+
+In addition to the OpenSpec workflow skills above, this repository includes skills for Git workflows and best practices.
+
+### `git-workflow` 🔗 Git Workflow Skill
+
+**Expert patterns for Git version control: branching, commits, collaboration, and CI/CD.**
+
+Deployed from: [netresearch/git-workflow-skill](https://github.com/netresearch/git-workflow-skill)
+
+#### Use When
+- Setting up branching strategies (Git Flow, GitHub Flow, Trunk-based)
+- Writing commit messages with Conventional Commits
+- Creating or reviewing pull requests
+- Handling merge conflicts
+- Integrating Git with CI/CD systems (GitHub Actions, GitLab CI)
+- Performing advanced Git operations (rebase, cherry-pick, bisect)
+- Managing releases with semantic versioning
+
+#### Expertise Areas
+- **Branching Strategies**: Git Flow, GitHub Flow, Trunk-based development, release management
+- **Commit Conventions**: Conventional Commits format, semantic versioning, commit best practices
+- **Collaboration**: PR workflows, code review processes, merge strategies (merge, squash, rebase), conflict resolution
+- **CI/CD Integration**: GitHub Actions, GitLab CI, branch protection rules, automated versioning
+- **Advanced Operations**: Interactive rebase, cherry-picking, bisecting, reflog recovery, signed commits
+
+#### Quick Reference: Conventional Commits
+```
+<type>[scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+**Breaking change**: Add `!` after type or `BREAKING CHANGE:` in footer
+
+Example:
+```
+feat(auth): add OAuth2 support
+
+Adds OpenID Connect provider integration for enterprise SSO.
+
+Closes #123
+```
+
+#### Quick Reference: Branch Naming
+```bash
+feature/TICKET-123-description     # New features
+fix/TICKET-456-bug-name            # Bug fixes
+release/1.2.0                       # Release branches
+hotfix/1.2.1-security-patch        # Emergency fixes
+```
+
+#### Quick Reference: GitHub Flow
+```bash
+git checkout main && git pull
+git checkout -b feature/my-feature
+# ... make changes ...
+git add -p                          # Stage hunks interactively
+git commit -m "feat: description"   # Conventional commit
+git push -u origin HEAD
+gh pr create
+gh pr merge --squash                # Merge with squash strategy
+```
+
+#### Reference Files
+When working on Git-related tasks, agents can load detailed references:
+- `branching-strategies.md` - For choosing and implementing branching models
+- `commit-conventions.md` - For writing clear, semantic commits
+- `pull-request-workflow.md` - For PR structure, review processes, conflict resolution
+- `ci-cd-integration.md` - For automating workflows with GitHub Actions and CI/CD
+- `advanced-git.md` - For rebasing, cherry-picking, bisecting
+- `github-releases.md` - For release management and immutable release patterns
+
+#### Critical Note: Immutable Releases
+GitHub **permanently blocks** tag names when releases are deleted. See `github-releases.md` for prevention and recovery patterns. Always get releases right the first time.
+
+---
+
+## See Also
+
+- [copilot-instructions.md](./copilot-instructions.md) - VS Code Copilot specific setup
+- `openspec/config.yaml` - Schema configuration
+- `openspec/changes/` - Active changes
+- `openspec/specs/` - Synced specifications
+- `.claude/skills/git-workflow/` - Git workflow skill files (Claude)
+- `.opencode/skills/git-workflow/` - Git workflow skill files (OpenCode)
