@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+#### Audit: Deployment Coverage & Script Responsibilities (New)
+- **Comprehensive Audit of Deployment System**
+  - Completed full audit of `setup.sh` (542 lines) and `bootstrap.sh` (169 lines)
+  - Mapped all 95 root-level items and their deployment status
+  - Analyzed script responsibilities and interaction patterns
+  - Verified coverage: **92% of all items deployed**
+
+- **New Deployment Documentation**
+  - `docs/DEPLOYMENT_MATRIX.md` - Comprehensive coverage matrix of all 95 items
+    - Shows which script handles each item (setup.sh, bootstrap.sh, repo-only, unmapped)
+    - Deployment method for each (symlinks, rsync copy, not deployed)
+    - Coverage analysis: 44% setup.sh, 42% bootstrap.sh, 9% repo-only, 4% unmapped
+    - Recommendations for items needing enhancement
+
+  - `docs/DEPLOYMENT_WORKFLOW.md` - Guidance for which script to run
+    - Scenario-based decision guide (first-time, updates, troubleshooting, etc.)
+    - Quick reference decision tree
+    - "Which script do I run?" for every common scenario
+    - Profile system explanation and testing
+    - Safe practices and best practices
+
+  - `docs/DEPLOYMENT_REFERENCE.md` - Technical reference guide
+    - Dry-run mode: how to preview changes before applying
+    - Idempotency guarantees and explanation
+    - Comprehensive troubleshooting guide with 15+ common issues
+    - Advanced topics and FAQ
+
+- **Updated Existing Documentation**
+  - `README.md` - Added "Deployment Workflow Guides" section with links
+  - `CONTRIBUTING.md` - Added "Deployment Responsibilities" section
+    - Explains two-script model to contributors
+    - How new files get deployed automatically
+    - Decision tree for adding new files
+    - Deployment verification steps
+
+- **Key Findings: bootstrap.sh Necessity Assessment**
+  - ✅ **bootstrap.sh is NECESSARY** (not redundant)
+  - **Rationale**: Provides 3 unique, first-time-only operations:
+    1. `git pull origin main` - Repository sync (unique to bootstrap)
+    2. `oh-my-zsh` installation - Shell framework (unique to bootstrap, ordering-dependent)
+    3. `rsync` deployment - bulk copy method (complements setup.sh symlinks)
+  - **Recommendation**: KEEP BOTH scripts with clear role separation
+    - bootstrap.sh: Initial deployment (run once per machine)
+    - setup.sh: Idempotent configuration (run anytime for updates)
+    - No consolidation needed—each serves distinct purpose
+
 ### Added
 
 #### Profile Deployment & Management System

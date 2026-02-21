@@ -25,6 +25,27 @@ bash setup.sh        # Configure environment: symlinks, profiles, validation
 
 See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow documentation.
 
+## Deployment Workflow Guides
+
+**New to dotfiles?** Start here:
+
+- **[DEPLOYMENT_WORKFLOW.md](./docs/DEPLOYMENT_WORKFLOW.md)** - Decision guide
+  - "Which script should I run?" (quick reference)
+  - Scenario-based instructions (first-time, updates, troubleshooting)
+  - Safe practices and best practices
+
+- **[DEPLOYMENT_MATRIX.md](./docs/DEPLOYMENT_MATRIX.md)** - Complete coverage
+  - All 95 files and which script handles each
+  - Deployment status and recommendations
+  - Coverage analysis
+
+- **[DEPLOYMENT_REFERENCE.md](./docs/DEPLOYMENT_REFERENCE.md)** - Technical reference
+  - Dry-run mode (preview before applying)
+  - Idempotency guarantees
+  - Comprehensive troubleshooting
+
+**TL;DR**: See "Quick Start" above, or run `./setup.sh --dry-run` to preview changes.
+
 ## Installation
 
 **Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don't want or need. Don't blindly use my settings unless you know what that entails. Use at your own risk!

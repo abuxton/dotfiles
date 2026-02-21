@@ -156,6 +156,198 @@ for file in "$dir"/*.md; do
 done
 ```
 
+## Deployment Responsibilities
+
+When contributing new files to this dotfiles repository, it's important to understand how and when your files get deployed to user machines.
+
+### Two-Script Deployment Model
+
+Dotfiles uses a two-script approach:
+
+#### bootstrap.sh (First-Time Setup)
+- **When**: Run once per machine (first-time deployment)
+- **Method**: rsync (copies files from repo to $HOME)
+- **Non-idempotent**: Will overwrite existing files (don't re-run)
+- **Responsibilities**:
+  - `git pull origin main` - Update repo to latest
+  - Install oh-my-zsh shell framework
+  - Bulk deploy files via rsync
+  - Install global npm packages
+  - Run shell reload
+
+#### setup.sh (Idempotent Configuration)
+- **When**: Run anytime to reconfigure (safe to run many times)
+- **Method**: Symlinks (creates links from repo to $HOME)
+- **Fully idempotent**: Safe to run multiple times
+- **Responsibilities**:
+  - Create required directories (`~/.functions.d`, `~/.config`)
+  - Create symlinks for dotfiles (including new files auto-detected)
+  - Deploy profile system (22+ language/ecosystem profiles)
+  - Copy function modules with size comparison
+  - Validate installation
+
+### Adding New Files: What Gets Deployed Where?
+
+When you add a new file to the repository, here's how it will be deployed:
+
+#### ✅ Automatically Deployed
+
+**Shell dotfiles** (`.bash_profile`, `.zshrc`, etc.):
+- Handled by setup.sh Step 3: Main dotfile symlinks
+- Line reference: setup.sh lines 375-396
+
+**Profile files** (`.*_profile`):
+- Handled by setup.sh Step 3c: Profile loop
+- Line reference: setup.sh lines 414-424
+- How: `for profile in .*_profile; do ln -sf "$profile" ~/"$profile"; done`
+- **Key point**: ALL `.*_profile` files automatically symlinked—no code changes needed!
+
+**Function modules** (`~/.functions.d/*.sh`):
+- Handled by setup.sh Step 4: Function module copying
+- Line reference: setup.sh lines 427-452
+- How: Copy with size comparison (skip if target is newer)
+- **Key point**: Individual `.sh` files automatically copied
+
+**Configuration files** (`.gitconfig`, `.tmux.conf`, etc.):
+- Handled by bootstrap.sh: rsync-copied
+- Handled by setup.sh Step 3: symlinked (if added to symlink loop)
+- Both: respect the file type pattern
+
+#### ⚙️ Requires Code Changes
+
+**New directories** not yet in deployment lists:
+- Add to setup.sh Step 1 (mkdir -p)
+- Or add to bootstrap.sh rsync exclusion review
+
+**New dotfiles with different deployment method**:
+- May require adding to setup.sh Step 3 symlink loop
+- Contact repo maintainer to discuss
+
+**Tool-specific configurations** (e.g., `.claude/`, `.opencode/`):
+- Currently unmapped (optional)
+- Could be added to setup.sh: (future enhancement)
+
+#### 📂 Never Deployed (Repository Infrastructure)
+
+These stay in the repo and never get deployed to $HOME:
+- `.git/` - Version control
+- `.github/` - GitHub Actions, workflows
+- `docs/` - Documentation
+- `openspec/` - Workflow tracking
+- `.gitignore`, `LICENSE*.txt` - Git infrastructure
+- Test/CI files
+
+### Adding New Directories
+
+If you're adding a new directory that should be deployed:
+
+1. **Is it a config directory?**
+   - ✅ Add to setup.sh Step 1 (`mkdir -p`)
+   - Example: `.zsh.d/`, `.vim/`, `.config/`
+
+2. **Is it a tool-specific config archive?**
+   - ✅ Consider adding to deployment (discuss with maintainer)
+   - Example: `.vscode/`, `.claude/`, `.opencode/`
+
+3. **Is it project infrastructure?**
+   - ❌ Keep in repo only (don't deploy)
+   - Example: `.github/`, `docs/`, `openspec/`
+
+### Adding New Dotfiles
+
+If you're adding a new dotfile (file starting with `.`):
+
+1. **Shell configuration** (`.bash_*`, `.zsh*`, etc.)
+   - Automatically handled by bootstrap.sh rsync
+   - Automatically handled by setup.sh symlink loop (if matching pattern)
+
+2. **Tool profile** (`.{toolname}_profile`)
+   - Automatically handled by setup.sh Step 3c profile loop
+   - **No code changes needed!** Just add the file and commit
+
+3. **Application config** (`.gitconfig`, `.tmux.conf`, etc.)
+   - Add to bootstrap.sh by default (rsync includes it)
+   - Add to setup.sh Step 3 if needs special handling
+
+### Examples: Where Do New Contributions Go?
+
+| Contribution | Where | Deployed | Handler |
+|---|---|---|---|
+| `.kubernetes_profile` | repo root | ✅ Auto | setup.sh Step 3c |
+| `.functions.d/docker.sh` | functions.d/ | ✅ Auto | setup.sh Step 4 |
+| `.config/myapp/` | .config/myapp/ | ✅ Auto | bootstrap.sh rsync |
+| utility script | bin/ | ✅ Auto | bootstrap.sh rsync |
+| `.gitconfig` changes | repo root | ✅ Auto | setup.sh Step 3 |
+| documentation | docs/ | ❌ No | stays in repo |
+
+### Deployment Verification
+
+After adding a new file, verify deployment:
+
+```bash
+# 1. Run setup.sh in dry-run mode
+./setup.sh --dry-run | grep "your-new-file"
+
+# 2. Run setup.sh for real
+./setup.sh
+
+# 3. Verify the file deployed
+ls -la ~/ | grep "your-new-file"
+
+# 4. For symlinked files, verify the symlink
+ls -la ~/.your_new_file
+# Should show: your_new_file -> /path/to/repo/your_new_file
+```
+
+### Deployment Decision Tree
+
+When adding a new file, ask:
+
+```
+Is it a profile file (.{toolname}_profile)?
+├─ YES → Just add it, setup.sh auto-deploys via Step 3c loop
+│
+└─NO
+  │
+  Is it a function module (.functions.d/*.sh)?
+  ├─ YES → Just add it, setup.sh auto-deploys via Step 4 copy loop
+  │
+  └─NO
+    │
+    Is it a shell configuration file?
+    ├─ YES → bootstrap.sh rsync handles it
+    │
+    └─NO
+      │
+      Is it a tool config (.{tool}config, .{tool}rc)?
+      ├─ YES → Add to setup.sh Step 3 symlink list (or PR for discussion)
+      │
+      └─NO → Likely repo-only (put in .gitignore or docs/)
+```
+
+### Communicating Deployment Needs
+
+When submitting a PR with new files:
+
+1. **Mention your files** in the PR description:
+   ```
+   Added: .myapp_profile (new tool profile for MyApp)
+   Modified: .functions.d/myapp.sh (helper functions)
+   Status: Should auto-deploy via existing setup.sh patterns
+   ```
+
+2. **If special deployment needed**, note it:
+   ```
+   Added: .myapp/ (new config directory)
+   TODO: Needs to be added to setup.sh Step 1 mkdir-p list
+   ```
+
+3. **Link to deployment docs**:
+   ```
+   See docs/DEPLOYMENT_MATRIX.md and docs/DEPLOYMENT_WORKFLOW.md
+   for how this integrates with the deployment system
+   ```
+
 ## Function Organization
 
 Functions are organized by domain in the `.functions.d/` directory:
