@@ -21,6 +21,18 @@ unset func_file;
 # Load secrets file (environment variables, credentials)
 [ -r "$HOME/.bash_secrets" ] && [ -f "$HOME/.bash_secrets" ] && source "$HOME/.bash_secrets";
 
+# Load context-specific profile files (bash-compatible only)
+# Note: Some profiles are zsh-specific (.uv_profile, etc.) and are skipped
+# Shell-compatible profiles (these work in both bash and zsh):
+for profile in ~/.{ruby,go,rust,aws,azure,gcloud,docker,kubernetes,brew,vault,terraform,bob,openai,claude,instruqt,vscode,atlasssian,hashicorp,rancher,vagrant,github}_profile; do
+  [ -r "$profile" ] && [ -f "$profile" ] && source "$profile" 2>/dev/null;
+done
+unset profile
+
+# Source python profile if available and bash-compatible
+[ -r "$HOME/.python_profile" ] && [ -f "$HOME/.python_profile" ] && \
+  grep -q "autoload\|compdef\|typeset -" "$HOME/.python_profile" || source "$HOME/.python_profile"
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
 

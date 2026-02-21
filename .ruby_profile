@@ -4,11 +4,24 @@ eval "$(rbenv init -)"
 if [ -x "$(command -v colorls)" ]; then
 # https://github.com/athityakumar/colorls#installation
   #source $(dirname $(gem which colorls))/tab_complete.sh
-  alias -g lc='colorls -lA --sd'
-  alias -g ls='colorls -h --sd -1'
-  alias -g l='colorls -A --sd'
-  alias -g ll='colorls -A --sd -l'
-  alias -g lgs='colorls -A --sd -l --gs'
+
+  # ZSH-specific global aliases (note: -g flag only works in zsh, not bash)
+  if [ -n "$ZSH_VERSION" ]; then
+    # ZSH: these are global aliases (auto-expanded anywhere in command)
+    alias -g lc='colorls -lA --sd'
+    alias -g ls='colorls -h --sd -1'
+    alias -g l='colorls -A --sd'
+    alias -g ll='colorls -A --sd -l'
+    alias -g lgs='colorls -A --sd -l --gs'
+  else
+    # Bash: aliases are always global, so use without -g
+    alias lc='colorls -lA --sd'
+    alias ls='colorls -h --sd -1'
+    alias l='colorls -A --sd'
+    alias ll='colorls -A --sd -l'
+    alias lgs='colorls -A --sd -l --gs'
+  fi
+
   #alias -g treecl='colorls --tree'
   function treecl(){
 	  colorls --tree

@@ -9,6 +9,143 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Profile Deployment & Management System
+- **Profile Symlink Deployment** - All 22 `.*_profile` files now automatically symlinked by `setup.sh`
+  - Explicit profile sourcing in `.bash_profile` and `.zshrc`
+  - Shell-aware profile loading (bash skips ZSH-specific features, zsh loads all)
+  - Documented sourcing order explaining why sequence matters
+  - New `.node_profile` for Node.js/npm configuration
+
+- **Enhanced Language Ecosystem Support** (Phase 5)
+  - Python/pyenv initialization with completion hooks
+  - Ruby/rbenv with colorls integration (bash-compatible)
+  - Go/go install with auto-tool installation
+  - Rust/rustup with cargo path setup
+  - Node.js/npm global package management
+  - Fixed `.ruby_profile` bash compatibility (global aliases)
+
+- **Comprehensive Documentation** (Phases 4-8)
+  - `docs/DEPLOYMENT.md` - Complete deployment workflow guide
+  - `docs/LANGUAGE_ECOSYSTEM.md` - Language manager setup and initialization order
+  - `docs/PROFILE_GUIDE.md` - Comprehensive profile management guide
+  - `docs/PACKAGE_MANAGER_GUIDE.md` - Package manager templates and consolidation strategy
+  - Updated `README.md` with clear bootstrap.sh vs setup.sh guidance
+  - Updated `CONTRIBUTING.md` with profile contribution guidelines
+
+#### Enhanced Validation & Testing (Phase 7)
+- **Extended `validate-dotfiles.sh`** with new checks:
+  - 6: Profile symlink validation (all 22 profiles checked)
+  - 7: Language ecosystem availability (pyenv, rbenv, go, rustup, node)
+  - 8: Shell sourcing validation (bash and zsh both work)
+  - 9: PATH verification
+  - Comprehensive validation output documentation
+  - Actionable remediation commands for each failure
+  - Extended success/failure summary with next steps
+
+#### Script Documentation & Clarification (Phase 4)
+- **bootstrap.sh** - Added 130+ line documentation header explaining responsibilities
+  - Repository sync (git pull)
+  - Oh-my-zsh installation
+  - Rsync deployment
+  - npm global packages
+  - Idempotency notes and comparison matrix with setup.sh
+
+- **setup.sh** - Added 160+ line documentation header explaining responsibilities
+  - Directory creation
+  - Secrets template generation
+  - Symlink management for dotfiles and profiles
+  - Function module deployment
+  - Profile sourcing configuration
+  - Comprehensive phase breakdown and safety guarantees
+
+- **Delegation Pattern Documentation** in `docs/DEPLOYMENT.md`
+  - setup.sh orchestrates brewfile-setup.sh for Homebrew
+  - Clear separation of concerns
+  - Single responsibility principle
+  - Optional vs. required features
+
+#### Package Manager Planning (Phase 6)
+- **Future-Ready Manifest Templates**
+  - Python: `pyproject.toml` and `requirements-global.txt` templates
+  - Ruby: `Gemfile` structure with `.ruby-version`
+  - Go: `go-tools.manifest` format
+  - Node.js: `npm-packages.txt` and `package.json` structure
+  - Rust: `rust-tools.manifest` for `cargo install` tools
+  - Migration guides for each ecosystem
+  - Consolidation phases documented (current → manifests available → adoption → standard)
+
+### Changed
+
+#### Bootstrap & Setup Workflow
+- **bootstrap.sh** - Clarified as "repo sync + initial deployment" only
+  - No longer recommended as sole deployment method
+  - Use `bootstrap.sh` → `setup.sh` sequence for first-time setup
+  - Updated to include comprehensive documentation
+
+- **setup.sh** - Enhanced profile handling
+  - Now automatically symlinks all discovered `.*_profile` files (Phase 2)
+  - Explicit profile sourcing in shell rc files (Phase 3)
+  - Profiles load in defined order (language → cloud → devops → optional)
+
+- **`.bash_profile` and `.zshrc`** - Profile sourcing
+  - Explicit loops sourcing all context-specific profiles
+  - Shell-aware sourcing (bash skips ZSH-specific, zsh loads all)
+  - Documented sourcing order with rationale
+  - Error suppression for optional profiles
+
+#### Deployment Guidance
+- **README.md** - Updated quick start
+  - Clear two-step setup: `bash bootstrap.sh` then `bash setup.sh`
+  - Explicit guidance on when to use which script
+  - Link to comprehensive `docs/DEPLOYMENT.md`
+
+- **Documentation Structure** - New `docs/` files
+  - Added 4 new comprehensive guides
+  - Profile system now fully documented
+  - Language ecosystem setup explained
+  - Package manager future strategy outlined
+
+### Fixed
+
+- **`.ruby_profile`** - Bash compatibility
+  - Fixed global alias syntax for bash (removed `-g` flag in bash section)
+  - Added shell detection (ZSH uses `-g`, Bash doesn't)
+  - Now sources without errors in both shells
+
+### Improved
+
+- **Audit and Discovery** (Phase 1)
+  - Created `audit-profiles.sh` script
+  - Generated `PROFILE_INVENTORY.md` with all 22 profiles catalogued
+  - Generated `PROFILE_AUDIT_REPORT.md` with findings and recommendations
+  - Identified package manager opportunities and consolidation potential
+
+- **Profile Categorization**
+  - 5 Language Tools (python, ruby, go, rust, node)
+  - 5 Cloud Platforms (aws, azure, gcloud, ...)
+  - 4 DevOps Tools (docker, kubernetes, rancher, terraform, vault)
+  - 2 Package Managers (HomeBrew, npm)
+  - 1 Editor (VS Code)
+  - 4+ Specialized Tools (GitHub, OpenAI, Claude, Instruqt, etc.)
+
+- **Shell Profile Sourcing Strategy**
+  - Explicit loading order documented
+  - Dependency management clear (language managers first)
+  - Error handling for optional profiles
+  - Shell-specific feature handling (ZSH completions, etc.)
+
+### See Also
+
+- `OpenSpec` change: `audit-profile-deployment-package-managers` (Phase 1-10 complete)
+- All changes tracked in `openspec/changes/audit-profile-deployment-package-managers/tasks.md`
+
+### Next Steps for Contributors
+
+- Monitor adoption of new profile management system
+- Gather feedback on profile organization and loading
+- Plan Phase 2: Package manager manifest adoption (optional, future)
+- Consider language ecosystem consolidation (optional, future)
+
 #### New Core Infrastructure
 - **`setup.sh`** - Single reproducible deployment script replacing `bootstrap.sh`
   - Fully automated symlink creation and permission management

@@ -1,7 +1,179 @@
 #!/usr/bin/env bash
-# Reproducible dotfiles setup script
-# Sets up shell environment, symlinks, directories, and secrets
-# This script is fully idempotent - running it multiple times produces the same result
+# ============================================================================
+# setup.sh - Local Environment Configuration & Dotfile Management
+# ============================================================================
+#
+# PURPOSE:
+#   Configure local shell environment, create symlinks, and manage context-specific
+#   profiles. This script is run AFTER bootstrap.sh to complete environment setup.
+#   It is fully idempotent - can be run multiple times safely.
+#
+# USAGE:
+#   bash setup.sh           # Run interactive setup
+#   bash setup.sh --dry-run # Preview changes without applying
+#   bash setup.sh --help    # Show this help message
+#
+# RELATIONSHIP WITH bootstrap.sh:
+#   bootstrap.sh is FIRST (repo sync + rsync deploy)
+#   setup.sh is SECOND (symlinks + profiles + configuration)
+#
+#   Typical workflow:
+#     1. bash bootstrap.sh     ← git pull, rsync, oh-my-zsh, npm globals
+#     2. bash setup.sh         ← symlinks, profiles, directories, validation
+#     3. Edit ~/.bash_secrets  ← add credentials
+#     4. Start new shell       ← profiles load
+#
+# RESPONSIBILITIES:
+#
+#   1. DIRECTORY CREATION
+#      - Creates ~/.functions.d for modular shell functions
+#      - Creates ~/.config for application configurations
+#      - Creates ~/.dotfiles.backup for backup storage
+#      - Idempotent: safe to rerun (mkdir -p is idempotent)
+#      Full responsibility: All required directories exist
+#
+#   2. SECRETS TEMPLATE CREATION
+#      - Creates ~/.bash_secrets if not already present
+#      - Uses template from templates/bash_secrets_template
+#      - Sets permissions to 600 (owner read/write only)
+#      - Prevents accidental credential storage in version control
+#      - Non-destructive: never overwrites existing secrets
+#      Full responsibility: Secrets file template available for editing
+#
+#   3. DOTFILE SYMLINKS
+#      - Creates symlinks for all config files (.bash_profile, .zshrc, etc.)
+#      - Source: $DOTFILES_DIR/<dotfile>
+#      - Target: $HOME/<dotfile>
+#      - Benefit: Edits in repo are immediately available to shell
+#      - Backup-safe: existing files backed up before symlinking
+#      Full responsibility: All dotfiles accessible via symlinks
+#
+#   4. PROFILE FILE SYMLINKS
+#      - Creates symlinks for all .*_profile files (context-specific)
+#      - Example files: .python_profile, .ruby_profile, .aws_profile, etc.
+#      - Source: $DOTFILES_DIR/.*_profile
+#      - Target: $HOME/.*_profile
+#      - Purpose: Context-specific configurations (language managers, CLIs)
+#      - 22 profiles currently managed: language tools, cloud, devops, etc.
+#      Full responsibility: All profiles deployed and ready for sourcing
+#
+#   5. CONVENIENCE SYMLINKS
+#      - Creates .dotfiles → repo directory (easy repo access)
+#      - Creates .ssh → config directory (SSH config access)
+#      - Benefit: Quick navigation to repo and SSH configs
+#      Full responsibility: Convenience symlinks in place
+#
+#   6. FUNCTION MODULE COPYING
+#      - Copies all .*.sh files from common/bin/ to ~/.functions.d/
+#      - Makes shell functions available to both bash and zsh
+#      - Benefit: Modular shell functions instead of monolithic rc file
+#      - Idempotent: copies overwrite previous versions
+#      Full responsibility: All shell functions available
+#
+#   7. PROFILE SOURCING CONFIGURATION
+#      - Configures .bash_profile to explicitly source all .*_profile files
+#      - Configures .zshrc to explicitly source all .*_profile files
+#      - Handles shell-specific profiles (zsh-specific have conditions)
+#      - Manages loading order (language managers first, etc.)
+#      Full responsibility: Profiles load in correct order in both shells
+#
+#   8. COMPREHENSIVE VALIDATION
+#      - Checks if setup is complete and working
+#      - Verifies symlinks point to correct locations
+#      - Tests shell configuration (bash, zsh)
+#      - Validates profiles are sourcing correctly
+#      - Validates function modules are loaded
+#      Full responsibility: Setup is valid and ready to use
+#
+#   9. OPTIONAL HOMEBREW SETUP
+#      - Offers to run brewfile-setup.sh to manage Homebrew packages
+#      - Separate script manages system package installation
+#      - Non-blocking: setup.sh completes even if skipped
+#      Full responsibility: User can choose Homebrew setup
+#
+# DEPLOYMENT PHASES (what happens when you run setup.sh):
+#   Phase 1: Parse arguments & validate
+#   Phase 2: Create required directories
+#   Phase 3: Create secrets template
+#   Phase 4: Create symlinks for dotfiles
+#   Phase 5: Create symlinks for profiles (4.1 new in this iteration)
+#   Phase 6: Create convenience symlinks
+#   Phase 7: Copy function modules
+#   Phase 8: Run comprehensive validation
+#   Phase 9: Offer Homebrew setup
+#   Phase 10: Show completion summary
+#
+# IDEMPOTENCY & SAFETY:
+#   ✓ Can be run multiple times without issues
+#   ✓ All directory creates use mkdir -p (safe if exist)
+#   ✓ All symlinks by create_symlink() handle conflicts
+#   ✓ All existing files backed up to ~/.dotfiles.backup
+#   ✓ Dry-run mode (--dry-run) shows what would happen
+#   ✓ No data loss - all originals preserved
+#
+# COMPARISON WITH bootstrap.sh:
+#   ┌─────────────────────────┬──────────────┬──────────────┐
+#   │ Aspect                  │ bootstrap.sh │ setup.sh     │
+#   ├─────────────────────────┼──────────────┼──────────────┤
+#   │ Git operations          │ YES          │ NO           │
+#   │ Creates symlinks        │ NO           │ YES          │
+#   │ Rsync deployment        │ YES          │ NO           │
+#   │ Creates backups         │ NO           │ YES          │
+#   │ Dry-run capability      │ NO           │ YES (--dry-run) │
+#   │ Idempotent              │ CAUTION      │ YES (fully)  │
+#   │ Can overwrite files     │ YES (rsync)  │ NO (backed up) │
+#   │ Safe to re-run          │ Use caution  │ Always safe  │
+#   │ Installs shell utils    │ YES          │ NO           │
+#   │ Handles profiles        │ Rsync only   │ Explicit     │
+#   └─────────────────────────┴──────────────┴──────────────┘
+#
+# DRY-RUN MODE (--dry-run):
+#   Shows exactly what would happen without making changes:
+#     bash setup.sh --dry-run
+#
+#   Output shows:
+#     ✓ What directories would be created
+#     ✓ What files would be backed up
+#     ✓ What symlinks would be created
+#     ✓ Where profiles would be deployed
+#     ✓ Validation results
+#
+#   No actual files are modified.
+#
+# BACKUPS:
+#   Location: ~/.dotfiles.backup
+#   Format: ~/.dotfiles.backup/<filename>.backup.<timestamp>
+#   Why: Preserve existing files in case of conflicts
+#   Restore: cp ~/.dotfiles.backup/<backup> ~/<original>
+#
+# EXTENDING setup.sh:
+#   To add new symlinks:
+#     1. Add file to openspec/changes/audit-profile-deployment-package-managers/
+#     2. Update DOTFILES array in main()
+#     3. Run: bash setup.sh --dry-run (verify)
+#     4. Run: bash setup.sh (apply)
+#
+#   To add new profiles:
+#     1. Create new .*_profile file in dotfiles repo
+#     2. Run: bash setup.sh (automatically symlinks)
+#     3. Run: source ~/.zshrc (or bash -l)
+#
+# TROUBLESHOOTING:
+#   Q: "symlink exists" error?
+#   A: Run setup.sh again - it handles existing symlinks
+#
+#   Q: Profiles not loading?
+#   A: Check: ls -la ~/.python_profile (should be symlink)
+#      Run: bash setup.sh to recreate
+#      Debug: source ~/.bash_profile 2>&1 | grep -i error
+#
+#   Q: Restore backed-up file?
+#   A: cp ~/.dotfiles.backup/<name>.backup.<ts> ~/<name>
+#
+#   Q: How to force re-run all symlink creation?
+#   A: bash setup.sh (always safe, recreates as needed)
+#
+# ============================================================================
 
 set -e  # Exit on error
 
@@ -234,8 +406,21 @@ main() {
   log_success "Convenience symlinks created"
   echo ""
 
+  # Step 3c: Create symlinks for all .*_profile files
+  log_info "Creating symlinks for context-specific profiles..."
+
+  for profile_file in "$DOTFILES_DIR"/.*_profile; do
+    if [ -f "$profile_file" ]; then
+      profile_name=$(basename "$profile_file")
+      target="$HOME/$profile_name"
+      create_symlink "$profile_file" "$target"
+    fi
+  done
+
+  log_success "Profile symlinks created"
+  echo ""
+
   # Step 4: Copy function modules
-  log_info "Copying function modules..."
   for func_file in "$DOTFILES_DIR/.functions.d"/*.sh; do
     if [ -f "$func_file" ]; then
       filename=$(basename "$func_file")

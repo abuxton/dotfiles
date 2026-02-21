@@ -306,9 +306,174 @@ Avoid these (platform-specific):
 - `gstat` (GNU), use `stat` with BSD flags
 - `brew` commands (Homebrew-specific)
 
+## Contributing Profiles
+
+Profiles are tool-specific configuration files that extend the shell environment. If you'd like to contribute a new profile:
+
+### Adding a New Profile
+
+1. **Create the profile file** in the dotfiles repo:
+   ```bash
+   touch ~/dotfiles/.{toolname}_profile
+   ```
+
+2. **Add a descriptive header**:
+   ```bash
+   #!/usr/bin/env bash
+   # {Tool Name} Configuration
+   # Description of what this profile does
+   # Dependencies: {other tools/profiles if any}
+   ```
+
+3. **Keep it focused**: One profile = one tool/domain
+   - ✅ `.python_profile` - Python/pyenv setup
+   - ✅ `.aws_profile` - AWS CLI configuration
+   - ❌ `.languages_profile` - Multiple tools (too broad)
+
+4. **Handle missing dependencies**:
+   ```bash
+   # Check before using
+   if ! [ -x "$(command -v pyenv)" ]; then
+     return  # or: echo "Warning: pyenv not installed"
+   fi
+   ```
+
+5. **Make it shell-compatible**:
+   ```bash
+   # ZSH-specific features
+   if [ -n "$ZSH_VERSION" ]; then
+     autoload -U compinit && compinit  # ZSH completions
+   fi
+   ```
+
+6. **Handle secrets properly**:
+   ```bash
+   # Profile contains public configuration
+   export PUBLIC_VAR="value"
+
+   # But prompt for or source private configuration
+   [ -f "$HOME/.bash_secrets" ] && source "$HOME/.bash_secrets"
+   ```
+
+7. **Document the profile** in `docs/PROFILE_GUIDE.md`:
+   - What it does
+   - Dependencies
+   - How to configure it
+   - Common issues/troubleshooting
+
+8. **Test both shells**:
+   ```bash
+   bash -n ~/dotfiles/.{toolname}_profile    # Check syntax
+   bash -c 'source ~/dotfiles/.{toolname}_profile && echo OK'
+   zsh -c 'source ~/dotfiles/.{toolname}_profile && echo OK'
+   ```
+
+### Profile Naming Convention
+
+Profiles use this naming pattern: `.{toolname}_profile`
+
+- Use lowercase tool name
+- Use underscore separators: `.my_tool_profile` (not `.myToolProfile`)
+- Include in commit with a message like: "Add .{toolname}_profile configuration"
+
+Examples:
+- `.python_profile` ✅
+- `.rust_profile` ✅
+- `.kubernetes_profile` ✅
+- `.my-tool_profile` ❌ (use underscore, not dash)
+- `.myToolProfile` ❌ (use lowercase and underscores)
+
+### Profile Loading Order
+
+Profiles are sourced in this order (edit `.bash_profile` and `.zshrc` if changing):
+
+1. **Language managers** (set up runtimes first)
+   - `.python_profile`, `.ruby_profile`, `.go_profile`, `.rust_profile`, `.node_profile`
+2. **Cloud platforms** (depends on languages)
+   - `.aws_profile`, `.azure_profile`, `.gcloud_profile`
+3. **DevOps tools** (depends on clouds)
+   - `.docker_profile`, `.kubernetes_profile`, `.rancher_profile`
+4. **Package managers**
+   - `.brew_profile`
+5. **Services and platforms**
+   - `.github_profile`, `.openai_profile`, etc.
+
+Add new profiles to the appropriate category in both shell rc files.
+
+### Testing Your Contribution
+
+Before submitting:
+
+```bash
+# 1. Syntax check
+bash -n ~/dotfiles/.{toolname}_profile
+zsh -n ~/dotfiles/.{toolname}_profile
+
+# 2. Functionality test
+source ~/dotfiles/.{toolname}_profile
+# Verify expected environment variables/aliases
+
+# 3. Run validation
+bash validate-dotfiles.sh
+
+# 4. Verify setup.sh still works
+bash setup.sh --dry-run | grep {toolname}
+
+# 5. Test on fresh shell
+exec zsh
+# Verify profile loaded without errors
+```
+
+### Documentation Requirements
+
+When adding a profile, update:
+
+1. **docs/PROFILE_GUIDE.md** - Add profile to table and describe it
+2. **docs/LANGUAGE_ECOSYSTEM.md** - If it's a language tool
+3. **docs/PACKAGE_MANAGER_GUIDE.md** - If it manages packages
+4. **README.md** - If it's major/important
+
+## Contributing Shell Functions
+
+When adding new shell functions to `~/.functions.d/`:
+
+### File Organization
+- One tool per file: `git.sh` for git functions, `system.sh` for system utilities
+- Use `.sh` extension for clarity
+- Keep related functions in the same file
+
+### Function Guidelines
+
+```bash
+# Good function template
+function my_function() {
+  # Description
+  local var1="$1"
+  local var2="$2"
+
+  # Implementation using POSIX-compatible features
+  if [ -z "$var1" ]; then
+    echo "Usage: my_function <arg1> [arg2]" >&2
+    return 1
+  fi
+
+  # Do work
+  return 0
+}
+
+# Export if it should be available in subshells
+export -f my_function
+```
+
+### Documentation
+- Add comments explaining what the function does
+- Document expected arguments
+- Show usage examples
+
 ## Questions?
 
 Refer to:
 - POSIX Shell Reference: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
 - Bash vs ZSH: https://shreevatsa.wordpress.com/2008/03/30/zshbash-startup-files-loading-order-bashrc-zshrc-etc/
 - The .d Pattern: https://chr4.org/posts/2014-09-10-conf-dot-d-like-directories-for-zsh-slash-bash-dotfiles/
+- [PROFILE_GUIDE.md](docs/PROFILE_GUIDE.md) - Comprehensive profile documentation

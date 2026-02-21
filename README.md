@@ -11,20 +11,58 @@
 ```bash
 git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-source setup.sh
+bash bootstrap.sh    # First-time setup: git pull, oh-my-zsh, rsync deploy
+bash setup.sh        # Configure environment: symlinks, profiles, validation
 ./validate-dotfiles.sh
 ```
 
-That's it! `setup.sh` handles everything:
-- Creating required directories (`~/.functions.d/`, `~/.config/`)
-- Setting up symlinks for all dotfiles
-- Creating `.bash_secrets` with secure permissions (600)
-- Installing function modules
-- Backing up existing configurations
+**For first-time setup**, run both scripts in order:
+1. `bash bootstrap.sh` - Updates repo, installs shell framework, deploys files
+2. `bash setup.sh` - Creates symlinks, configures profiles, sets up environment
+
+**For updating existing setup**, just run:
+- `bash setup.sh` - Reconfigures without git operations or overwrites
+
+See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow documentation.
 
 ## Installation
 
 **Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don't want or need. Don't blindly use my settings unless you know what that entails. Use at your own risk!
+
+### Two-Step Setup (Recommended for new machines)
+
+```bash
+git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+bash bootstrap.sh    # Step 1: Sync repo, install oh-my-zsh, deploy dotfiles
+bash setup.sh        # Step 2: Configure environment, symlinks, profiles
+```
+
+**Step 1: bootstrap.sh** - Repository and Shell Framework Setup
+- Updates dotfiles repository to latest version (`git pull`)
+- Installs/updates Oh My Zsh shell framework
+- Deploys all dotfiles to home directory via rsync
+- Installs global npm packages
+- Non-idempotent: Use once per machine (will overwrite existing files)
+
+**Step 2: setup.sh** - Local Environment Configuration
+- Creates required directories (`~/.functions.d/`, `~/.config/`)
+- Creates `.bash_secrets` with secure permissions (600)
+- Creates symlinks for all dotfiles and profiles
+- Copies function modules
+- Fully idempotent: Safe to run multiple times
+
+### For Existing Setups (or if already cloned)
+
+If you already have the repository cloned, just run:
+
+```bash
+bash setup.sh
+```
+
+This reconfigures your environment without git operations or overwrites.
+
+For detailed deployment workflow documentation, see [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 ### Using setup.sh (Recommended)
 

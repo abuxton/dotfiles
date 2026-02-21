@@ -171,7 +171,24 @@ unset func_file;
 # Load secrets file (environment variables, credentials)
 [ -r "$HOME/.bash_secrets" ] && [ -f "$HOME/.bash_secrets" ] && source "$HOME/.bash_secrets";
 
-export PATH="$HOME/bin:/usr/local/sbin:$PATH"
+# Load context-specific profile files (in explicit order)
+# These files configure language managers, cloud CLIs, and development tools
+# Profile sourcing order:
+#   1. Language managers first (python, ruby, go, rust) - need to be available before tools
+#   2. Cloud platform CLIs (aws, azure, gcloud)
+#   3. DevOps/container tools (docker, kubernetes, rancher, vagrant)
+#   4. Package managers (brew, node/npm)
+#   5. Development platforms (openai, claude, instruqt, vscode)
+for profile in ~/.{python,ruby,go,rust,node,perl,aws,azure,gcloud,docker,kubernetes,brew,vault,terraform}_profile; do
+  [ -r "$profile" ] && [ -f "$profile" ] && source "$profile";
+done
+unset profile
+
+# Load additional optional profiles (these are supplementary, failures won't break setup)
+for optional_profile in ~/.{openai,claude,instruqt,bob,vscode,atlasssian,hashicorp,rancher,vagrant,uv,github,perl}_profile; do
+  [ -r "$optional_profile" ] && [ -f "$optional_profile" ] && source "$optional_profile";
+done
+unset optional_profile
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 #test -x /Users/abuxton/.pyenv/shims/archey && zsh -c archey
