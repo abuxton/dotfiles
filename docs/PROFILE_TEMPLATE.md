@@ -19,7 +19,7 @@ This template shows how to create and document dependency-aware tool profiles.
 # export GITHUB_TOKEN="..."  ← Already set in .bash_secrets
 
 # GitHub-specific settings
-export GITHUB_USER="abuxton"
+export GITHUB_USER=$(whoami)
 export GITHUB_DEFAULT_BRANCH="main"
 
 # GitHub CLI configuration
