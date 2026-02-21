@@ -219,23 +219,23 @@ function doIt() {
 	  rsync --exclude ".git/" \
 	    --exclude ".gitignore" \
 	    --exclude ".github/" \
-        --exclude ".vscode/" \
+      --exclude ".vscode/" \
 	    --exclude "docs/" \
 	    --exclude "scripts/" \
-		--exclude "common/" \
-		--exclude ".claude/" \
-		--exclude ".openai/" \
-		--exclude ".opencode/" \
-		--exclude "openspec/" \
-		--exclude ".dependabot/" \
+		  --exclude "common/" \
+		  --exclude ".claude/" \
+		  --exclude ".openai/" \
+		  --exclude ".opencode/" \
+		  --exclude "openspec/" \
+		  --exclude ".dependabot/" \
 	    --exclude ".DS_Store" \
 	    --exclude ".osx" \
-		--exclude "assets/" \
-		--exclude "*.sh" \
-		--exclude "README.md" \
-		--exclude "LICENSE-MIT.txt" \
-		--exclude "*.md" \
-		-avh --no-perms . ~;
+		  --exclude "assets/" \
+		  --exclude "*.sh" \
+		  --exclude "README.md" \
+		  --exclude "LICENSE*" \
+		  --exclude "*.md" \
+		  -avh --no-perms . ~;
 	  # Reload shell environment to activate new dotfiles and profiles
 	  source ~/.zshrc;
 	fi
