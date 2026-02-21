@@ -13,9 +13,11 @@
 #     5. Reloading shell environment
 #
 # USAGE:
-#   bash bootstrap.sh           # Run with confirmation prompt
-#   bash bootstrap.sh --force   # Run without confirmation
-#   bash bootstrap.sh -f        # Alias for --force
+#   bash bootstrap.sh                 # Run with confirmation prompt
+#   bash bootstrap.sh --force         # Run without confirmation
+#   bash bootstrap.sh -f              # Alias for --force
+#   bash bootstrap.sh --dry-run       # Preview what would happen
+#   bash bootstrap.sh --help          # Show this help message
 #
 # RELATIONSHIP WITH setup.sh:
 #   bootstrap.sh is the FIRST script to run (repo sync + initial deployment)
@@ -98,7 +100,7 @@
 #   │ Creates symlinks        │ NO           │ YES          │
 #   │ Installs shells/tools   │ YES          │ NO           │
 #   │ Creates backups         │ NO           │ YES          │
-#   │ Has dry-run mode        │ NO           │ YES          │
+#   │ Has dry-run mode        │ YES          │ YES          │
 #   │ Safe for re-run         │ CAUTION      │ YES          │
 #   │ Can overwrite files     │ YES          │ NO           │
 #   └─────────────────────────┴──────────────┴──────────────┘
@@ -107,59 +109,205 @@
 
 cd "$(dirname "${BASH_SOURCE}")";
 
+# ============================================================================
+# HELP FUNCTION
+# ============================================================================
+
+show_help() {
+  cat <<'EOF'
+Bootstrap Dotfiles - Initial Setup & Deployment
+
+DESCRIPTION:
+  First-time deployment and repository synchronization for dotfiles.
+  Handles git pull, oh-my-zsh installation, rsync deployment, and npm globals.
+
+USAGE:
+  bash bootstrap.sh [OPTIONS]
+
+OPTIONS:
+  --help           Show this help message and exit
+  --dry-run        Preview what would be deployed without making changes
+  --force, -f      Run without interactive confirmation prompt
+  (default)        Run with confirmation prompt
+
+WORKFLOW:
+  1. bash bootstrap.sh --dry-run      # Preview changes first
+  2. bash bootstrap.sh                # Run with confirmation
+  3. bash setup.sh                    # Create symlinks & profiles
+  4. Edit ~/.bash_secrets             # Add your secrets
+  5. Restart shell                    # Profiles load
+
+WHAT GETS DEPLOYED:
+  ✓ All dotfiles (.bash_profile, .zshrc, .aliases, etc.)
+  ✓ All profiles (.*_profile files - python, ruby, aws, etc.)
+  ✓ All config files (.gitconfig, .curlrc, etc.)
+  ✓ Supporting scripts (brew.sh, etc.)
+  ✗ EXCLUDED: .git, .DS_Store, *.md files, bootstrap.sh itself
+
+CAUTION:
+  This script OVERWRITES existing files in your home directory.
+  Always review with --dry-run before running without --force.
+  Files are NOT backed up by this script (setup.sh does backups).
+
+AFTER RUNNING:
+  Run: bash setup.sh
+  This creates symlinks and enables proper dotfile management.
+
+SEE ALSO:
+  - docs/DEPLOYMENT_WORKFLOW.md  (decision guide)
+  - docs/DEPLOYMENT_REFERENCE.md (technical reference)
+  - bootstrap.sh source code      (detailed documentation)
+EOF
+}
+
+# ============================================================================
+# ARGUMENT PARSING
+# ============================================================================
+
+DRY_RUN=false
+FORCE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help|-h)
+      show_help
+      exit 0
+      ;;
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    --force|-f)
+      FORCE=true
+      shift
+      ;;
+    *)
+      echo "❌ Unknown option: $1"
+      echo "Use --help for usage information"
+      exit 1
+      ;;
+  esac
+done
+
+cd "$(dirname "${BASH_SOURCE}")";
+
+# Print mode indicator
+if [ "$DRY_RUN" = true ]; then
+  echo "⚠️  [DRY RUN MODE] - Previewing changes only, no files will be modified"
+fi
+
 # Step 1: Update repository to latest version
-# Ensures we have the newest dotfiles, profiles, and configurations
-git pull origin main;
+echo ""
+echo "📦 Step 1: Updating dotfiles repository..."
+if [ "$DRY_RUN" = true ]; then
+  echo "   [DRY RUN] Would run: git pull origin main"
+else
+  git pull origin main;
+fi
 
 # Step 2: Deploy dotfiles via rsync
 # Non-idempotent: copies/overwrites files rather than symlinking
 # After bootstrap, setup.sh will create symlinks pointing back to repo
+
+echo "📂 Step 2: Deploying dotfiles..."
 function doIt() {
-	rsync --exclude ".git/" \
-		--exclude ".DS_Store" \
-		--exclude ".osx" \
+	echo "   Running rsync deployment..."
+	if [ "$DRY_RUN" = true ]; then
+	  echo "   [DRY RUN] Would deploy files via rsync (excluding .git, .DS_Store, *.md, etc.)"
+	  echo "   [DRY RUN] Would source ~/.zshrc to reload environment"
+	else
+	  rsync --exclude ".git/" \
+	    --exclude ".gitignore" \
+	    --exclude ".github/" \
+        --exclude ".vscode/" \
+	    --exclude "docs/" \
+	    --exclude "scripts/" \
+		--exclude "common/" \
+		--exclude ".claude/" \
+		--exclude ".openai/" \
+		--exclude ".opencode/" \
+		--exclude "openspec/" \
+		--exclude ".dependabot/" \
+	    --exclude ".DS_Store" \
+	    --exclude ".osx" \
 		--exclude "assets/" \
-		--exclude "bootstrap.sh" \
+		--exclude "*.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
-		--exclude "brew.sh" \
 		--exclude "*.md" \
 		-avh --no-perms . ~;
-	#source ~/.bash_profile;
-	# Reload shell environment to activate new dotfiles and profiles
-	source ~/.zshrc;
+	  # Reload shell environment to activate new dotfiles and profiles
+	  source ~/.zshrc;
+	fi
 }
 
 # Step 3: Install Oh My Zsh shell framework
 # Only runs if oh-my-zsh is not already installed
 # Provides shell framework, theme infrastructure, plugin system
+
+echo "🔧 Step 3: Setting up Oh My Zsh..."
 function makeItHappen () {
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  if [ "$DRY_RUN" = true ]; then
+    echo "   [DRY RUN] Would install oh-my-zsh via: curl | sh"
+  else
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
 }
 
 # Step 4: Install global npm packages
 # Checks if package already exists before installing (idempotent)
 # add-gitignore: Create .gitignore files from github/gitignore repo
+
+echo "📦 Step 4: Installing global npm packages..."
 function nodeKnows(){
-  if ! [ -x "$(command -v add-gitignore)" ]; then
-	cd $HOME && npm i -g add-gitignore  #https://github.com/TejasQ/add-gitignore
+  if [ "$DRY_RUN" = true ]; then
+    echo "   [DRY RUN] Would check for: add-gitignore"
+    echo "   [DRY RUN] Would run: npm i -g add-gitignore (if needed)"
+  else
+    if ! [ -x "$(command -v add-gitignore)" ]; then
+      cd $HOME && npm i -g add-gitignore  #https://github.com/TejasQ/add-gitignore
+    else
+      echo "   ✓ add-gitignore already installed"
+    fi
   fi
 }
 
 # Step 5: Execute deployment
 # With --force or -f flag: skip confirmation
 # Otherwise: prompt user for confirmation
-if [ "$1" == "--force" -o "$1" == "-f" ]; then
-	doIt;
+
+echo ""
+if [ "$DRY_RUN" = true ]; then
+  # In dry-run mode, always execute (no confirmation needed)
+  echo "Executing deployment preview..."
+  makeItHappen;
+  doIt;
+  nodeKnows;
+  echo ""
+  echo "✓ DRY RUN COMPLETE - No changes were made"
+  echo "To apply these changes, run: bash bootstrap.sh"
+elif [ "$FORCE" = true ]; then
+  # Force mode: skip confirmation
+  echo "Executing deployment (force mode)..."
+  makeItHappen;
+  doIt;
+  nodeKnows;
+  echo ""
+  echo "✓ Deployment complete! Next step: bash setup.sh"
 else
-	read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
-	echo "";
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		# Execute: oh-my-zsh install → rsync deploy → npm globals
-		makeItHappen;
-		doIt;
-        nodeKnows;
-	fi;
+  # Interactive mode: ask for confirmation
+  read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
+  echo "";
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    # Execute: oh-my-zsh install → rsync deploy → npm globals
+    makeItHappen;
+    doIt;
+    nodeKnows;
+    echo ""
+    echo "✓ Deployment complete! Next step: bash setup.sh"
+  else
+    echo "Deployment cancelled."
+  fi;
 fi;
 
 # Cleanup: Remove function definitions from environment

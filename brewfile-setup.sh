@@ -29,6 +29,7 @@ set -euo pipefail
 : "${BREW_REPO_URL:=https://github.com/$(whoami)/homebrew-brewfile}"
 : "${BREW_LOG_DIR:=$BREW_HOME/log}"
 : "${BREW_LOG:=$BREW_LOG_DIR/brew.log}"
+: "${DRY_RUN:=false}"
 
 # Color codes for output (compatible with both sed and printf)
 readonly RED='\033[0;31m'
@@ -55,6 +56,68 @@ log_warn() {
 
 log_error() {
   printf "${RED}✗${NC}  %s\n" "$1" >&2
+}
+
+# ============================================================================
+# HELP FUNCTION
+# ============================================================================
+
+show_help() {
+  cat <<'EOF'
+Homebrew Package Manager Setup
+
+DESCRIPTION:
+  Manages Homebrew package installations via Brewfile for reproducible system setup.
+  Install, list, add, and remove packages with easy Brewfile management.
+
+USAGE:
+  bash brewfile-setup.sh [OPTIONS]
+  source brewfile-setup.sh
+  brew_install_from_file [--dry-run]
+
+OPTIONS:
+  --help                Show this help message and exit
+  --dry-run             Preview packages that would be installed without installing
+
+COMMON FUNCTIONS:
+  brew_initialize_home              Clone/update homebrew-brewfile repository
+  brew_install_homebrew [silent]    Install Homebrew
+  brew_install_from_file [--dry-run] Install all packages from Brewfile
+  brew_list_installed               List currently installed packages
+  brew_update_packages              Update all installed packages
+  brew_add_to_brewfile <pkg>        Add package to Brewfile
+  brew_remove_from_brewfile <pkg>   Remove package from Brewfile
+  brew_generate_brewfile            Generate Brewfile from installed packages
+  brew_show_brewfile                Display Brewfile contents
+  brew_validate                     Check Homebrew installation
+  brew_doctor                       Run Homebrew diagnostics
+
+EXAMPLES:
+  # First time setup:
+  bash brewfile-setup.sh --help              # See this help
+  source brewfile-setup.sh                   # Load functions
+  brew_install_homebrew                     # Install Homebrew if needed
+  brew_initialize_home                      # Clone homebrew-brewfile repo
+  brew_install_from_file                    # Install packages
+
+  # Preview packages before installing:
+  brew_install_from_file --dry-run          # See what would be installed
+
+  # Generate backup of current packages:
+  brew_generate_brewfile                    # Creates timestamped backup
+
+  # Add/remove packages:
+  brew_add_to_brewfile git                  # Add to Brewfile
+  brew_remove_from_brewfile git             # Remove from tracking
+
+  # Update everything:
+  brew_update_packages                      # Update all packages
+
+SEE ALSO:
+  - docs/DEPLOYMENT_WORKFLOW.md (dotfiles deployment guide)
+  - https://brew.sh (Homebrew documentation)
+  - https://github.com/Homebrew/homebrew-bundle (brew bundle)
+EOF
 }
 
 # ============================================================================
@@ -224,9 +287,17 @@ brew_count_packages() {
 
 ##
 # Install all packages from Brewfile
-# Accepts optional flags to pass to 'brew install'
+# Arguments:
+#   $1 - optional: "--dry-run" to preview without installing
 #
 brew_install_from_file() {
+  local dry_run=false
+
+  # Check for --dry-run flag
+  if [ "${1:-}" = "--dry-run" ]; then
+    dry_run=true
+  fi
+
   if ! brew_validate; then
     return 1
   fi
@@ -238,8 +309,12 @@ brew_install_from_file() {
   local count
   count=$(brew_count_packages)
 
-  log_info "Installing $count packages from Brewfile..."
-  log_info "This may take several minutes..."
+  if [ "$dry_run" = true ]; then
+    log_info "[DRY RUN] Would install $count packages from Brewfile"
+  else
+    log_info "Installing $count packages from Brewfile..."
+    log_info "This may take several minutes..."
+  fi
 
   local packages
   packages=$(grep -v '^#' "$BREWFILE" | grep -v '^[[:space:]]*$' | tr '\n' ' ')
@@ -249,7 +324,14 @@ brew_install_from_file() {
     return 1
   fi
 
-  # Install all packages
+  if [ "$dry_run" = true ]; then
+    log_info "[DRY RUN] Packages that would be installed:"
+    echo "$packages" | tr ' ' '\n' | sed 's/^/  - /'
+    log_success "[DRY RUN] COMPLETE - No packages were installed"
+    return 0
+  fi
+
+  # Install all packages (only if not dry-run)
   # shellcheck disable=SC2086
   if brew install $packages; then
     log_success "All packages installed successfully"
@@ -407,17 +489,17 @@ brew_generate_brewfile() {
 
   # Check if brew bundle is available
   if brew bundle --help >/dev/null 2>&1; then
-    log_info \"Using 'brew bundle dump' for Brewfile generation...\"
+    log_info "Using 'brew bundle dump' for Brewfile generation..."
 
-    if brew bundle dump --file=\"$output_file\" --force; then
-      log_success \"Generated Brewfile saved to: $output_file\"
-      log_info \"Brewfile contains current system packages (via brew bundle dump)\"
+    if brew bundle dump --file="$output_file" --force; then
+      log_success "Generated Brewfile saved to: $output_file"
+      log_info "Brewfile contains current system packages (via brew bundle dump)"
       return 0
     else
-      log_warn \"brew bundle dump failed, falling back to manual generation\"
+      log_warn "brew bundle dump failed, falling back to manual generation"
     fi
   else
-    log_info \"brew bundle not available, using manual generation\"
+    log_info "brew bundle not available, using manual generation"
   fi
 
   # Fallback: manual generation if brew bundle unavailable
@@ -518,11 +600,26 @@ EOF
 }
 
 # ============================================================================
-# INITIALIZATION
+# ARGUMENT HANDLING
 # ============================================================================
 
 # If sourced with a command as first argument, execute it
 if [ $# -gt 0 ]; then
-  # Call function with remaining arguments
-  "$@"
+  case "$1" in
+    --help|-h)
+      show_help
+      ;;
+    --dry-run)
+      # Pass --dry-run to functions that support it
+      # For now, just show help about how to use --dry-run
+      show_help
+      echo ""
+      echo "Examples of --dry-run usage:"
+      echo "  brew_install_from_file --dry-run    # Preview packages"
+      ;;
+    *)
+      # Call function with remaining arguments
+      "$@"
+      ;;
+  esac
 fi
