@@ -123,8 +123,26 @@ main() {
   log_success "Symlinks created"
   echo ""
 
+  # Step 3b: Create convenience symlinks
+  log_info "Creating convenience symlinks..."
+
+  # Symlink to dotfiles project directory
+  create_symlink "$DOTFILES_DIR" "$HOME/.dotfiles"
+
+  # Symlink to SSH configuration (if .ssh exists in dotfiles)
+  if [ -d "$DOTFILES_DIR/.ssh"  ]; then
+    create_symlink "$DOTFILES_DIR/.ssh" "$HOME/.ssh"
+  elif [ -d "/Users/$(whoami)/Dropbox/profile/dotfiles/ssh" ]; then
+	 create_symlink "$DOTFILES_DIR/.ssh" "$HOME/.ssh"
+  else
+    log_warn ".ssh directory not found in dotfiles - skipping symlink"
+  fi
+
+  log_success "Convenience symlinks created"
+  echo ""
+
   # Step 4: Copy function modules
-  log_info "Installing function modules..."
+  log_info "Copying function modules..."
   for func_file in "$DOTFILES_DIR/.functions.d"/*.sh; do
     if [ -f "$func_file" ]; then
       filename=$(basename "$func_file")
@@ -144,8 +162,8 @@ main() {
   log_success "Function modules installed"
   echo ""
 
-  # Step 5: Run validation
-  log_info "Validating setup..."
+  # Step 5: Validate basic setup
+  log_info "Validating base setup..."
   if [ -d "$HOME/.functions.d" ] && [ -f "$HOME/.bash_secrets" ]; then
     log_success "Setup validation passed"
   else
@@ -154,7 +172,7 @@ main() {
   fi
   echo ""
 
-  # Step 6: Optional Homebrew setup
+  # Step 6: Optional Homebrew setup (initializes ~/.homebrew with git repo)
   echo ""
   read -p "Install Homebrew packages from Brewfile? (y/n) " -n 1 -r
   echo
@@ -201,7 +219,7 @@ main() {
   fi
   echo ""
 
-  # Step 7: Run comprehensive validation if script exists
+  # Step 7: Run comprehensive validation
   if [ -f "$DOTFILES_DIR/validate-dotfiles.sh" ]; then
     log_info "Running comprehensive validation..."
     bash "$DOTFILES_DIR/validate-dotfiles.sh" > /dev/null 2>&1 && log_success "Validation script passed" || log_warn "Validation script found issues - run: ./validate-dotfiles.sh"
