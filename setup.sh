@@ -392,13 +392,13 @@ main() {
   log_info "Creating convenience symlinks..."
 
   # Symlink to dotfiles project directory
-  create_symlink "$DOTFILES_DIR" "$HOME/.dotfiles"
+  # create_symlink "$DOTFILES_DIR" "$HOME/.dotfiles"
 
   # Symlink to SSH configuration (if .ssh exists in dotfiles)
   if [ -d "$DOTFILES_DIR/.ssh"  ]; then
     create_symlink "$DOTFILES_DIR/.ssh" "$HOME/.ssh"
   elif [ -d "/Users/$(whoami)/Dropbox/profile/dotfiles/ssh" ]; then
-	 create_symlink "$DOTFILES_DIR/.ssh" "$HOME/.ssh"
+    create_symlink "/Users/$(whoami)/Dropbox/profile/dotfiles/ssh" "$HOME/.ssh"
   else
     log_warn ".ssh directory not found in dotfiles - skipping symlink"
   fi
