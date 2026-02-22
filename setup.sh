@@ -392,7 +392,7 @@ main() {
   log_info "Creating convenience symlinks..."
 
   # Symlink to dotfiles project directory
-  create_symlink "$DOTFILES_DIR" "$HOME/.dotfiles"
+  # create_symlink "$DOTFILES_DIR" "$HOME/.dotfiles"
 
   # Symlink to SSH configuration (if .ssh exists in dotfiles)
   if [ -d "$DOTFILES_DIR/.ssh"  ]; then
