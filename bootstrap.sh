@@ -2,7 +2,7 @@
 
 cd "$(dirname "${BASH_SOURCE}")";
 
-if [ -z "$CI" ]; then git pull origin main; fi;
+git pull origin main;
 
 function doIt() {
 	rsync --exclude ".git/" \
@@ -16,7 +16,7 @@ function doIt() {
 		--exclude "*.md" \
 		-avh --no-perms . ~;
 	#source ~/.bash_profile;
-	if [ -z "$CI" ]; then source ~/.zshrc; fi;
+	source ~/.zshrc;
 }
 function makeItHappen () {
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
