@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Node.js / npm Configuration
+#
+# Configures Node.js environment and npm package management.
+# Supports both nvm (Node Version Manager) and npm (built-in with Node).
+#
+# Note: For version management, consider:
+# - nvm: Manual installation, compatible with bash/zsh
+# - nodenv: Homebrew-friendly, similar to pyenv/rbenv
+# - Homebrew: System-wide Node installation (simpler, no version switching)
+#
+# This profile assumes Node.js is installed via Homebrew.
+
+# Ensure npm is in PATH (typically added by Homebrew)
+# export PATH="$HOME/.npm-global/bin:$PATH"
+
+# Uncomment below if using nvm (Node Version Manager)
+# NVM allows switching between Node.js versions, similar to pyenv/rbenv
+# Installation: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# [ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh"  # This loads nvm
+# [ -s "$HOME/.nvm/bash_completion" ] && \. "$HOME/.nvm/bash_completion"  # This loads nvm bash_completion
+
+# Uncomment below if using nodenv (Node Version Manager similar to rbenv)
+# Installation: brew install nodenv
+# eval "$(nodenv init -)"
+
+# Configure npm
+# Suppress audit warnings unless critical
+npm config set audit false 2>/dev/null || true
+
+# Set npm registry (optional, defaults to official npmjs registry)
+# npm config set registry https://registry.npmjs.org
+
+# Create .npm-global if it doesn't exist (for global packages)
+mkdir -p ~/.npm-global
+
+# Global npm packages location (useful if you have permissions issues)
+export NPM_HOME="${NPM_HOME:-$HOME/.npm-global}"
+export PATH="$NPM_HOME/bin:$PATH"
+
+# Note: Common global packages can be managed via package managers
+# rather than npm install -g for reproducibility:
+# - Use Brewfile for system packages (see brewfile-setup.sh)
+# - Use package.json + npm ci for project dependencies
+# - Use package managers (yarn, pnpm) for monorepos
+
+# Aliases for common npm operations
+alias nim='npm install -m'           # npm install missing
+alias ni='npm install'               # npm install
+alias niS='npm install --save'       # npm install and save to package.json
+alias niD='npm install --save-dev'   # npm install as dev dependency
+alias nip='npm install -g'           # npm install global
+alias nu='npm update'                # npm update
+alias nun='npm uninstall'            # npm uninstall
+alias nis='npm info --view=readme'   # npm info + readme

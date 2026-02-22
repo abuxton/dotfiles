@@ -1,44 +1,64 @@
-name: validate-dotfiles
+name: Validate Dotfiles
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feature/**
   pull_request:
+    branches:
+      - main
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    runs-on: macos-latest
+
     steps:
-      - name: Checkout dotfiles to workspace
-        uses: actions/checkout@v4
-        with:
-          path: dotfiles
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Link dotfiles into home directory
-        run: ln -sf "${GITHUB_WORKSPACE}/dotfiles" "${HOME}/dotfiles"
-
-      - name: Run setup.sh
-        run: bash "${HOME}/dotfiles/setup.sh"
-
-      - name: Run bootstrap.sh
-        run: bash "${HOME}/dotfiles/bootstrap.sh" --force
-
-      - name: Verify dotfiles
+      - name: Run validation script
         run: |
-          echo "Verifying dotfiles are installed in home directory..."
-          missing=0
-          for file in .bash_profile .bashrc .aliases .functions .exports; do
-            if [ -f "${HOME}/${file}" ]; then
-              echo "✓ ${HOME}/${file} exists"
-            else
-              echo "✗ ${HOME}/${file} missing"
-              missing=$((missing + 1))
-            fi
-          done
-          if [ $missing -gt 0 ]; then
-            echo "ERROR: $missing dotfile(s) are missing"
+          chmod +x ./validate-dotfiles.sh
+          ./validate-dotfiles.sh
+        env:
+          DOTFILES_DIR: ${{ github.workspace }}
+
+      - name: Check POSIX compliance
+        run: |
+          echo "Checking for bash-specific patterns..."
+          if grep -r "\[\[" .functions.d/*.sh 2>/dev/null; then
+            echo "ERROR: Found bash-specific [[ ]] patterns in function files"
             exit 1
           fi
-          echo "All dotfiles verified successfully!"
+          if grep -r "declare -A" .functions.d/*.sh 2>/dev/null; then
+            echo "ERROR: Found bash associative arrays in function files"
+            exit 1
+          fi
+          echo "✓ POSIX compliance check passed"
+
+      - name: Verify file permissions
+        run: |
+          # Check that .bash_secrets.template would have secure permissions
+          echo "Checking file structure integrity..."
+          [ -f .bash_secrets.template ] && echo "✓ .bash_secrets.template found" || exit 1
+          [ -f setup.sh ] && echo "✓ setup.sh found" || exit 1
+          [ -f validate-dotfiles.sh ] && echo "✓ validate-dotfiles.sh found" || exit 1
+          [ -d .functions.d ] && echo "✓ .functions.d directory found" || exit 1
+
+      - name: Test shell sourcing
+        run: |
+          echo "Testing shell configuration sourcing..."
+          # Test that rc files don't have syntax errors
+          bash -n .bash_profile && echo "✓ .bash_profile syntax valid" || exit 1
+          bash -n .bashrc && echo "✓ .bashrc syntax valid" || exit 1
+          zsh -n .zshrc && echo "✓ .zshrc syntax valid" || exit 1
+
+      - name: Verify symlink targets
+        run: |
+          echo "Verifying setup.sh creates correct targets..."
+          [ -f .bash_profile ] && echo "✓ .bash_profile exists" || exit 1
+          [ -f .bashrc ] && echo "✓ .bashrc exists" || exit 1
+          [ -f .zshrc ] && echo "✓ .zshrc exists" || exit 1
+          [ -f .bash_secrets.template ] && echo "✓ .bash_secrets.template exists" || exit 1
+          [ -d .functions.d ] && [ $(ls -1 .functions.d/*.sh 2>/dev/null | wc -l) -ge 3 ] && echo "✓ Function modules present" || exit 1

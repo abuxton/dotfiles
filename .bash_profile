@@ -3,11 +3,35 @@ export PATH="$HOME/bin:$PATH";
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+# * ~/.exports contains common environment variables
+# * ~/.aliases contains common aliases
+# * ~/.functions.d/ contains modular shell functions
+# * ~/.extra can be used for other settings you don't want to commit.
+for file in ~/.{path,bash_prompt,exports,aliases,extra}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
+
+# Load modular functions from ~/.functions.d/
+for func_file in ~/.functions.d/*.sh; do
+	[ -r "$func_file" ] && [ -f "$func_file" ] && source "$func_file";
+done;
+unset func_file;
+
+# Load secrets file (environment variables, credentials)
+[ -r "$HOME/.bash_secrets" ] && [ -f "$HOME/.bash_secrets" ] && source "$HOME/.bash_secrets";
+
+# Load context-specific profile files (bash-compatible only)
+# Note: Some profiles are zsh-specific (.uv_profile, etc.) and are skipped
+# Shell-compatible profiles (these work in both bash and zsh):
+for profile in ~/.{ruby,go,rust,aws,azure,gcloud,docker,kubernetes,brew,vault,terraform,bob,openai,claude,instruqt,vscode,atlasssian,hashicorp,rancher,vagrant,github}_profile; do
+  [ -r "$profile" ] && [ -f "$profile" ] && source "$profile" 2>/dev/null;
+done
+unset profile
+
+# Source python profile if available and bash-compatible
+[ -r "$HOME/.python_profile" ] && [ -f "$HOME/.python_profile" ] && \
+  grep -q "autoload\|compdef\|typeset -" "$HOME/.python_profile" || source "$HOME/.python_profile"
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob;
