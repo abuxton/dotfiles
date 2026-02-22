@@ -42,12 +42,12 @@ CHECKS_FAILED=0
 
 log_pass() {
   echo -e "${GREEN}✓${NC} $1"
-  ((CHECKS_PASSED++))
+  ((CHECKS_PASSED++)) || true
 }
 
 log_fail() {
   echo -e "${RED}✗${NC} $1"
-  ((CHECKS_FAILED++))
+  ((CHECKS_FAILED++)) || true
 }
 
 log_info() {
