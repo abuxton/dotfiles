@@ -234,6 +234,7 @@ function doIt() {
 		  --exclude "*.sh" \
 		  --exclude "README.md" \
 		  --exclude "LICENSE*" \
+			--exclude "agents" \
 		  --exclude "*.md" \
 		  -avh --no-perms . ~;
 	  # Reload shell environment to activate new dotfiles and profiles

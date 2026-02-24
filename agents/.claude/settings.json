@@ -1,0 +1,9 @@
+{
+  "enabledPlugins": {
+    "terraform-code-generation@hashicorp": true,
+    "terraform-module-generation@hashicorp": true,
+    "terraform-provider-development@hashicorp": true,
+    "packer-builders@hashicorp": true,
+    "packer-hcp@hashicorp": true
+  }
+}
