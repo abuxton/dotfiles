@@ -236,6 +236,7 @@ function doIt() {
 		  --exclude "LICENSE*" \
 			--exclude "agents" \
 		  --exclude "*.md" \
+		  --exclude "*_profile" \
 		  -avh --no-perms . ~;
 	  # Reload shell environment to activate new dotfiles and profiles
 	  source ~/.zshrc;
