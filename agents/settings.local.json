@@ -1,12 +1,5 @@
 {
-  "enabledPlugins": {
-    "terraform-code-generation@hashicorp": true,
-    "terraform-module-generation@hashicorp": true,
-    "terraform-provider-development@hashicorp": true,
-    "packer-builders@hashicorp": true,
-    "packer-hcp@hashicorp": true
-  },
- "permissions": {
+  "permissions": {
     "allow": [
       "Bash(git fetch:*)",
       "Bash(.foundations/scripts/bash/create-new-feature.sh:*)",
@@ -99,4 +92,3 @@
   ],
   "disableAllHooks": true
 }
-
