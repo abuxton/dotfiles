@@ -1,10 +1,10 @@
-# Dotfiles Project - Agent-Agnostic Workflow Guide
+# AGENTS Agent-Agnostic Workflow Guide
 
-This guide explains how to work with this dotfiles project using OpenSpec, an artifact-driven workflow system. Use this regardless of which agent interface you're using (GitHub Copilot, OpenCode, Claude, or any other agent).
+This guide explains how to work with projects using OpenSpec, an artifact-driven workflow system. Use this regardless of which agent interface you're using (GitHub Copilot, OpenCode, Claude, or any other agent).
 
 ## Overview
 
-This repository manages dotfiles, shell configurations, package manager profiles, and development environment setup. Work is organized using **OpenSpec**, an artifact-driven workflow that structures development into well-defined phases:
+Agents are expected to be used for a veriety of projects and we would like to establish a standardised approach utilising a mix of agent skills and Spec driven deployment in any development environment setup. Work is organized using **OpenSpec**, an artifact-driven workflow that structures development into well-defined phases:
 
 1. **Proposal** — What you want to build and why
 2. **Specs** — Technical requirements and acceptance criteria
@@ -16,11 +16,13 @@ This structure enables methodical progression from planning through completion.
 
 ### What Makes This Repository Agent-Aware?
 
-- **Multiple guided modes:** Copilot uses prompts, OpenCode uses CLI commands, agents use skills
-- **Consolidated references:** Skills organized in `.opencode/` and `.github/` directories
+- **Unified agent resources:** All skills, commands, prompts, and configuration in `~/.agents/`
+- **Local development:** During development, resources are in `.agents/` within project
+- **Deployable structure:** Copy entire `.agents/` directory to `~/.agents/` for system-wide access
+- **Multiple agent types:** Supports Claude, Copilot, OpenCode, and custom integrations
 - **Idempotent operations:** Safe for both autonomous and human decision-making
 - **Clear phase documentation:** Bootstrap, setup, validation, optional features
-- **Artifact-driven workflow:** OpenSpec structures complex changes like configuration refactors, new shell functions, deployment strategy updates
+- **Artifact-driven workflow:** OpenSpec structures complex changes consistently
 
 ### Key Concepts
 
@@ -31,11 +33,29 @@ This structure enables methodical progression from planning through completion.
 
 ## Available Skills
 
-Skills are organized by agent type and available in your agent's configuration directory:
+All skills are available in a unified location. The path depends on your context:
 
-- **For OpenCode CLI:** `.opencode/skills/` - All OpenSpec skills + git-workflow
-- **For GitHub Copilot:** `.github/skills/` - All OpenSpec skills
-- **For Claude AI:** Check this repository's root documentation
+**Development (in project):**
+- **Location:** `./.agents/skills/`
+- **Commands:** `./.agents/commands/`
+- **Prompts:** `./.agents/prompts/`
+- **Configuration:** `./.agents/settings.json`
+
+**Deployed (system-wide):**
+- **Location:** `~/.agents/skills/`
+- **Commands:** `~/.agents/commands/`
+- **Prompts:** `~/.agents/prompts/`
+- **Configuration:** `~/.agents/settings.json`
+
+Access available skills:
+
+```bash
+# During development (in project)
+ls ./.agents/skills/
+
+# After deployment to home directory
+ls ~/.agents/skills/
+```
 
 All skills follow the same conceptual pattern:
 
@@ -236,6 +256,10 @@ openspec/
 
 ## Configuration
 
+Agent configuration is managed in two places:
+
+### OpenSpec Configuration
+
 OpenSpec configuration lives in `openspec/config.yaml`:
 
 ```yaml
@@ -243,6 +267,24 @@ schema: spec-driven
 # Additional context can be added here to inform AI agents
 # Examples: tech stack, conventions, style guides, domain knowledge
 ```
+
+### Agent Resources Configuration
+
+Agent settings and environment configuration lives in `~/.agents/settings.json`:
+
+```json
+{
+  "version": "1.0",
+  "settings": {
+    "// Comment": "Agent integration settings"
+  },
+  "skills": {},
+  "commands": {},
+  "prompts": {}
+}
+```
+
+During development, this file is at `./.agents/settings.json` in your project. When deployed to your home directory, agents use `~/.agents/settings.json` to configure their behavior and available resources.
 
 ## Tips for Effective Use
 
@@ -270,25 +312,62 @@ When ready to commit work:
 4. Archive the change
 5. Sync specs if updating main specifications
 
-## Agent-Specific Notes
+## Agent Integration
 
-### GitHub Copilot (VS Code)
-- Skills accessible via `.github/skills/` directory
-- Custom prompts in `.github/prompts/` for OpenSpec operations
-- Tight integration with editor - can apply-change while editing
-- Use with VS Code chat or inline completions
+All agents access the same unified resource structure in `~/.agents/`:
 
-### OpenCode CLI
-- Skills in `.opencode/skills/` for CLI integration
-- Git workflow skill also available in `.opencode/skills/git-workflow/`
-- Can chain skills in workflows
-- CLI-first approach for autonomous operations
+```
+~/.agents/
+├── skills/          # All OpenSpec and domain-specific skills
+│   ├── openspec-new-change/
+│   ├── openspec-apply-change/
+│   ├── openspec-explore/
+│   ├── openspec-verify-change/
+│   ├── openspec-archive-change/
+│   ├── openspec-bulk-archive-change/
+│   ├── openspec-continue-change/
+│   ├── openspec-ff-change/
+│   ├── openspec-sync-specs/
+│   ├── openspec-onboard/
+│   ├── git-workflow/
+│   ├── go-development-skill/
+│   └── [other domain-specific skills]
+│
+├── commands/        # CLI command definitions for OpenCode and similar
+│   └── [command definitions]
+│
+├── prompts/         # Prompt templates for Copilot and other agents
+│   ├── opsx-new.prompt.md
+│   ├── opsx-apply.prompt.md
+│   ├── opsx-explore.prompt.md
+│   └── [other prompts]
+│
+└── settings.json    # Configuration and integration settings
+```
 
-### Claude AI
-- Skills loaded as part of system context
-- Full conversation history available
-- Can explore ideas extensively before choosing skill
-- Reference this file for complete workflow guidance
+### How Different Agents Use `~/.agents/`
+
+During development, agents reference `.agents/` in your project directory. After deployment, the same structure is available at `~/.agents/` for system-wide access.
+
+**Claude AI:**
+- Loads skills from `~/.agents/skills/`
+- References prompts for guidance
+- Uses settings.json for integration parameters
+
+**GitHub Copilot:**
+- Uses `~/.agents/prompts/` for custom prompt workflows
+- Accesses skills from `~/.agents/skills/`
+- References settings.json for VS Code integration
+
+**OpenCode CLI:**
+- Uses `~/.agents/commands/` for CLI operations
+- Loads skills from `~/.agents/skills/`
+- Reads settings.json for CLI configuration
+
+**Custom Integrations:**
+- Any agent can read from `~/.agents/skills/`
+- Use `~/.agents/settings.json` for agent-specific configuration
+- Reference `~/.agents/prompts/` for interaction patterns
 
 ## Common Workflows
 
@@ -402,18 +481,25 @@ GitHub **permanently blocks** tag names when releases are deleted. See `github-r
 
 ---
 
-## See Also
+## Directory Reference
 
-**Skills and Configurations:**
-- `.opencode/skills/` - OpenSpec and git-workflow skills for CLI
-- `.github/skills/` - OpenSpec skills for Copilot
-- `.github/prompts/` - Custom Copilot prompts for each OpenSpec operation
+**Agent Resources (Deployed):**
+- `~/.agents/skills/` - All OpenSpec and domain-specific skills
+- `~/.agents/commands/` - CLI command definitions
+- `~/.agents/prompts/` - Prompt templates for agent workflows
+- `~/.agents/settings.json` - Agent configuration and integration settings
+
+**Agent Resources (Development):**
+- `.agents/skills/` - All OpenSpec and domain-specific skills
+- `.agents/commands/` - CLI command definitions
+- `.agents/prompts/` - Prompt templates for agent workflows
+- `.agents/settings.json` - Agent configuration and integration settings
 
 **Project Configuration:**
 - `openspec/config.yaml` - Schema and project context
 - `openspec/changes/` - Active and archived changes
 - `openspec/specs/` - Specification files for the project
 
-**Project Reference:**
-- `README.md` - Dotfiles project overview
-- `CONTRIBUTING.md` - Contribution guidelines
+**Deployment:**
+- Copy entire `.agents/` directory from project to `~/.agents/` for system-wide home-based access
+- Agents automatically locate resources in `~/.agents/` on any system
