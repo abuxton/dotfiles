@@ -1,9 +1,9 @@
- Instructions for TFM Development
+ Copilot Instructions for Development Projects
 
 **PRIMARY RESOURCE:** Before consulting this file, refer to `$HOME/AGENTS.md` for the authoritative workflow and skill reference.
 
-This document provides guidance for GitHub Copilot when assisting with development of a project with Spec Driven Development utilizing openspec, speckit and GitFlow workflow conventions.
-regardless of language but with consideration for IaC, shell/bash and Go development patterns. It should be used as a reference for Copilot to understand the project's coding standards, workflow, and best practices when generating code or providing suggestions.
+This document provides guidance for GitHub Copilot when assisting with development using Spec Driven Development with openspec, OpenSpec workflow, and GitFlow version control conventions.
+Regardless of language, with core support for Go development patterns, shell/bash scripting, and Infrastructure as Code. It should be used as a reference for Copilot to understand best practices for workflow, standards, and patterns when generating code or providing suggestions.
 
 **Date:** 2026-02-25
 
@@ -12,12 +12,11 @@ regardless of language but with consideration for IaC, shell/bash and Go develop
 ## Table of Contents
 
 1. [Go Development Standards](#go-development-standards)
-2. [Project Structure](#project-structure)
-3. [Local Development Skills](#local-development-skills)
-4. [GitFlow Workflow (Quick Reference)](#gitflow-workflow-quick-reference)
-5. [Code Quality & Testing](#code-quality--testing)
-6. [ADR-Driven Development](#adr-driven-development)
-7. [Common Tasks & Patterns](#common-tasks--patterns)
+2. [Local Development Skills](#local-development-skills)
+3. [GitFlow Workflow (Quick Reference)](#gitflow-workflow-quick-reference)
+4. [Code Quality & Testing](#code-quality--testing)
+5. [Architecture Decision Records](#architecture-decision-records)
+6. [Common Development Patterns](#common-development-patterns)
 
 ---
 
@@ -50,33 +49,20 @@ regardless of language but with consideration for IaC, shell/bash and Go develop
 
 ### Code Organization
 
+Organize code with clear separation of concerns:
+
 ```
-tfm/
-├── cmd/              # Command implementations (Cobra CLI structure)
-│   ├── root.go       # Root command
-│   ├── copy/         # Copy command & subpackages
-│   ├── core/         # Core migration logic
-│   ├── delete/       # Delete command
-│   ├── generate/     # Code generation
-│   ├── helper/       # Shared helpers
-│   ├── list/         # Listing commands
-│   ├── lock/         # Locking logic
-│   ├── nuke/         # Cleanup commands
-│   └── unlock/       # Unlock logic
-├── output/           # Output formatting (writers)
-├── tfclient/         # Terraform Cloud client wrappers
-├── vcsclients/       # VCS provider clients (GitHub, GitLab)
-├── version/          # Version management
-├── ADR/              # Architecture Decision Records
+project/
+├── cmd/              # Command implementations (if CLI-based)
+├── internal/         # Internal packages not for external use
+├── pkg/              # Public packages for library use
 ├── test/             # Integration & e2e tests
-├── main.go           # Entry point
+├── main.go           # Entry point (if applicable)
 ├── go.mod            # Module definition
 ├── README.md         # Project overview
 ├── Makefile          # Build and test targets
 └── .github/          # GitHub configuration
     ├── workflows/    # CI/CD pipelines
-    ├── copilot-instructions.md  # This file
-    ├── CODEOWNERS    # Code ownership
     └── (skills and prompts deployed to ~/.agents/)
 ```
 
@@ -84,8 +70,8 @@ tfm/
 
 ### Naming Conventions
 
-- **Packages:** use lowercase, no underscores or hyphens (e.g., `copy`, `vcsclients`)
-- **Functions:** CamelCase, exported functions start with uppercase (e.g., `GetState`, `CloneRepo`)
+- **Packages:** use lowercase, no underscores or hyphens (e.g., `server`, `models`, `handlers`)
+- **Functions:** CamelCase, exported functions start with uppercase (e.g., `GetState`, `ProcessData`)
 - **Constants:** ALL_CAPS for exported, camelCase for unexported
 - **Interfaces:** Suffix with "er" when describing capability (e.g., `Reader`, `Writer`, `Validator`)
 - **Files:** use hyphens for multi-word names if clarity requires (e.g., `helper_logs.go`)
@@ -102,14 +88,8 @@ tfm/
 
 - Use **Viper** for config file & environment variable handling
 - Support both TOML/YAML config files AND environment variable overrides
-- Prefix env vars with `TFM_` (e.g., `TFM_SRC_TFE_TOKEN`)
+- Prefix env vars with your project name (e.g., `MYPROJECT_API_TOKEN`)
 - Document all config keys in README and code comments
-
-### VCS Abstraction
-
-- New VCS provider support must be abstraction-friendly (see ADR #0006)
-- All VCS operations should be provider-agnostic where possible
-- Use a `vcs_type` config option to route between GitHub/GitLab/future providers
 
 ---
 
@@ -207,50 +187,48 @@ This repository includes development skills deployed to `~/.agents/` for both of
 
 For comprehensive Git workflow guidance, refer to the deployed git-workflow skill at `~/.agents/skills/git-workflow/`.
 
-### TFM-Specific GitFlow Setup
+This guide uses **GitFlow** for version control and release management. Key commands and patterns are documented in deployed skill references.
 
-This project uses **GitFlow** for version control and release management. Key commands and patterns are documented in local skill references; quick reference below for TFM specifics.
+### Branch Naming
 
-### Branch Naming for TFM
-
-- **Feature:** `feature/<ADR-number>-<short-description>` (links ADRs to implementation)
-- **Bugfix:** `bugfix/<issue-number>-<short-description>`
+- **Feature:** `feature/issue-number-short-description` (link to issue tracker)
+- **Bugfix:** `bugfix/issue-number-short-description`
 - **Release:** `release/<version>`
-- **Hotfix:** `hotfix/<version>-<issue>`
+- **Hotfix:** `hotfix/<version>-issue`
 
 **See also:** [~/.agents/skills/git-workflow/references/branching-strategies.md](~/.agents/skills/git-workflow/references/branching-strategies.md) for detailed conventions and alternative branching models.
 
-### PR Workflow for TFM
+### Pull Request Workflow
 
 **Reference:** See [~/.agents/skills/git-workflow/references/pull-request-workflow.md](~/.agents/skills/git-workflow/references/pull-request-workflow.md) for comprehensive PR guidance.
 
-**TFM Requirements:**
-- **Title format:** `[ADR #0003] Implement monorepo discovery` (include ADR reference)
-- **Description:** Reference the ADR, link related issues, explain *why* changes are needed
+**Standard Requirements:**
+- **Title format:** Clear, descriptive title with issue reference (e.g., `#123: Add user authentication`)
+- **Description:** Link related issues, explain *why* changes are needed, reference any architectural decisions
 - **Commit convention:** Follow [Conventional Commits](~/.agents/skills/git-workflow/references/commit-conventions.md) format:
   ```
   type(scope): description
 
   Body: Detailed explanation.
-  Footer: Fixes #issue-number, References ADR #number
+  Footer: Fixes #issue-number
   ```
-- **Reviews:** 1+ code owner approval (see `.github/CODEOWNERS`)
+- **Reviews:** Approval from code owners
 - **Checks:** All CI/CD must pass
-- **Merge:** Squash commits to `develop`; preserve history for `main`
+- **Merge:** Squash commits for feature branches; preserve history for main branch
 
 ### Release & Hotfix Workflows
 
 **Reference:** See [~/.agents/skills/git-workflow/references/github-releases.md](~/.agents/skills/git-workflow/references/github-releases.md) for release management best practices.
 
-**TFM Release Process:**
+**Release Process:**
 1. Create `release/<version>` from `develop`
-2. Update `version/version.go` and `CHANGELOG.md`
+2. Update version files and CHANGELOG.md
 3. Merge to `main` with PR review
-4. Tag with semantic version (e.g., `v0.9.0`)
+4. Tag with semantic version (e.g., `v1.0.0`)
 5. Merge back to `develop` to sync version
 
-**TFM Hotfix Process:**
-1. Create `hotfix/<version>-<issue>` from `main`
+**Hotfix Process:**
+1. Create `hotfix/<version>-issue` from `main`
 2. Apply fix and bump patch version
 3. Merge to `main` with tag
 4. Merge back to `develop`
@@ -264,8 +242,8 @@ This project uses **GitFlow** for version control and release management. Key co
 All PRs must include relevant test coverage:
 
 - **Unit tests:** Minimum 70% code coverage on new packages
-- **Integration tests:** For multi-step workflows (clone → create workspaces → upload state)
-- **E2E tests:** In `test/` directory for full migration scenarios
+- **Integration tests:** For complex workflows or multi-step operations
+- **E2E tests:** For critical user-facing functionality
 
 ### Quality Gates & Test Execution
 
@@ -280,7 +258,7 @@ go test -v -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out
 
 # Run specific test
-go test -v -run TestCloneRepos ./cmd/core
+go test -v -run TestExample ./path/to/package
 
 # Comprehensive linting (must pass all)
 golangci-lint run --timeout 5m
@@ -317,146 +295,39 @@ Before requesting review, ensure:
 - [ ] Type assertions and reflection minimized
 - [ ] Naming follows conventions: `ID`, `URL`, `HTTP` (not `Id`, `Url`, `Http`)
 - [ ] Commit messages follow conventional format
-- [ ] ADR reference included (if applicable)
+- [ ] ADR or design documentation reference included (if applicable)
 - [ ] No hardcoded credentials or secrets
 - [ ] Comments explain *why*, not *what*
 - [ ] One pattern per problem domain (consistency with codebase)
 
 ---
 
-## ADR-Driven Development
+## Architecture Decision Records
 
-### ADR Reference in Code
+### Using ADRs in Development
 
-Every feature PR should reference its driving ADR:
+Architecture Decision Records (ADRs) document major design decisions and their rationale:
 
-1. **Use ADR number in branch name:** `feature/0003-monorepo-discovery`
-2. **Reference ADR in commits:** `References ADR #0003`
-3. **Link ADR in PR description:** Include ADR URL or number
-4. **Update ADR status:** Move status from `Proposed` → `Accepted` → `Implemented` as work progresses
+1. **Create ADRs for significant decisions:** Complex features, major refactors, API changes
+2. **Reference in code:** Link to ADR documentation in PR descriptions and relevant code comments
+3. **Track status:** Move ADRs through `Proposed` → `Accepted` → `Implemented` as work progresses
+4. **Version with code:** Keep ADR records in your repository for historical context
 
-### Active ADRs
-
-| ADR | Title | Status | Primary Goal |
-|-----|-------|--------|---|
-| 0001 | Initial ADR | Foundational | Go/Cobra/Viper decision |
-| 0003 | CE to TFC Migration | Proposed | Core migration workflow |
-| 0004 | CLI-Driven Workspaces | Accepted | Automate `cloud {}` block insertion |
-| 0005 | Variables Migration | Accepted | Terraform variable file handling |
-| 0006 | GitLab VCS Support | Draft | Multi-VCS abstraction |
-
-**Reference:** See [ADR/next-steps.md](../../ADR/next-steps.md) for current implementation roadmap.
+**Reference:** See your project's ADR directory for decision history and patterns.
 
 ---
 
-## Common Tasks & Patterns
-
-### Adding a New VCS Provider (e.g., Bitbucket after GitLab)
-
-1. **Create `vcsclients/bitbucket.go`** following the GitLab pattern:
-   ```go
-   package vcsclients
-
-   import (
-       "context"
-       bbClient "github.com/bitbucket/library-go"
-   )
-
-   type BitbucketContext struct {
-       Client context.Context
-       Token  string
-       // ...other fields
-   }
-
-   func NewBitbucketClient(token, workspace string) (*BitbucketContext, error) {
-       // Implementation
-   }
-   ```
-
-2. **Refactor `cmd/core/clone.go`** to be provider-agnostic:
-   ```go
-   func CloneRepo(vcsType string, repoName string) error {
-       switch vcsType {
-       case "github":
-           return cloneFromGitHub(repoName)
-       case "gitlab":
-           return cloneFromGitLab(repoName)
-       case "bitbucket":
-           return cloneFromBitbucket(repoName)
-       default:
-           return fmt.Errorf("unsupported VCS type: %s", vcsType)
-       }
-   }
-   ```
-
-3. **Update config validation** in `cmd/helper/helper_viper.go`:
-   ```go
-   func ValidateVCSConfig(vcsType string, config *Config) error {
-       switch vcsType {
-       case "gitlab":
-           if config.GitLabToken == "" || config.GitLabGroup == "" {
-               return errors.New("gitlab_token and gitlab_group required")
-           }
-       case "bitbucket":
-           if config.BitbucketToken == "" || config.BitbucketWorkspace == "" {
-               return errors.New("bitbucket_token and bitbucket_workspace required")
-           }
-       }
-       return nil
-   }
-   ```
-
-4. **Add tests** in `vcsclients/bitbucket_test.go`
-
-5. **Reference ADR:** Link to multi-VCS support ADR in PR
-
-### Adding a New Command
-
-1. **Create `cmd/<command>/<command>.go`** with a `NewCommand()` function:
-   ```go
-   package example
-
-   import "github.com/spf13/cobra"
-
-   func NewCommand() *cobra.Command {
-       cmd := &cobra.Command{
-           Use:   "example",
-           Short: "Example command",
-           Long:  "Longer description",
-           RunE:  RunCommand,
-       }
-       cmd.Flags().StringP("flag", "f", "default", "Flag description")
-       return cmd
-   }
-
-   func RunCommand(cmd *cobra.Command, args []string) error {
-       // Implementation
-       return nil
-   }
-   ```
-
-2. **Register in `cmd/root.go`:**
-   ```go
-   import "github.com/hashicorp-services/tfm/cmd/example"
-
-   func init() {
-       rootCmd.AddCommand(example.NewCommand())
-   }
-   ```
-
-3. **Add tests** in `cmd/example/example_test.go`
+## Common Development Patterns
 
 ### Error Handling Pattern
 
 Always provide context with type-safe error wrapping:
 
 ```go
-func CloneRepo(repoURL, targetPath string) error {
-    client, err := git.PlainClone(targetPath, false, &git.CloneOptions{
-        URL: repoURL,
-    })
+func ProcessData(data []byte) error {
+    result, err := Parse(data)
     if err != nil {  // lowercase, no punctuation
-        return fmt.Errorf("failed to clone repository %s to %s: %w", repoURL, targetPath, err)
+        return fmt.Errorf("failed to parse data: %w", err)
     }
     return nil
 }
@@ -464,19 +335,17 @@ func CloneRepo(repoURL, targetPath string) error {
 
 ### Logging Pattern
 
-Use structured logging with color output for CLI feedback:
+Use structured logging with optional color output for CLI feedback:
 
 ```go
 import (
     "log/slog"
-    "github.com/fatih/color"
+    // optional: "github.com/fatih/color" for CLI color output
 )
 
 func Example() {
-    color.Green("✓ Operation succeeded")
-    color.Yellow("⚠ Warning message")
-    color.Red("✗ Error message")
     slog.Info("operation completed", "duration", elapsed)
+    slog.Error("operation failed", "error", err)
 }
 ```
 
@@ -507,24 +376,24 @@ func Process[T any](items []T) {
 Use functional options for flexible, extensible config:
 
 ```go
-type CloneConfig struct {
+type ProcessConfig struct {
     Timeout time.Duration
     Retries int
     Auth    string
 }
 
-type Option func(*CloneConfig)
+type Option func(*ProcessConfig)
 
 func WithTimeout(d time.Duration) Option {
-    return func(cfg *CloneConfig) { cfg.Timeout = d }
+    return func(cfg *ProcessConfig) { cfg.Timeout = d }
 }
 
 func WithRetries(n int) Option {
-    return func(cfg *CloneConfig) { cfg.Retries = n }
+    return func(cfg *ProcessConfig) { cfg.Retries = n }
 }
 
-func Clone(url string, opts ...Option) error {
-    cfg := &CloneConfig{Timeout: 30 * time.Second}
+func Process(data []byte, opts ...Option) error {
+    cfg := &ProcessConfig{Timeout: 30 * time.Second}
     for _, opt := range opts {
         opt(cfg)
     }
@@ -532,7 +401,7 @@ func Clone(url string, opts ...Option) error {
 }
 
 // Usage
-Clone("https://example.com/repo.git",
+Process(myData,
     WithTimeout(60*time.Second),
     WithRetries(3))
 ```
@@ -553,11 +422,11 @@ All PRs automatically run these checks (must pass all before merge):
 4. **Build validation** - Cross-platform binary compilation
 5. **Code formatting** - `go fmt`, `goimports` consistency
 
-**Before merging to `develop`:**
+**Before merging to `develop` or `main`:**
 - All CI checks must pass
-- Code review approval from code owner
+- Code review approval from project maintainers
 - Squash commits for feature branches
-- Include ADR reference in PR body and commits
+- Include any ADR/design document references in PR body
 
 **View workflows:** `.github/workflows/`
 
@@ -576,14 +445,13 @@ When developing features, load these patterns as needed from `~/.agents/skills/g
 
 | Pattern | Purpose | Example Use Case |
 |---------|---------|---|
-| **Architecture & Design** | Package structure, config management, middleware chains | Designing new command packages or refactoring VCS clients |
-| **Logging** | Structured logging with `log/slog`, color CLI feedback | Adding diagnostic output to migration commands |
-| **Error Handling** | Error wrapping with context, type-safe checks | Implementing robust error propagation in copied resources |
+| **Logging** | Structured logging with `log/slog` | Adding diagnostic output to application operations |
+| **Error Handling** | Error wrapping with context, type-safe checks | Implementing robust error propagation throughout codebase |
 | **Testing** | Table-driven tests, interface mocks, build tags | Writing comprehensive test coverage for new features |
 | **Linting** | `golangci-lint` v2 config, static analysis best practices | Ensuring code quality gates before PR submission |
-| **API Design** | Functional options, builder patterns, extensible config | Designing CLI flags and config file options |
-| **Resilience** | Retry logic, graceful shutdown, context propagation | Implementing timeout and retry behavior for VCS/TFC API calls |
-| **Performance** | Memory pooling, garbage collection awareness | Optimizing large-scale copy operations |
+| **API Design** | Functional options, builder patterns, extensible config | Designing flexible, composable APIs and interfaces |
+| **Resilience** | Retry logic, graceful shutdown, context propagation | Implementing timeout and retry behavior for network operations |
+| **Performance** | Memory pooling, garbage collection awareness | Optimizing code and resource usage |
 | **Modernization** | Go 1.26+ features, `go fix`, generic functions | Applying modern Go patterns during refactors |
 
 ### Code Quality Benchmarks
@@ -599,24 +467,15 @@ When developing features, load these patterns as needed from `~/.agents/skills/g
 
 ## Code Ownership & Review
 
-See `.github/CODEOWNERS` for specific package ownership. Key maintainers:
-
-- **Core migration logic:** Core team
-- **VCS integrations:** VCS team
-- **CLI/UX:** CLI team
-- **Testing:** QA + core teams
+Code ownership and review processes vary by project. Refer to `.github/CODEOWNERS` for your project's specific ownership and review requirements.
 
 ---
 
 ## Resources & References
 
-- **Main README:** [README.md](.README.md)
+- **Main README:** [README.md](README.md)
 - **Primary Workflow Guide:** [$HOME/AGENTS.md]($HOME/AGENTS.md)
-- **Architecture Decisions:** [ADR/](./doc/ADR/)
-- **Implementation Status:** [ADR/next-steps.md](./doc/ADR/next-steps.md)
-- **Terraform Documentation:** https://developer.hashicorp.com/terraform
 - **Go Standards:** https://golang.org/doc/effective_go
-- **Cobra CLI Framework:** https://cobra.dev
 - **Deployed Git Workflow Skill:** [~/.agents/skills/git-workflow/SKILL.md](~/.agents/skills/git-workflow/SKILL.md)
 - **Deployed Go Development Skill:** [~/.agents/skills/go-development-skill/SKILL.md](~/.agents/skills/go-development-skill/SKILL.md)
 - **Git Workflow References:** [~/.agents/skills/git-workflow/references/](~/.agents/skills/git-workflow/references/)
