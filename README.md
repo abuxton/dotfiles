@@ -11,19 +11,28 @@
 ```bash
 git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-bash bootstrap.sh    # First-time setup: git pull, oh-my-zsh, rsync deploy
-bash setup.sh        # Configure environment: symlinks, profiles, validation
+bash bootstrap.sh       # First-time setup: git pull, oh-my-zsh, rsync deploy
+bash setup.sh           # Configure environment: symlinks, profiles
+bash deploy-agents.sh   # Deploy AI agent configurations
 ./validate-dotfiles.sh
 ```
 
-**For first-time setup**, run both scripts in order:
+**For first-time setup**, run all three scripts in order:
 1. `bash bootstrap.sh` - Updates repo, installs shell framework, deploys files
 2. `bash setup.sh` - Creates symlinks, configures profiles, sets up environment
+3. `bash deploy-agents.sh` - Deploys AI agent configurations to `~/.agents/`, `~/AGENTS.md`, etc.
 
 **For updating existing setup**, just run:
-- `bash setup.sh` - Reconfigures without git operations or overwrites
+- `bash setup.sh` - Reconfigures without git operations or overwrites (idempotent)
+- `bash deploy-agents.sh` - Updates agent configurations (idempotent)
 
 See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow documentation.
+
+## Agent Configuration
+
+This repository includes AI agent configurations for multiple agent platforms (Claude, OpenAI via Git-Copilot, OpenCode, etc.). Run `bash deploy-agents.sh` to deploy these configurations.
+
+**Reference:** After deployment, see `$HOME/AGENTS.md` for complete agent workflow documentation.
 
 ## Deployment Workflow Guides
 
@@ -50,13 +59,14 @@ See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow 
 
 **Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don't want or need. Don't blindly use my settings unless you know what that entails. Use at your own risk!
 
-### Two-Step Setup (Recommended for new machines)
+### Three-Step Setup (Recommended for new machines)
 
 ```bash
 git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-bash bootstrap.sh    # Step 1: Sync repo, install oh-my-zsh, deploy dotfiles
-bash setup.sh        # Step 2: Configure environment, symlinks, profiles
+bash bootstrap.sh       # Step 1: Sync repo, install oh-my-zsh, deploy dotfiles
+bash setup.sh           # Step 2: Configure environment, symlinks, profiles
+bash deploy-agents.sh   # Step 3: Deploy AI agent configurations
 ```
 
 **Step 1: bootstrap.sh** - Repository and Shell Framework Setup
@@ -73,37 +83,85 @@ bash setup.sh        # Step 2: Configure environment, symlinks, profiles
 - Copies function modules
 - Fully idempotent: Safe to run multiple times
 
+**Step 3: deploy-agents.sh** - AI Agent Configuration Deployment
+- Symlinks `~/.agents/` for centralized agent skill/prompt storage
+- Deploys agent-specific configs (`~/.bob/`, `~/.claude/`, `~/.github/`, `~/.opencode/`)
+- Symlinks `~/AGENTS.md` for agent workflow reference
+- Enables system-wide access to agent resources and documentation
+- Fully idempotent: Safe to run multiple times
+
 ### For Existing Setups (or if already cloned)
 
-If you already have the repository cloned, just run:
+If you already have the repository cloned, run the setup scripts that you need:
 
 ```bash
+# Reconfigure dotfiles and environment
 bash setup.sh
+
+# Deploy or update agent configurations
+bash deploy-agents.sh
 ```
 
-This reconfigures your environment without git operations or overwrites.
+Both scripts are fully **idempotent** - safe to run multiple times without side effects.
 
 For detailed deployment workflow documentation, see [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
-### Using setup.sh (Recommended)
+### Understanding the Three Scripts
 
-The easiest way to set up these dotfiles:
+| Script | Runs | Idempotent | Primary Purpose |
+|--------|------|------------|--------------------------------|
+| `bootstrap.sh` | Once per machine | No | Repository sync + initial deployment |
+| `setup.sh` | Multiple times | Yes | Symlinks, profiles, environment setup |
+| `deploy-agents.sh` | Multiple times | Yes | Agent configuration deployment |
 
-```bash
-git clone https://github.com/abuxton/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-source setup.sh
-```
-
-The `setup.sh` script is fully **idempotent** - running it multiple times is safe and produces the same result.
+**Workflow timeline:**
+1. Run `bootstrap.sh` first on a new machine
+2. Run `setup.sh` after bootstrap, or anytime to reconfigure
+3. Run `deploy-agents.sh` after setup, or anytime to update agent configs
+4. All subsequent runs use `setup.sh` and `deploy-agents.sh` as needed
 
 ### Verify Installation
 
-After installation, verify everything is configured:
+After running all three scripts, verify everything is configured:
 
 ```bash
 ./validate-dotfiles.sh
 ```
+
+Verify agent configurations are deployed:
+
+```bash
+ls -la ~/.agents/
+cat ~/AGENTS.md
+```
+
+## Agent Configuration Details
+
+### Available Agent Resources
+
+After running `deploy-agents.sh`, the following agent resources are available:
+
+**Deployed Locations:**
+- `~/.agents/` - Central agent resource repository
+  - `skills/` - All available skills (OpenSpec, git-workflow, domain-specific)
+  - `prompts/` - Agent-specific prompt templates
+  - `commands/` - CLI command definitions
+  - `settings.json` - Central agent configuration
+- `~/.bob/` - Bob agent configuration
+- `~/.claude/` - Claude agent configuration
+- `~/.github/` - GitHub Copilot configuration
+- `~/.opencode/` - OpenCode CLI configuration
+- `~/AGENTS.md` - Primary agent workflow documentation (symlinked from `agents/AGENTS.md`)
+
+**Agent Skills Included:**
+- **OpenSpec Workflow:** `openspec-new-change`, `openspec-apply-change`, `openspec-explore`, `openspec-verify-change`, `openspec-ff-change`, `openspec-archive-change`, and more
+- **Git Workflow:** Branching strategies, conventional commits, PR workflows, CI/CD integration, release management
+- **Domain-Specific:** Go development patterns, shell scripting, infrastructure as code
+
+**Getting Started with Agents:**
+1. Review `~/AGENTS.md` for complete agent workflow documentation
+2. Configure agent-specific settings in `~/.agents/settings.json`
+3. Start using agents with Copilot, Claude, OpenCode CLI, etc.
 
 ## Configuration
 

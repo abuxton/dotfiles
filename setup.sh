@@ -399,6 +399,7 @@ main() {
     create_symlink "$DOTFILES_DIR/.ssh" "$HOME/.ssh"
   elif [ -d "/Users/$(whoami)/Dropbox/profile/dotfiles/ssh" ]; then
     create_symlink "/Users/$(whoami)/Dropbox/profile/dotfiles/ssh" "$HOME/.ssh"
+		log_info "Symlinked .ssh from Dropbox profile (fallback)"
   else
     log_warn ".ssh directory not found in dotfiles - skipping symlink"
   fi

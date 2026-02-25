@@ -1,10 +1,26 @@
-# Working with OpenSpec - Agent-Agnostic Guide
+# Dotfiles Project - Agent-Agnostic Workflow Guide
 
-This guide explains how to work with OpenSpec in this repository, regardless of which agent interface you're using (GitHub Copilot, OpenCode, Claude, or any other agent with OpenSpec skills).
+This guide explains how to work with this dotfiles project using OpenSpec, an artifact-driven workflow system. Use this regardless of which agent interface you're using (GitHub Copilot, OpenCode, Claude, or any other agent).
 
 ## Overview
 
-OpenSpec is an artifact-driven workflow system that structures development work into well-defined artifacts (proposal, specs, design, tasks, implementation, etc.). The workflow enables methodical progression through changes from planning to completion.
+This repository manages dotfiles, shell configurations, package manager profiles, and development environment setup. Work is organized using **OpenSpec**, an artifact-driven workflow that structures development into well-defined phases:
+
+1. **Proposal** — What you want to build and why
+2. **Specs** — Technical requirements and acceptance criteria
+3. **Design** — Architecture and implementation approach
+4. **Tasks** — Concrete, actionable work items
+5. **Implementation** — Code changes and deployment
+
+This structure enables methodical progression from planning through completion.
+
+### What Makes This Repository Agent-Aware?
+
+- **Multiple guided modes:** Copilot uses prompts, OpenCode uses CLI commands, agents use skills
+- **Consolidated references:** Skills organized in `.opencode/` and `.github/` directories
+- **Idempotent operations:** Safe for both autonomous and human decision-making
+- **Clear phase documentation:** Bootstrap, setup, validation, optional features
+- **Artifact-driven workflow:** OpenSpec structures complex changes like configuration refactors, new shell functions, deployment strategy updates
 
 ### Key Concepts
 
@@ -15,7 +31,13 @@ OpenSpec is an artifact-driven workflow system that structures development work 
 
 ## Available Skills
 
-All skills are available in agent-specific locations but follow the same conceptual pattern:
+Skills are organized by agent type and available in your agent's configuration directory:
+
+- **For OpenCode CLI:** `.opencode/skills/` - All OpenSpec skills + git-workflow
+- **For GitHub Copilot:** `.github/skills/` - All OpenSpec skills
+- **For Claude AI:** Check this repository's root documentation
+
+All skills follow the same conceptual pattern:
 
 ### 🎯 Primary Skills
 
@@ -251,19 +273,22 @@ When ready to commit work:
 ## Agent-Specific Notes
 
 ### GitHub Copilot (VS Code)
-- Skills accessible via chat commands
+- Skills accessible via `.github/skills/` directory
+- Custom prompts in `.github/prompts/` for OpenSpec operations
 - Tight integration with editor - can apply-change while editing
-- Visual diff support during implementation
+- Use with VS Code chat or inline completions
 
-### Claude
+### OpenCode CLI
+- Skills in `.opencode/skills/` for CLI integration
+- Git workflow skill also available in `.opencode/skills/git-workflow/`
+- Can chain skills in workflows
+- CLI-first approach for autonomous operations
+
+### Claude AI
 - Skills loaded as part of system context
 - Full conversation history available
 - Can explore ideas extensively before choosing skill
-
-### OpenCode
-- Skills in `.opencode/commands/` for CLI integration
-- Can chain skills in workflows
-- CLI-first approach
+- Reference this file for complete workflow guidance
 
 ## Common Workflows
 
@@ -379,9 +404,16 @@ GitHub **permanently blocks** tag names when releases are deleted. See `github-r
 
 ## See Also
 
-- [copilot-instructions.md](./copilot-instructions.md) - VS Code Copilot specific setup
-- `openspec/config.yaml` - Schema configuration
-- `openspec/changes/` - Active changes
-- `openspec/specs/` - Synced specifications
-- `.claude/skills/git-workflow/` - Git workflow skill files (Claude)
-- `.opencode/skills/git-workflow/` - Git workflow skill files (OpenCode)
+**Skills and Configurations:**
+- `.opencode/skills/` - OpenSpec and git-workflow skills for CLI
+- `.github/skills/` - OpenSpec skills for Copilot
+- `.github/prompts/` - Custom Copilot prompts for each OpenSpec operation
+
+**Project Configuration:**
+- `openspec/config.yaml` - Schema and project context
+- `openspec/changes/` - Active and archived changes
+- `openspec/specs/` - Specification files for the project
+
+**Project Reference:**
+- `README.md` - Dotfiles project overview
+- `CONTRIBUTING.md` - Contribution guidelines
