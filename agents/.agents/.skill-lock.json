@@ -36,6 +36,96 @@
       "skillFolderHash": "a5a8823e403adc13b2488aae9968d6d92adbd2d7",
       "installedAt": "2026-02-26T11:12:43.652Z",
       "updatedAt": "2026-02-26T11:12:43.652Z"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "5c26c1472b98de33a48074ba5d3efe3a727b8e37",
+      "installedAt": "2026-02-26T11:30:34.131Z",
+      "updatedAt": "2026-02-26T11:30:34.131Z"
+    },
+    "ansible-automation": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
+      "skillPath": "skills/ansible-automation/SKILL.md",
+      "skillFolderHash": "1769e294ab52cc17afe5a72b3623b2e6be6d678a",
+      "installedAt": "2026-02-26T11:35:52.640Z",
+      "updatedAt": "2026-02-26T11:35:52.640Z"
+    },
+    "markdown-documentation": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
+      "skillPath": "skills/markdown-documentation/SKILL.md",
+      "skillFolderHash": "a464981287a76c6a7efa16ec81fe67cae63d5665",
+      "installedAt": "2026-02-26T11:36:53.507Z",
+      "updatedAt": "2026-02-26T11:36:53.507Z"
+    },
+    "user-story-writing": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
+      "skillPath": "skills/user-story-writing/SKILL.md",
+      "skillFolderHash": "9e48382570fca082748e9c3b54f3ab70ee36895c",
+      "installedAt": "2026-02-26T11:39:13.539Z",
+      "updatedAt": "2026-02-26T11:39:13.539Z"
+    },
+    "obs-memory": {
+      "source": "adamtylerlynch/obsidian-agent-memory-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/adamtylerlynch/obsidian-agent-memory-skills.git",
+      "skillPath": "skills/obs/SKILL.md",
+      "skillFolderHash": "9c54b64225973ba206e5ce9b962e28919dcbf64e",
+      "installedAt": "2026-02-26T11:42:39.136Z",
+      "updatedAt": "2026-02-26T11:42:39.136Z"
+    },
+    "azure-verified-modules": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
+      "skillPath": "terraform/code-generation/skills/azure-verified-modules/SKILL.md",
+      "skillFolderHash": "571ad476a6280c3ef1fc4781d7ee7ae41dfa0917",
+      "installedAt": "2026-02-26T11:58:20.836Z",
+      "updatedAt": "2026-02-26T11:58:20.836Z"
+    },
+    "terraform-style-guide": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
+      "skillPath": "terraform/code-generation/skills/terraform-style-guide/SKILL.md",
+      "skillFolderHash": "41487ea35027d0ca9930aed05d16840209e0a181",
+      "installedAt": "2026-02-26T11:58:20.859Z",
+      "updatedAt": "2026-02-26T11:58:20.859Z"
+    },
+    "terraform-test": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
+      "skillPath": "terraform/code-generation/skills/terraform-test/SKILL.md",
+      "skillFolderHash": "4b296f72fefb4891ec985cd7f459599e269301e6",
+      "installedAt": "2026-02-26T11:58:20.871Z",
+      "updatedAt": "2026-02-26T11:58:20.871Z"
+    },
+    "refactor-module": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
+      "skillPath": "terraform/module-generation/skills/refactor-module/SKILL.md",
+      "skillFolderHash": "f0abaa84ffa8642ee10bac6b6c1e7c32b72461f2",
+      "installedAt": "2026-02-26T11:58:20.885Z",
+      "updatedAt": "2026-02-26T11:58:20.885Z"
+    },
+    "run-acceptance-tests": {
+      "source": "hashicorp/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
+      "skillPath": "terraform/provider-development/skills/run-acceptance-tests/SKILL.md",
+      "skillFolderHash": "675112f945c8668ab68e616a4d8744e74c821eb6",
+      "installedAt": "2026-02-26T11:58:20.896Z",
+      "updatedAt": "2026-02-26T11:58:20.896Z"
     }
   },
   "dismissed": {
