@@ -1,0 +1,70 @@
+{
+  "skill_name": "do-nothing-scripting",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a do-nothing script from the asciinema cast file at ./_assets/asciinema/skills.cast",
+      "expected_output": "A do-nothing bash script written to ./tmp/skills_do_nothing.sh, with step functions derived from the cast recording, made executable, and validated with bash -n.",
+      "files": [
+        "_assets/asciinema/skills.cast"
+      ],
+      "expectations": [
+        "extract_commands.py is run with the .cast file path",
+        "The output script contains step_ functions",
+        "The output script contains a main() function",
+        "The output script contains wait_for_enter",
+        "bash -n is run to validate the script",
+        "chmod +x is applied to the output script"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have a text file at /tmp/deploy_steps.txt listing the commands I run for a deployment. Create a do-nothing script from it.",
+      "expected_output": "A do-nothing bash script written to ./tmp/deploy_steps_do_nothing.sh, with one step function per logical group of commands from the text file.",
+      "files": [],
+      "expectations": [
+        "extract_commands.py is run against the text file",
+        "The --format=text flag is used OR the file is auto-detected as text format",
+        "The output script contains step_ functions",
+        "The output script contains a main() function",
+        "bash -n is run to validate the script"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Use my recent shell history to generate a do-nothing script. Capture the last 20 commands.",
+      "expected_output": "history 20 is run and saved to a temp file; extract_commands.py processes it with history format; a do-nothing bash script is generated from the result.",
+      "files": [],
+      "expectations": [
+        "history 20 is executed (or history N > /tmp/history.txt equivalent)",
+        "extract_commands.py is run with --format=history or the file is auto-detected as history format",
+        "The output script contains step_ functions",
+        "bash -n is run to validate the script"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I don't have a cast file or a text file. Help me create a do-nothing script for deploying a web application.",
+      "expected_output": "The agent interviews the user step-by-step, collecting the procedure via prompts, then generates a do-nothing bash script from the gathered steps.",
+      "files": [],
+      "expectations": [
+        "The agent asks the user for the first step of the procedure",
+        "The agent continues asking for subsequent steps until the user indicates there are no more",
+        "The collected steps are written to a temporary text file or used directly",
+        "A do-nothing bash script is generated from the collected steps",
+        "bash -n is run to validate the script"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Create a do-nothing script from my text file at /tmp/steps.txt but treat it as history format.",
+      "expected_output": "extract_commands.py is run with --format=history to override auto-detection; a do-nothing script is generated from the parsed commands.",
+      "files": [],
+      "expectations": [
+        "extract_commands.py is run with --format=history flag explicitly set",
+        "The output script contains step_ functions",
+        "bash -n is run to validate the script"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 {
   "ibm": {
     "isNotFirstTime": true
+  },
+  "ibm_secrets": {},
+  "security": {
+    "auth": {
+      "selectedType": "sso"
+    }
   }
 }
