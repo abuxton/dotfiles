@@ -351,6 +351,42 @@
       "skillFolderHash": "dcf14b03607b3436b0163b38d9f885ea9c4c2533",
       "installedAt": "2026-02-27T09:57:49.822Z",
       "updatedAt": "2026-02-27T09:57:49.822Z"
+    },
+    "jira-cli": {
+      "source": "code-and-sorts/awesome-copilot-agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/code-and-sorts/awesome-copilot-agents.git",
+      "skillPath": "skills/jira-cli/SKILL.md",
+      "skillFolderHash": "d5fe6c4458139af3f45a521824224b9a8afc9f6a",
+      "installedAt": "2026-02-27T11:03:29.335Z",
+      "updatedAt": "2026-02-27T11:03:29.335Z"
+    },
+    "do-nothing-scripting": {
+      "source": "abuxton/Skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/abuxton/Skills.git",
+      "skillPath": "skills/do-nothing-scripting/SKILL.md",
+      "skillFolderHash": "91eadcaf748aa6cd6f4f289ddc6740c1f73d5023",
+      "installedAt": "2026-02-27T15:28:55.540Z",
+      "updatedAt": "2026-02-27T15:28:55.540Z"
+    },
+    "github-gist": {
+      "source": "abuxton/Skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/abuxton/Skills.git",
+      "skillPath": "skills/github-gist/SKILL.md",
+      "skillFolderHash": "37dc012b3095d5476e6f992b2e6db95b9f786532",
+      "installedAt": "2026-02-27T15:28:55.555Z",
+      "updatedAt": "2026-02-27T15:28:55.555Z"
+    },
+    "asciinema-record": {
+      "source": "abuxton/Skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/abuxton/Skills.git",
+      "skillPath": "skills/asciinema-record/SKILL.md",
+      "skillFolderHash": "70da151c48138fb11056d1389f8b6bc4b5d471fc",
+      "installedAt": "2026-02-27T15:28:55.567Z",
+      "updatedAt": "2026-02-27T15:28:55.567Z"
     }
   },
   "dismissed": {

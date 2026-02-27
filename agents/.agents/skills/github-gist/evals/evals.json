@@ -1,0 +1,52 @@
+{
+  "skill_name": "github-gist",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a gist with a bash script that shows disk usage sorted by size. Make it public.",
+      "expected_output": "A public gist created containing a .sh script file AND a README.md with description, file table, and usage section showing how to run the script.",
+      "files": [],
+      "expectations": [
+        "A README.md file is included in the gist",
+        "The README.md documents the script's purpose",
+        "The README.md includes a Usage section",
+        "gh gist create is called with --public flag",
+        "gh gist create includes both README.md and the script file"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "List my gists and find any that are related to docker.",
+      "expected_output": "gh gist list with --filter docker is run; results are shown to the user.",
+      "files": [],
+      "expectations": [
+        "gh gist list is called",
+        "--filter flag is used with a docker-related pattern"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a Python helper script to my existing gist abc123. The script lists all files changed in the last 24 hours.",
+      "expected_output": "A Python script is created and added to the gist. The README.md in the gist is updated to document the new file.",
+      "files": [],
+      "expectations": [
+        "gh gist view abc123 --files is called to inspect existing files",
+        "A .py file is created with the requested functionality",
+        "gh gist edit is called to add the new file",
+        "README.md is updated to include the new file in the files table"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Create a secret gist with my nginx config and a setup script.",
+      "expected_output": "A secret gist (no --public flag) is created with nginx.conf, a setup script, and a README.md documenting both files.",
+      "files": [],
+      "expectations": [
+        "No --public flag is used (default secret)",
+        "README.md is included",
+        "README.md documents all included files",
+        "gh gist create is called with all three files"
+      ]
+    }
+  ]
+}
