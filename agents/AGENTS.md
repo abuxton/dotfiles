@@ -479,6 +479,15 @@ When working on Git-related tasks, agents can load detailed references:
 #### Critical Note: Immutable Releases
 GitHub **permanently blocks** tag names when releases are deleted. See `github-releases.md` for prevention and recovery patterns. Always get releases right the first time.
 
+#### Quick Reference: tmp or temporary files
+**Agent Working Directory**, All AI agent workflows use `./tmp/` for intermediate and temporary files. This local directory pattern ensures:
+- All working files are local to the repository (not system-wide in `/tmp`)
+- Easier cleanup and resetting of agent state
+- Better isolation between concurrent processes
+- No pollution of system temporary directories
+
+The `./tmp/` directory is git-ignored to prevent version control of ephemeral files while allowing agents to persist working state during development.
+
 ---
 
 ## Directory Reference

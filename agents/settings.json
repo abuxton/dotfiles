@@ -65,7 +65,8 @@
       "Bash(gh issue view:*)",
       "Bash(GH_HOST=github.ibm.com gh issue view:*)",
       "Bash(gh api:*)",
-      "Bash(open:*)"
+      "Bash(open:*)",
+			"Write(./tmp)"
     ],
     "deny": [
       "Write(.gitignore)",
@@ -82,7 +83,7 @@
       "Edit(.mcp.json)",
       "mcp__terraform__create_workspace_variable",
       "mcp__terraform__create_run",
-			"Write(/tmp)",
+			"Write(/tmp)"
     ]
   },
   "enableAllProjectMcpServers": false,
@@ -90,5 +91,6 @@
     "terraform",
     "aws-knowledge-mcp-server"
   ],
+	"chat.mcp.discovery.enabled": true,
   "disableAllHooks": true
 }
