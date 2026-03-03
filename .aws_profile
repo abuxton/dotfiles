@@ -1,6 +1,6 @@
 # https://stackoverflow.com/a/53199639/2362673
 
- export AWS_PROFILE=tg_user
+#  export AWS_PROFILE=tg_user
  export AWS_DEFAULT_REGION=eu-west-2
  export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials
 
