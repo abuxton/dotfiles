@@ -1,0 +1,49 @@
+#compdef copilot
+
+local -a _copilot_cmds _copilot_models
+_copilot_cmds=(
+  'help:Display help information'
+  'init:Initialize Copilot instructions'
+  'login:Authenticate with Copilot'
+  'plugin:Manage plugins'
+  'update:Download the latest version'
+  'version:Display version information'
+)
+_copilot_models=(
+  claude-sonnet-4.6 claude-sonnet-4.5 claude-haiku-4.5
+  claude-opus-4.6 claude-opus-4.6-fast claude-opus-4.5
+  claude-sonnet-4 gemini-3-pro-preview
+  gpt-5.4 gpt-5.3-codex gpt-5.2-codex gpt-5.2
+  gpt-5.1-codex-max gpt-5.1-codex gpt-5.1 gpt-5.1-codex-mini
+  gpt-5-mini gpt-4.1
+)
+
+_arguments -C -s \
+  '--help[display help for command]' \
+  '--version[show version information]' \
+  '--continue[Resume the most recent session]' \
+  '--resume[Resume previous session]:session id:' \
+  '--model[Set AI model]:model:(${_copilot_models})' \
+  '--allow-all[Enable all permissions]' \
+  '--allow-all-tools[Allow all tools]' \
+  '--allow-all-paths[Allow all paths]' \
+  '--allow-all-urls[Allow all URLs]' \
+  '--allow-tool[Allow tool]:tool:' \
+  '--deny-tool[Deny tool]:tool:' \
+  '--allow-url[Allow URL]:url:_urls' \
+  '--deny-url[Deny URL]:url:_urls' \
+  '--add-dir[Add allowed directory]:directory:_files -/' \
+  '--config-dir[Set config dir]:directory:_files -/' \
+  '--log-dir[Set log dir]:directory:_files -/' \
+  '--log-level[Set log level]:level:(none error warning info debug all default)' \
+  '--output-format[Set output format]:format:(text json)' \
+  '--stream[Streaming mode]:mode:(on off)' \
+  '--prompt[Non-interactive prompt]:prompt:' \
+  '-p[Non-interactive prompt]:prompt:' \
+  '-i[Interactive prompt]:prompt:' \
+  '-s[Silent output]' \
+  '*::command:->cmds'
+
+case $state in
+  cmds) _describe -t commands 'copilot command' _copilot_cmds ;;
+esac

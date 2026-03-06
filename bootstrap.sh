@@ -213,12 +213,12 @@ echo "📂 Step 2: Deploying dotfiles..."
 function doIt() {
 	echo "   Running rsync deployment..."
 	if [ "$DRY_RUN" = true ]; then
-	  echo "   [DRY RUN] Would deploy files via rsync (excluding .git, .DS_Store, *.md, etc.)"
+	  echo "   [DRY RUN] Would deploy files via rsync ( excluding project files (.git*/, .vscode, common/, .osx, assets., etc ... ),  *.md, *_profile, etc. Managed by setup.sh, and AGENTS/ directory which is managed separately )";
 	  echo "   [DRY RUN] Would source ~/.zshrc to reload environment"
 	else
-	  rsync --exclude ".git/" \
-	    --exclude ".gitignore" \
-	    --exclude ".github/" \
+	  rsync -avh --no-perms \
+		  --exclude ".git*/" \
+	    --exclude ".git*" \
       --exclude ".vscode/" \
 	    --exclude "docs/" \
 	    --exclude "scripts/" \
@@ -237,7 +237,7 @@ function doIt() {
 			--exclude "agents" \
 		  --exclude "*.md" \
 		  --exclude "*_profile" \
-		  -avh --no-perms . ~;
+		  . ~;
 	  # Reload shell environment to activate new dotfiles and profiles
 	  source ~/.zshrc;
 	fi
