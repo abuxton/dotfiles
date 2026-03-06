@@ -225,3 +225,6 @@ echo “NSW:  $AU”
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/abuxton/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+fpath=(~/.zsh/completions $fpath)
+autoload -Uz compinit
+compinit -i
