@@ -110,12 +110,12 @@
 
 ## 12. Update Project Documentation
 
-- [ ] 12.1 Update README.md: add workflow guidance section
-- [ ] 12.2 Update README.md: link to new DEPLOYMENT_WORKFLOW.md
-- [ ] 12.3 Update CONTRIBUTING.md: add "Deployment Responsibilities" section
-- [ ] 12.4 Update CONTRIBUTING.md: explain where new files should be deployed
-- [ ] 12.5 Update CHANGELOG.md: document audit findings and recommendations
-- [ ] 12.6 Add comments to bootstrap.sh documenting its final recommended role
+- [x] 12.1 Update README.md: add workflow guidance section
+- [x] 12.2 Update README.md: link to new DEPLOYMENT_WORKFLOW.md
+- [x] 12.3 Update CONTRIBUTING.md: add "Deployment Responsibilities" section
+- [x] 12.4 Update CONTRIBUTING.md: explain where new files should be deployed
+- [x] 12.5 Update CHANGELOG.md: document audit findings and recommendations
+- [x] 12.6 Add comments to bootstrap.sh documenting its final recommended role
 - [x] 12.7 Add comments to setup.sh documenting its final recommended role
 
 ## 13. Verify and Validate

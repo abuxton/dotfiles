@@ -238,6 +238,16 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 1
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 
 ###############################################################################
+# Security                                                                    #
+###############################################################################
+
+# Enable the firewall
+sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1
+
+# Activate the firewall daemon (no-op / may fail silently on macOS Ventura+)
+sudo launchctl load /System/Library/LaunchDaemons/com.apple.alf.agent.plist 2>/dev/null || true
+
+###############################################################################
 # Finder                                                                      #
 ###############################################################################
 

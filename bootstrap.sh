@@ -6,6 +6,7 @@
 # PURPOSE:
 #   First-time deployment and repository synchronization for dotfiles.
 #   This script handles the initial setup of a new machine by:
+#     0. Checking/installing Xcode Command Line Tools (prerequisite for git)
 #     1. Updating the dotfiles repository to latest version (git pull)
 #     2. Installing Oh My Zsh shell framework
 #     3. Deploying all dotfiles to home directory via rsync (non-symlink)
@@ -26,6 +27,12 @@
 #   Workflow: bootstrap.sh → setup.sh → manually add ~/.bash_secrets → restart shell
 #
 # RESPONSIBILITIES:
+#   0. XCODE COMMAND LINE TOOLS (Step 0)
+#      - Checks if CLT are installed (required for git/homebrew)
+#      - Installs via softwareupdate if missing, or triggers GUI installer
+#      - Accepts Xcode license if not yet agreed to
+#      - Full responsibility: git is available before Step 1
+#
 #   1. REPOSITORY SYNC (git pull)
 #      - Fetches latest changes from origin/main
 #      - Ensures you have newer code, profiles, and configurations
@@ -194,6 +201,42 @@ cd "$(dirname "${BASH_SOURCE}")";
 # Print mode indicator
 if [ "$DRY_RUN" = true ]; then
   echo "⚠️  [DRY RUN MODE] - Previewing changes only, no files will be modified"
+fi
+
+# Step 0: Check Xcode Command Line Tools
+# Git (used in Step 1) requires CLT; install before attempting git pull.
+echo ""
+echo "🛠️  Step 0: Checking Xcode Command Line Tools..."
+if ! [ -f "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
+  echo "   Xcode Command Line Tools not found - installing..."
+  if [ "$DRY_RUN" = true ]; then
+    echo "   [DRY RUN] Would install Xcode Command Line Tools via softwareupdate"
+  else
+    CLT_PLACEHOLDER="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+    sudo touch "$CLT_PLACEHOLDER"
+    CLT_PACKAGE=$(softwareupdate -l 2>&1 \
+      | grep -B 1 "Command Line Tools" \
+      | awk -F"*" '/^ *\*/ {print $2}' \
+      | sed -e 's/^ *Label: //' -e 's/^ *//' \
+      | sort -V \
+      | tail -n1)
+    if [ -n "$CLT_PACKAGE" ]; then
+      sudo softwareupdate -i "$CLT_PACKAGE"
+      sudo rm -f "$CLT_PLACEHOLDER"
+      # Accept Xcode license if prompted
+      if /usr/bin/xcrun clang 2>&1 | grep -q license; then
+        sudo xcodebuild -license accept
+      fi
+      echo "   ✓ Xcode Command Line Tools installed"
+    else
+      sudo rm -f "$CLT_PLACEHOLDER"
+      echo "   Launching GUI installer - complete it then re-run bootstrap.sh"
+      xcode-select --install
+      exit 1
+    fi
+  fi
+else
+  echo "   ✓ Xcode Command Line Tools already installed"
 fi
 
 # Step 1: Update repository to latest version
