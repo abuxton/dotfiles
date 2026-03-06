@@ -229,6 +229,7 @@ WHAT THE SCRIPT DOES:
   6. Validates basic setup
   7. Offers optional Homebrew setup
   8. Runs comprehensive validation
+  9. Configures macOS security (Touch ID for sudo, FileVault check)
 
 BACKUPS:
   Existing files are backed up to: ~/.dotfiles.backup
@@ -518,6 +519,47 @@ main() {
     bash "$DOTFILES_DIR/validate-dotfiles.sh" > /dev/null 2>&1 && log_success "Validation script passed" || log_warn "Validation script found issues - run: ./validate-dotfiles.sh"
   elif [ "$DRY_RUN" = true ]; then
     log_info "Validation would run: $DOTFILES_DIR/validate-dotfiles.sh"
+  fi
+  echo ""
+
+  # Step 8: macOS Security Configuration
+  # Configure Touch ID for sudo and check FileVault status.
+  # These are idempotent checks - safe to run on every setup.
+  echo ""
+  log_info "macOS Security Configuration..."
+
+  # Touch ID for sudo: configure /etc/pam.d/sudo_local (survives macOS updates)
+  if ls /usr/lib/pam 2>/dev/null | grep -q "pam_tid.so"; then
+    local PAM_FILE="/etc/pam.d/sudo_local"
+    local PAM_HEADER="# sudo_local: local config file which survives system update and is included for sudo"
+    local PAM_LINE="auth       sufficient     pam_tid.so"
+    if [ "$DRY_RUN" = true ]; then
+      log_warn "[DRY RUN] Would configure $PAM_FILE to use pam_tid.so for Touch ID sudo"
+    elif sudo grep -q "pam_tid.so" "$PAM_FILE" 2>/dev/null; then
+      log_success "Touch ID for sudo: already configured"
+    else
+      # Create sudo_local if it doesn't exist
+      if [ ! -f "$PAM_FILE" ]; then
+        echo "$PAM_HEADER" | sudo tee "$PAM_FILE" > /dev/null
+      fi
+      # Verify file starts with expected header before inserting
+      if head -n1 "$PAM_FILE" | grep -q "sudo_local"; then
+        sudo sed -i .bak -e "s|$PAM_HEADER|$PAM_HEADER\n$PAM_LINE|" "$PAM_FILE"
+        sudo rm -f "${PAM_FILE}.bak"
+        log_success "Touch ID for sudo: configured in $PAM_FILE"
+      else
+        log_warn "Touch ID for sudo: $PAM_FILE format unexpected - skipped"
+      fi
+    fi
+  else
+    log_info "Touch ID for sudo: pam_tid.so not available on this system"
+  fi
+
+  # FileVault check
+  if fdesetup status 2>/dev/null | grep -qE "FileVault is (On|Off, but will be enabled after the next restart)"; then
+    log_success "FileVault: enabled"
+  else
+    log_warn "FileVault is not enabled. Enable with: sudo fdesetup enable -user \"$USER\""
   fi
   echo ""
 
