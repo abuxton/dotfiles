@@ -29,13 +29,13 @@
       "updatedAt": "2026-02-26T11:10:35.620Z"
     },
     "playwright-cli": {
-      "source": "microsoft/playwright-cli",
+      "source": "thinkfleetai/thinkfleet-engine",
       "sourceType": "github",
-      "sourceUrl": "https://github.com/microsoft/playwright-cli.git",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
       "skillPath": "skills/playwright-cli/SKILL.md",
-      "skillFolderHash": "a5a8823e403adc13b2488aae9968d6d92adbd2d7",
+      "skillFolderHash": "6a690a1347afa82678dfae46bf616d455e193b23",
       "installedAt": "2026-02-26T11:12:43.652Z",
-      "updatedAt": "2026-02-26T11:12:43.652Z"
+      "updatedAt": "2026-03-06T15:12:04.811Z"
     },
     "skill-creator": {
       "source": "anthropics/skills",
@@ -216,6 +216,195 @@
       "skillFolderHash": "70da151c48138fb11056d1389f8b6bc4b5d471fc",
       "installedAt": "2026-02-27T15:28:55.567Z",
       "updatedAt": "2026-02-27T15:28:55.567Z"
+    },
+    "changelog-automation": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/changelog-automation/SKILL.md",
+      "skillFolderHash": "c1626a594158c987da0af7acd217d2f13a283445",
+      "installedAt": "2026-03-06T15:11:58.049Z",
+      "updatedAt": "2026-03-06T15:11:58.049Z"
+    },
+    "changelog-gen": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/changelog-gen/SKILL.md",
+      "skillFolderHash": "cedd5151499c3a0ec79fdd8dad8e539b8dacc059",
+      "installedAt": "2026-03-06T15:11:58.359Z",
+      "updatedAt": "2026-03-06T15:11:58.359Z"
+    },
+    "clean-code": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/clean-code/SKILL.md",
+      "skillFolderHash": "5d2121450e4adc9ddc340f9edac6b42da2e751cd",
+      "installedAt": "2026-03-06T15:11:58.914Z",
+      "updatedAt": "2026-03-06T15:11:58.914Z"
+    },
+    "code-review": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/code-review/SKILL.md",
+      "skillFolderHash": "90d8e131beaab17b25f0f11cf3584d62dea84498",
+      "installedAt": "2026-03-06T15:11:59.514Z",
+      "updatedAt": "2026-03-06T15:11:59.514Z"
+    },
+    "coding-agent": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/coding-agent/SKILL.md",
+      "skillFolderHash": "a0e47d81b74a454d34b7f1cda54bc06a6a3a8dc8",
+      "installedAt": "2026-03-06T15:11:59.990Z",
+      "updatedAt": "2026-03-06T15:11:59.990Z"
+    },
+    "conventional-commits": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/conventional-commits/SKILL.md",
+      "skillFolderHash": "f4b50e0033f6089cef6edd7c2ddd07d8526e0d2b",
+      "installedAt": "2026-03-06T15:12:00.433Z",
+      "updatedAt": "2026-03-06T15:12:00.433Z"
+    },
+    "cron-writer": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/cron-writer/SKILL.md",
+      "skillFolderHash": "2727fb3fa7d3dacd12314ad616373702bafa0f00",
+      "installedAt": "2026-03-06T15:12:01.020Z",
+      "updatedAt": "2026-03-06T15:12:01.020Z"
+    },
+    "gemini": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/gemini/SKILL.md",
+      "skillFolderHash": "c4db299fe12c18985204211adb03eff84a9e5116",
+      "installedAt": "2026-03-06T15:12:01.416Z",
+      "updatedAt": "2026-03-06T15:12:01.416Z"
+    },
+    "gitignore-gen": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/gitignore-gen/SKILL.md",
+      "skillFolderHash": "1d4688c552b02ba4c00e9714fba5833612858932",
+      "installedAt": "2026-03-06T15:12:01.855Z",
+      "updatedAt": "2026-03-06T15:12:01.855Z"
+    },
+    "github-action-gen": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/github-action-gen/SKILL.md",
+      "skillFolderHash": "0b171e4c5ca29da8d476e505b2ea2b299b012922",
+      "installedAt": "2026-03-06T15:12:02.269Z",
+      "updatedAt": "2026-03-06T15:12:02.269Z"
+    },
+    "github": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/github/SKILL.md",
+      "skillFolderHash": "c9af7d31610fa5fee560acc8a39020ef818fce46",
+      "installedAt": "2026-03-06T15:12:02.662Z",
+      "updatedAt": "2026-03-06T15:12:02.662Z"
+    },
+    "homebrew": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/homebrew/SKILL.md",
+      "skillFolderHash": "18063eac0bc60faa0a2c648546eb2a20b306cb88",
+      "installedAt": "2026-03-06T15:12:03.024Z",
+      "updatedAt": "2026-03-06T15:12:03.024Z"
+    },
+    "jq-json-processor": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/jq-json-processor/SKILL.md",
+      "skillFolderHash": "0e787ab2b1063627e94f623740382118bdb1c077",
+      "installedAt": "2026-03-06T15:12:03.347Z",
+      "updatedAt": "2026-03-06T15:12:03.347Z"
+    },
+    "language-learning": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/language-learning/SKILL.md",
+      "skillFolderHash": "d2d29277beb7ab9600c01d87c49eec23e7ea85ee",
+      "installedAt": "2026-03-06T15:12:03.657Z",
+      "updatedAt": "2026-03-06T15:12:03.657Z"
+    },
+    "merge-resolve": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/ai-merge-resolve/SKILL.md",
+      "skillFolderHash": "7c5d22b56341906c18d3b950c1a605a1ecf16c48",
+      "installedAt": "2026-03-06T15:12:04.222Z",
+      "updatedAt": "2026-03-06T15:12:04.222Z"
+    },
+    "obsidian": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/obsidian/SKILL.md",
+      "skillFolderHash": "257106802c51621c25167deb549799fcc486647e",
+      "installedAt": "2026-03-06T15:12:04.502Z",
+      "updatedAt": "2026-03-06T15:12:04.502Z"
+    },
+    "session-logs": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/session-logs/SKILL.md",
+      "skillFolderHash": "f01a136f472e1aaa48dd5bd032794f1573f50928",
+      "installedAt": "2026-03-06T15:12:05.328Z",
+      "updatedAt": "2026-03-06T15:12:05.328Z"
+    },
+    "skills-search": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/skills-search/SKILL.md",
+      "skillFolderHash": "33d15324735fce2f44fcbac6ed32a99030446730",
+      "installedAt": "2026-03-06T15:12:05.771Z",
+      "updatedAt": "2026-03-06T15:12:05.771Z"
+    },
+    "summarize": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/summarize/SKILL.md",
+      "skillFolderHash": "02f37311f4d2823e3d1ccf29cd868b6834bdcc4c",
+      "installedAt": "2026-03-06T15:12:06.124Z",
+      "updatedAt": "2026-03-06T15:12:06.124Z"
+    },
+    "tmux": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/tmux/SKILL.md",
+      "skillFolderHash": "b376b0f4dfc07f77f103715817d3005a323e4c0e",
+      "installedAt": "2026-03-06T15:12:06.807Z",
+      "updatedAt": "2026-03-06T15:12:06.807Z"
+    },
+    "tmux-agents": {
+      "source": "thinkfleetai/thinkfleet-engine",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thinkfleetai/thinkfleet-engine.git",
+      "skillPath": "skills/tmux-agents/SKILL.md",
+      "skillFolderHash": "91763b4d59c7d8f28d2c896840ae320843ab067e",
+      "installedAt": "2026-03-06T15:12:07.237Z",
+      "updatedAt": "2026-03-06T15:12:07.237Z"
     }
   },
   "dismissed": {

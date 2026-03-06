@@ -1,0 +1,19 @@
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Sensitive data - OAuth tokens, credentials, secrets
+mcp-oauth-tokens*.json
+*-tokens*.json
+*token*.json
+*secret*
+*credential*
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Installation identifiers
+installation_id
