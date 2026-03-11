@@ -379,10 +379,11 @@ main() {
     ".exports"
     ".path"
     ".gitconfig"
+		".skillshub"
   )
 
   for file in "${files_to_link[@]}"; do
-    if [ -f "$DOTFILES_DIR/$file" ]; then
+    if [ -e "$DOTFILES_DIR/$file" ]; then
       create_symlink "$DOTFILES_DIR/$file" "$HOME/$file"
     fi
   done

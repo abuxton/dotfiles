@@ -13,6 +13,7 @@
 #   bash deploy-agents.sh           # Run interactive deployment
 #   bash deploy-agents.sh --dry-run # Preview changes without applying
 #   bash deploy-agents.sh --force   # Deploy without confirmation
+#   bash deploy-agents.sh --enable-zsh-plugins # Also update ~/.zshrc plugins array
 #   bash deploy-agents.sh -f        # Alias for --force
 #   bash deploy-agents.sh --help    # Show this help message
 #
@@ -59,13 +60,21 @@
 #      - Confirms $HOME/AGENTS.md accessibility
 #      Full responsibility: Agent deployment is valid and ready
 #
+#   5. OH MY ZSH AI CLI PLUGINS
+#      - Syncs https://github.com/abuxton/ohmyzsh-ai-cli-plugins
+#      - Symlinks plugin folders into ~/.oh-my-zsh/custom/plugins/
+#      - Deploys claude, codex, and gemini plugin directories
+#      - Warns if plugins are not enabled in ~/.zshrc
+#      Full responsibility: AI CLI completion plugins are available to oh-my-zsh
+#
 # DEPLOYMENT PHASES:
 #   Phase 1: Parse arguments & validate environment
 #   Phase 2: Validate dotfiles directory exists
 #   Phase 3: Create symlinks for agent config directories
 #   Phase 4: Create symlink for AGENTS.md
-#   Phase 5: Validate all symlinks and permissions
-#   Phase 6: Display deployment summary
+#   Phase 5: Deploy oh-my-zsh AI CLI plugins
+#   Phase 6: Validate all symlinks and permissions
+#   Phase 7: Display deployment summary
 #
 # ============================================================================
 
@@ -79,6 +88,10 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOTFILES_DIR="${SCRIPT_DIR}"
 AGENTS_DIR="${DOTFILES_DIR}/agents"
+AI_ZSH_PLUGIN_REPO_URL="https://github.com/abuxton/ohmyzsh-ai-cli-plugins.git"
+AI_ZSH_PLUGIN_CACHE_DIR="${HOME}/.cache/ohmyzsh-ai-cli-plugins"
+OH_MY_ZSH_CUSTOM_PLUGINS_DIR="${HOME}/.oh-my-zsh/custom/plugins"
+AI_ZSH_PLUGIN_NAMES=("claude" "codex" "gemini")
 
 # Color codes
 RED='\033[0;31m'
@@ -91,12 +104,17 @@ NC='\033[0m' # No Color
 DRY_RUN=false
 FORCE=false
 VERBOSE=false
+ENABLE_ZSH_PLUGINS=false
 
 # Counters
 SYMLINKS_CREATED=0
 SYMLINKS_SKIPPED=0
 SYMLINKS_UPDATED=0
 ERRORS=0
+ZSH_PLUGINS_READY=0
+ZSH_PLUGINS_SKIPPED=0
+ZSH_PLUGINS_ENABLED=0
+ZSH_PLUGINS_ENABLE_SKIPPED=0
 
 # ============================================================================
 # Functions
@@ -202,6 +220,154 @@ validate_symlink() {
     return 0
 }
 
+zshrc_has_plugin() {
+    local plugin="$1"
+    local zshrc_file="${HOME}/.zshrc"
+
+    if [[ ! -f "$zshrc_file" && ! -L "$zshrc_file" ]]; then
+        return 1
+    fi
+
+    if grep -q "^[[:space:]]*${plugin}[[:space:]]*$" "$zshrc_file"; then
+        return 0
+    fi
+
+    if grep -q "^plugins=(.*${plugin}.*)" "$zshrc_file"; then
+        return 0
+    fi
+
+    return 1
+}
+
+deploy_ohmyzsh_ai_plugins() {
+    local repo_url="$AI_ZSH_PLUGIN_REPO_URL"
+    local cache_dir="$AI_ZSH_PLUGIN_CACHE_DIR"
+    local plugin_root="$OH_MY_ZSH_CUSTOM_PLUGINS_DIR"
+    local plugin source target
+
+    if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
+        warning "oh-my-zsh not found at ${HOME}/.oh-my-zsh; skipping AI CLI plugin deployment"
+        ((ZSH_PLUGINS_SKIPPED+=${#AI_ZSH_PLUGIN_NAMES[@]}))
+        return 0
+    fi
+
+    if ! command -v git >/dev/null 2>&1; then
+        warning "git command not found; skipping AI CLI plugin deployment"
+        ((ZSH_PLUGINS_SKIPPED+=${#AI_ZSH_PLUGIN_NAMES[@]}))
+        return 0
+    fi
+
+    log ""
+    log "Deploying Oh My Zsh AI CLI plugins..."
+
+    if [[ "$DRY_RUN" == true ]]; then
+        log_verbose "Would sync plugin repo: ${repo_url} -> ${cache_dir}"
+        for plugin in "${AI_ZSH_PLUGIN_NAMES[@]}"; do
+            log_verbose "Would create symlink: ${plugin_root}/${plugin} -> ${cache_dir}/${plugin}"
+        done
+        return 0
+    else
+        if [[ -d "${cache_dir}/.git" ]]; then
+            log_verbose "Updating cached plugin repository: ${cache_dir}"
+            if ! git -C "$cache_dir" pull --ff-only >/dev/null 2>&1; then
+                warning "Failed to update ${cache_dir}; keeping existing local copy"
+            fi
+        else
+            log_verbose "Cloning plugin repository: ${repo_url}"
+            mkdir -p "$(dirname "$cache_dir")"
+            if ! git clone "$repo_url" "$cache_dir" >/dev/null 2>&1; then
+                error "Failed to clone plugin repository: ${repo_url}"
+                ((ZSH_PLUGINS_SKIPPED+=${#AI_ZSH_PLUGIN_NAMES[@]}))
+                return 1
+            fi
+        fi
+    fi
+
+    if [[ "$DRY_RUN" != true ]]; then
+        mkdir -p "$plugin_root"
+    fi
+
+    for plugin in "${AI_ZSH_PLUGIN_NAMES[@]}"; do
+        source="${cache_dir}/${plugin}"
+        target="${plugin_root}/${plugin}"
+
+        if [[ ! -d "$source" ]]; then
+            warning "Plugin source not found: $source"
+            ((ZSH_PLUGINS_SKIPPED++))
+            continue
+        fi
+
+        if create_symlink "$source" "$target" "oh-my-zsh plugin: ${plugin}"; then
+            ((ZSH_PLUGINS_READY++))
+            if ! zshrc_has_plugin "$plugin"; then
+                warning "Plugin '${plugin}' is deployed but not enabled in ~/.zshrc plugins array"
+            fi
+        else
+            ((ZSH_PLUGINS_SKIPPED++))
+        fi
+    done
+}
+
+enable_ohmyzsh_plugins_in_zshrc() {
+    local zshrc_file="${HOME}/.zshrc"
+    local plugin temp_file
+
+    if [[ "$ENABLE_ZSH_PLUGINS" != true ]]; then
+        return 0
+    fi
+
+    log ""
+    log "Updating ~/.zshrc plugins array..."
+
+    if [[ ! -f "$zshrc_file" && ! -L "$zshrc_file" ]]; then
+        warning "~/.zshrc not found; cannot enable plugins automatically"
+        ((ZSH_PLUGINS_ENABLE_SKIPPED+=${#AI_ZSH_PLUGIN_NAMES[@]}))
+        return 0
+    fi
+
+    if ! grep -q "^plugins=(" "$zshrc_file"; then
+        warning "No plugins=(...) block found in ~/.zshrc; please add plugins manually"
+        ((ZSH_PLUGINS_ENABLE_SKIPPED+=${#AI_ZSH_PLUGIN_NAMES[@]}))
+        return 0
+    fi
+
+    for plugin in "${AI_ZSH_PLUGIN_NAMES[@]}"; do
+        if zshrc_has_plugin "$plugin"; then
+            log_verbose "~/.zshrc already contains plugin: ${plugin}"
+            ((ZSH_PLUGINS_ENABLE_SKIPPED++))
+            continue
+        fi
+
+        if [[ "$DRY_RUN" == true ]]; then
+            log_verbose "Would add '${plugin}' to ~/.zshrc plugins array"
+            ((ZSH_PLUGINS_ENABLED++))
+            continue
+        fi
+
+        temp_file=$(mktemp)
+
+        # Single-line plugins=(git brew ...)
+        if grep -q "^plugins=(.*)" "$zshrc_file"; then
+            sed "s/^plugins=(\(.*\))/plugins=(\1 ${plugin})/" "$zshrc_file" > "$temp_file"
+        else
+            # Multi-line plugins=( ... )
+            awk -v plugin="$plugin" '
+                /^plugins=\(/ { in_plugins=1 }
+                in_plugins && /^\)/ {
+                    print "  " plugin
+                    in_plugins=0
+                }
+                { print }
+            ' "$zshrc_file" > "$temp_file"
+        fi
+
+        cat "$temp_file" > "$zshrc_file"
+        rm -f "$temp_file"
+        success "Enabled plugin in ~/.zshrc: ${plugin}"
+        ((ZSH_PLUGINS_ENABLED++))
+    done
+}
+
 show_help() {
     cat << EOF
 ${BLUE}deploy-agents.sh${NC} - Deploy agent configurations to home directory
@@ -212,6 +378,7 @@ ${BLUE}USAGE:${NC}
 ${BLUE}OPTIONS:${NC}
   --dry-run      Preview changes without applying
   --force, -f    Deploy without confirmation
+    --enable-zsh-plugins  Add claude/codex/gemini to ~/.zshrc plugins array
   -v, --verbose  Show detailed output
   -h, --help     Show this help message
 
@@ -219,6 +386,7 @@ ${BLUE}EXAMPLES:${NC}
   bash deploy-agents.sh        # Interactive deployment
   bash deploy-agents.sh --dry-run   # Preview first
   bash deploy-agents.sh --force     # Deploy without prompts
+    bash deploy-agents.sh --enable-zsh-plugins
 
 ${BLUE}DESCRIPTION:${NC}
   Deploys AI agent configurations from agents/ to the home directory.
@@ -259,6 +427,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --force|-f)
             FORCE=true
+            shift
+            ;;
+        --enable-zsh-plugins)
+            ENABLE_ZSH_PLUGINS=true
             shift
             ;;
         -v|--verbose)
@@ -328,8 +500,19 @@ log "Deployed resources:"
 echo "  • ~/.agents/skills/     - All available skills"
 echo "  • ~/.agents/prompts/    - Agent-specific prompts"
 echo "  • ~/.agents/commands/   - CLI command definitions"
+echo "  • ~/.oh-my-zsh/custom/plugins/{claude,codex,gemini}/ - AI CLI completions"
 echo "  • ~/AGENTS.md           - Workflow documentation"
 echo ""
+
+log "Oh My Zsh plugin source repository:"
+echo "  - ${AI_ZSH_PLUGIN_REPO_URL}"
+echo ""
+
+if [[ "$ENABLE_ZSH_PLUGINS" == true ]]; then
+    log "Zsh plugin auto-enable mode: enabled"
+    echo "  - ~/.zshrc plugins array will be updated for: ${AI_ZSH_PLUGIN_NAMES[*]}"
+    echo ""
+fi
 
 # ============================================================================
 # Confirmation (only in interactive mode)
@@ -374,6 +557,13 @@ target="${HOME}/AGENTS.md"
 create_symlink "$source" "$target" "AGENTS.md" || true
 
 # ============================================================================
+# Deploy Oh My Zsh AI CLI Plugins
+# ============================================================================
+
+deploy_ohmyzsh_ai_plugins || true
+enable_ohmyzsh_plugins_in_zshrc || true
+
+# ============================================================================
 # Validation
 # ============================================================================
 
@@ -389,6 +579,15 @@ if [[ "$DRY_RUN" != true ]]; then
 
     target="${HOME}/AGENTS.md"
     validate_symlink "$target" "AGENTS.md" || true
+
+    if [[ -d "${HOME}/.oh-my-zsh" ]]; then
+        for plugin in "${AI_ZSH_PLUGIN_NAMES[@]}"; do
+            target="${OH_MY_ZSH_CUSTOM_PLUGINS_DIR}/${plugin}"
+            if [[ -e "$target" || -L "$target" ]]; then
+                validate_symlink "$target" "oh-my-zsh plugin: ${plugin}" || true
+            fi
+        done
+    fi
 fi
 
 # ============================================================================
@@ -417,12 +616,20 @@ if [[ "$DRY_RUN" == true ]]; then
         log "    ${AGENTS_DIR}/${dir}/"
     done
     log "    ${AGENTS_DIR}/AGENTS.md"
+    log "    ${AI_ZSH_PLUGIN_CACHE_DIR}/{claude,codex,gemini}/"
+    if [[ "$ENABLE_ZSH_PLUGINS" == true ]]; then
+        log "    ~/.zshrc plugins=(...) block"
+    fi
     log ""
     log "  Symbolic links to create:"
     for dir in "${AGENT_DIRS[@]}"; do
         log "    ${HOME}/${dir} → ${AGENTS_DIR}/${dir}"
     done
     log "    ${HOME}/AGENTS.md → ${AGENTS_DIR}/AGENTS.md"
+    log "    ${OH_MY_ZSH_CUSTOM_PLUGINS_DIR}/{claude,codex,gemini} → ${AI_ZSH_PLUGIN_CACHE_DIR}/{claude,codex,gemini}"
+    if [[ "$ENABLE_ZSH_PLUGINS" == true ]]; then
+        log "    ~/.zshrc updated to include: ${AI_ZSH_PLUGIN_NAMES[*]}"
+    fi
     log ""
     log "${YELLOW}No changes were applied in dry-run mode.${NC}"
     log "Run 'bash deploy-agents.sh' to apply, or 'bash deploy-agents.sh --force' to skip confirmation."
@@ -434,10 +641,21 @@ else
     log "  - ~/.agents/skills/        (OpenSpec and domain-specific skills)"
     log "  - ~/.agents/prompts/       (Agent prompts and templates)"
     log "  - ~/.agents/commands/      (CLI command definitions)"
+    log "  - ~/.oh-my-zsh/custom/plugins/claude"
+    log "  - ~/.oh-my-zsh/custom/plugins/codex"
+    log "  - ~/.oh-my-zsh/custom/plugins/gemini"
     log "  - ~/AGENTS.md              (Workflow documentation)"
+    log ""
+    log "Oh My Zsh AI plugins ready: ${ZSH_PLUGINS_READY}"
+    log "Oh My Zsh AI plugins skipped: ${ZSH_PLUGINS_SKIPPED}"
+    if [[ "$ENABLE_ZSH_PLUGINS" == true ]]; then
+        log "Oh My Zsh plugins enabled in ~/.zshrc: ${ZSH_PLUGINS_ENABLED}"
+        log "Oh My Zsh plugin enables skipped: ${ZSH_PLUGINS_ENABLE_SKIPPED}"
+    fi
     log ""
     log "Verify deployment:"
     log "  ls -la ~/.agents/"
+    log "  ls -la ~/.oh-my-zsh/custom/plugins/"
     log "  cat ~/AGENTS.md"
     log ""
     log "Next steps:"
