@@ -1,0 +1,239 @@
+{
+  "taps": {
+    "EYH0602/skillshub": {
+      "url": "https://github.com/EYH0602/skillshub",
+      "skills_path": "skills",
+      "updated_at": null,
+      "is_default": true
+    },
+    "anthropics/skills": {
+      "url": "https://github.com/anthropics/skills",
+      "skills_path": "skills",
+      "updated_at": "2026-03-11T11:04:31.294837Z",
+      "is_default": false,
+      "cached_registry": {
+        "name": "anthropics/skills",
+        "description": "Skills from anthropics/skills",
+        "skills": {
+          "template-skill": {
+            "path": "template",
+            "description": "Replace with description of the skill and when Claude should use it.",
+            "homepage": null
+          },
+          "slack-gif-creator": {
+            "path": "skills/slack-gif-creator",
+            "description": "Knowledge and utilities for creating animated GIFs optimized for Slack. Provides constraints, validation tools, and animation concepts. Use when users request animated GIFs for Slack like \"make me a GIF of X doing Y for Slack.\"",
+            "homepage": null
+          },
+          "webapp-testing": {
+            "path": "skills/webapp-testing",
+            "description": "Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+            "homepage": null
+          },
+          "docx": {
+            "path": "skills/docx",
+            "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+            "homepage": null
+          },
+          "doc-coauthoring": {
+            "path": "skills/doc-coauthoring",
+            "description": "Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This workflow helps users efficiently transfer context, refine content through iteration, and verify the doc works for readers. Trigger when user mentions writing docs, creating proposals, drafting specs, or similar documentation tasks.",
+            "homepage": null
+          },
+          "theme-factory": {
+            "path": "skills/theme-factory",
+            "description": "Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that you can apply to any artifact that has been creating, or can generate a new theme on-the-fly.",
+            "homepage": null
+          },
+          "canvas-design": {
+            "path": "skills/canvas-design",
+            "description": "Create beautiful visual art in .png and .pdf documents using design philosophy. You should use this skill when the user asks to create a poster, piece of art, design, or other static piece. Create original visual designs, never copying existing artists' work to avoid copyright violations.",
+            "homepage": null
+          },
+          "skill-creator": {
+            "path": "skills/skill-creator",
+            "description": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
+            "homepage": null
+          },
+          "internal-comms": {
+            "path": "skills/internal-comms",
+            "description": "A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to write some sort of internal communications (status reports, leadership updates, 3P updates, company newsletters, FAQs, incident reports, project updates, etc.).",
+            "homepage": null
+          },
+          "pptx": {
+            "path": "skills/pptx",
+            "description": "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill.",
+            "homepage": null
+          },
+          "xlsx": {
+            "path": "skills/xlsx",
+            "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path — even casually (like \"the xlsx in my downloads\") — and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.",
+            "homepage": null
+          },
+          "mcp-builder": {
+            "path": "skills/mcp-builder",
+            "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+            "homepage": null
+          },
+          "brand-guidelines": {
+            "path": "skills/brand-guidelines",
+            "description": "Applies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply.",
+            "homepage": null
+          },
+          "claude-api": {
+            "path": "skills/claude-api",
+            "description": "Build apps with the Claude API or Anthropic SDK. TRIGGER when: code imports `anthropic`/`@anthropic-ai/sdk`/`claude_agent_sdk`, or user asks to use Claude API, Anthropic SDKs, or Agent SDK. DO NOT TRIGGER when: code imports `openai`/other AI SDK, general programming, or ML/data-science tasks.",
+            "homepage": null
+          },
+          "algorithmic-art": {
+            "path": "skills/algorithmic-art",
+            "description": "Creating algorithmic art using p5.js with seeded randomness and interactive parameter exploration. Use this when users request creating art using code, generative art, algorithmic art, flow fields, or particle systems. Create original algorithmic art rather than copying existing artists' work to avoid copyright violations.",
+            "homepage": null
+          },
+          "web-artifacts-builder": {
+            "path": "skills/web-artifacts-builder",
+            "description": "Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.",
+            "homepage": null
+          },
+          "pdf": {
+            "path": "skills/pdf",
+            "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill.",
+            "homepage": null
+          },
+          "frontend-design": {
+            "path": "skills/frontend-design",
+            "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
+            "homepage": null
+          }
+        }
+      }
+    },
+    "abuxton/skills": {
+      "url": "https://github.com/abuxton/skills",
+      "skills_path": "skills",
+      "updated_at": "2026-03-11T11:05:50.576275Z",
+      "is_default": false,
+      "cached_registry": {
+        "name": "abuxton/skills",
+        "description": "Skills from abuxton/skills",
+        "skills": {
+          "shields-badges": {
+            "path": "skills/shields-badges",
+            "description": "Analyse a repository to identify its focus, technology stack, and labels, then search for and apply appropriate shields.io badges to markdown files.",
+            "homepage": null
+          },
+          "github-gist": {
+            "path": "skills/github-gist",
+            "description": "Create, manage, and organize GitHub Gists using the gh CLI. Use this skill whenever a user wants to create a gist, share code snippets, manage existing gists, add files to a gist, list or search gists, edit gist content or descriptions, clone a gist, or delete a gist. Every gist created or modified must include a README.md documenting its purpose and contents.",
+            "homepage": null
+          },
+          "publishing-npm": {
+            "path": "skills/publishing-npm",
+            "description": "Prepare and publish an npm package that ships agent skills, following the skills-npm convention for skill bundling and distribution.",
+            "homepage": null
+          },
+          "asciinema-record": {
+            "path": "skills/asciinema-record",
+            "description": "Record a terminal session to a named .cast file using asciinema, trim the recording to marked content, and optionally convert it to a GIF using agg.",
+            "homepage": null
+          },
+          "do-nothing-scripting": {
+            "path": "skills/do-nothing-scripting",
+            "description": "Derive a do-nothing bash script from an asciinema .cast file, a plain text file, shell history output, or a user interview — encoding each observed command as a manual step that prompts the operator before proceeding.",
+            "homepage": null
+          },
+          "writing-skills": {
+            "path": "skills/writing-skills",
+            "description": "Author high-quality agent skills following the agentskills.io specification, with correct frontmatter, workflow structure, and reference assets.",
+            "homepage": null
+          }
+        }
+      }
+    },
+    "hashicorp/agent-skills": {
+      "url": "https://github.com/hashicorp/agent-skills",
+      "skills_path": "skills",
+      "updated_at": "2026-03-11T11:06:04.286782Z",
+      "is_default": false,
+      "cached_registry": {
+        "name": "hashicorp/agent-skills",
+        "description": "Skills from hashicorp/agent-skills",
+        "skills": {
+          "terraform-test": {
+            "path": "terraform/code-generation/skills/terraform-test",
+            "description": "Comprehensive guide for writing and running Terraform tests. Use when creating test files (.tftest.hcl), writing test scenarios with run blocks, validating infrastructure behavior with assertions, mocking providers and data sources, testing module outputs and resource configurations, or troubleshooting Terraform test syntax and execution.",
+            "homepage": null
+          },
+          "provider-actions": {
+            "path": "terraform/provider-development/skills/provider-actions",
+            "description": "Implement Terraform Provider actions using the Plugin Framework. Use when developing imperative operations that execute at lifecycle events (before/after create, update, destroy).",
+            "homepage": null
+          },
+          "run-acceptance-tests": {
+            "path": "terraform/provider-development/skills/run-acceptance-tests",
+            "description": "Guide for running acceptance tests for a Terraform provider. Use this when asked to run an acceptance test or to run a test with the prefix `TestAcc`.",
+            "homepage": null
+          },
+          "terraform-search-import": {
+            "path": "terraform/code-generation/skills/terraform-search-import",
+            "description": "Discover existing cloud resources using Terraform Search queries and bulk import them into Terraform management. Use when bringing unmanaged infrastructure under Terraform control, auditing cloud resources, or migrating to IaC.",
+            "homepage": null
+          },
+          "azure-verified-modules": {
+            "path": "terraform/code-generation/skills/azure-verified-modules",
+            "description": "Azure Verified Modules (AVM) requirements and best practices for developing certified Azure Terraform modules. Use when creating or reviewing Azure modules that need AVM certification.",
+            "homepage": null
+          },
+          "windows-builder": {
+            "path": "packer/builders/skills/windows-builder",
+            "description": "Build Windows images with Packer using WinRM communicator and PowerShell provisioners. Use when creating Windows AMIs, Azure images, or VMware templates.",
+            "homepage": null
+          },
+          "azure-image-builder": {
+            "path": "packer/builders/skills/azure-image-builder",
+            "description": "Build Azure managed images and Azure Compute Gallery images with Packer. Use when creating custom images for Azure VMs.",
+            "homepage": null
+          },
+          "terraform-style-guide": {
+            "path": "terraform/code-generation/skills/terraform-style-guide",
+            "description": "Generate Terraform HCL code following HashiCorp's official style conventions and best practices. Use when writing, reviewing, or generating Terraform configurations.",
+            "homepage": null
+          },
+          "refactor-module": {
+            "path": "terraform/module-generation/skills/refactor-module",
+            "description": "Transform monolithic Terraform configurations into reusable, maintainable modules following HashiCorp's module design principles and community best practices.",
+            "homepage": null
+          },
+          "terraform-stacks": {
+            "path": "terraform/module-generation/skills/terraform-stacks",
+            "description": "Comprehensive guide for working with HashiCorp Terraform Stacks. Use when creating, modifying, or validating Terraform Stack configurations (.tfcomponent.hcl, .tfdeploy.hcl files), working with stack components and deployments from local modules, public registry, or private registry sources, managing multi-region or multi-environment infrastructure, or troubleshooting Terraform Stacks syntax and structure.",
+            "homepage": null
+          },
+          "push-to-registry": {
+            "path": "packer/hcp/skills/push-to-registry",
+            "description": "Push Packer build metadata to HCP Packer registry for tracking and managing image lifecycle. Use when integrating Packer builds with HCP Packer for version control and governance.",
+            "homepage": null
+          },
+          "new-terraform-provider": {
+            "path": "terraform/provider-development/skills/new-terraform-provider",
+            "description": "Use this when scaffolding a new Terraform provider.",
+            "homepage": null
+          },
+          "provider-resources": {
+            "path": "terraform/provider-development/skills/provider-resources",
+            "description": "Implement Terraform Provider resources and data sources using the Plugin Framework. Use when developing CRUD operations, schema design, state management, and acceptance testing for provider resources.",
+            "homepage": null
+          },
+          "aws-ami-builder": {
+            "path": "packer/builders/skills/aws-ami-builder",
+            "description": "Build Amazon Machine Images (AMIs) with Packer using the amazon-ebs builder. Use when creating custom AMIs for EC2 instances.",
+            "homepage": null
+          }
+        }
+      }
+    }
+  },
+  "installed": {},
+  "external": {},
+  "linked_agents": []
+}

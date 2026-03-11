@@ -379,6 +379,7 @@ main() {
     ".exports"
     ".path"
     ".gitconfig"
+		".skillshub"
   )
 
   for file in "${files_to_link[@]}"; do
