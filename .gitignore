@@ -28,3 +28,6 @@ node_modules
 
 # Backups from setup script
 .dotfiles.backup/
+
+**/.opencode/skill/**
+**/skills/**
