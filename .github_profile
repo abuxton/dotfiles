@@ -1,5 +1,8 @@
-export GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/github-pat)"
-export GITHUB_USER=$(whoami)
+GITHUB_TOKEN="$(cat ~/Dropbox/profile/github/github-pat)"
+GH_ENTERPRISE_TOKEN="$(cat ~/Dropbox/profile/github/github-enterprise-pat)"
+GITHUB_USER=$(whoami)
+
+export GITHUB_TOKEN GH_ENTERPRISE_TOKEN GITHUB_USER
 
 alias gg="env GIT_SSL_NO_VERIFY=true"
 alias gp="env PAGER=hub"
@@ -7,3 +10,55 @@ alias gp="env PAGER=hub"
 alias gb='export BRANCH=$(git rev-parse --abbrev-ref HEAD)'
 alias g="hub" #cos I is lazy!
 alias git-delete='echo "#delete local git branch -d localBranchName  #delete remote git push origin --delete remoteBranchName" '
+
+# install and configure awslabs/git-secrets for global git hook templates
+function git_secrets_setup() {
+	if ! command -v git-secrets >/dev/null 2>&1; then
+		if command -v brew >/dev/null 2>&1; then
+			brew install git-secrets
+		else
+			echo "homebrew is required to install git-secrets"
+			return 1
+		fi
+	fi
+
+	local git_secrets_template_dir="${HOME}/.git-templates/git-secrets"
+	mkdir -p "${git_secrets_template_dir}"
+
+	git secrets --install "${git_secrets_template_dir}"
+	git config --global init.templateDir "${git_secrets_template_dir}"
+	git secrets --register-aws --global
+
+	echo "git-secrets setup complete (${git_secrets_template_dir})"
+}
+
+alias git-secrets-setup='git_secrets_setup'
+alias git-secrets-install='git secrets --install && git secrets --register-aws'
+
+# one-time auto-run for interactive shells
+function git_secrets_setup_autorun() {
+	if [[ $- != *i* ]]; then
+		return 0
+	fi
+
+	local git_secrets_template_dir="${HOME}/.git-templates/git-secrets"
+	local git_secrets_setup_marker="${git_secrets_template_dir}/.setup-complete"
+	local configured_template_dir
+	configured_template_dir="$(git config --global --get init.templateDir 2>/dev/null)"
+
+	if [[ -f "${git_secrets_setup_marker}" ]] \
+		&& command -v git-secrets >/dev/null 2>&1 \
+		&& [[ "${configured_template_dir}" == "${git_secrets_template_dir}" ]]; then
+		return 0
+	fi
+
+	if git_secrets_setup; then
+		mkdir -p "${git_secrets_template_dir}"
+		touch "${git_secrets_setup_marker}"
+	else
+		echo "git-secrets auto-setup failed; run git-secrets-setup manually" >&2
+	fi
+}
+
+git_secrets_setup_autorun
+
