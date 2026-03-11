@@ -58,10 +58,12 @@ log_status() {
   echo -e "${YELLOW}→${NC} $1"
 }
 
-# Determine dotfiles directory
-DOTFILES_DIR="${DOTFILES_DIR:-.}"
-if [ ! -f "$DOTFILES_DIR/setup.sh" ]; then
+# Determine dotfiles directory (always use absolute path for proper comparison)
+if [ -z "$DOTFILES_DIR" ]; then
   DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+else
+  # Convert relative DOTFILES_DIR to absolute if needed
+  DOTFILES_DIR="$(cd "$DOTFILES_DIR" && pwd)"
 fi
 
 echo "🔍 Validating dotfiles setup"
@@ -153,18 +155,18 @@ echo "${BLUE}Checking profile symlinks...${NC}"
 profile_count=0
 profiles_ok=0
 
-for profile_file in "$DOTFILES_DIR"./.*_profile; do
+for profile_file in "$DOTFILES_DIR"/.*_profile; do
   [ -f "$profile_file" ] || continue
   profile_name=$(basename "$profile_file")
   profile_path="$HOME/$profile_name"
 
-  ((profile_count++))
+  ((profile_count++)) || true
 
   if [ -L "$profile_path" ]; then
     actual_target=$(readlink "$profile_path")
     if [ "$actual_target" = "$profile_file" ]; then
       log_pass "Profile $profile_name symlinked correctly"
-      ((profiles_ok++))
+      ((profiles_ok++)) || true
     else
       log_fail "Profile $profile_name points to wrong target: $actual_target (expected: $profile_file)"
     fi
@@ -188,55 +190,55 @@ ecosystem_ok=0
 ecosystem_checks=0
 
 # Check Python/pyenv
-((ecosystem_checks++))
+((ecosystem_checks++)) || true
 if [ -x "$(command -v pyenv)" ]; then
   log_pass "Python/pyenv is available: $(pyenv --version 2>/dev/null | head -1)"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 elif [ -f "$HOME/.pyenv/bin/pyenv" ]; then
   log_pass "Python/pyenv installed at: $HOME/.pyenv/bin/pyenv"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 else
   log_fail "Python/pyenv not found - optional, run: brew install pyenv (or see docs/LANGUAGE_ECOSYSTEM.md)"
 fi
 
 # Check Ruby/rbenv
-((ecosystem_checks++))
+((ecosystem_checks++)) || true
 if [ -x "$(command -v rbenv)" ]; then
   log_pass "Ruby/rbenv is available: $(rbenv --version 2>/dev/null)"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 elif [ -f "$HOME/.rbenv/bin/rbenv" ]; then
   log_pass "Ruby/rbenv installed at: $HOME/.rbenv/bin/rbenv"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 else
   log_fail "Ruby/rbenv not found - optional, run: brew install rbenv"
 fi
 
 # Check Go
-((ecosystem_checks++))
+((ecosystem_checks++)) || true
 if [ -x "$(command -v go)" ]; then
   log_pass "Go is available: $(go version 2>/dev/null)"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 else
   log_fail "Go not found - optional, run: brew install go"
 fi
 
 # Check Rust/rustup
-((ecosystem_checks++))
+((ecosystem_checks++)) || true
 if [ -x "$(command -v rustc)" ]; then
   log_pass "Rust/rustup is available: $(rustc --version 2>/dev/null)"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 elif [ -f "$HOME/.cargo/bin/rustc" ]; then
   log_pass "Rust/rustup installed at: $HOME/.cargo/bin/rustc"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 else
   log_fail "Rust/rustup not found - optional, run: brew install rustup"
 fi
 
 # Check Node.js
-((ecosystem_checks++))
+((ecosystem_checks++)) || true
 if [ -x "$(command -v node)" ]; then
   log_pass "Node.js is available: $(node --version 2>/dev/null)"
-  ((ecosystem_ok++))
+  ((ecosystem_ok++)) || true
 else
   log_fail "Node.js not found - optional, run: brew install node"
 fi
