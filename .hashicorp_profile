@@ -105,7 +105,7 @@ alias tfa-debug="TF_LOG=DEBUG terraform apply"
 # auto complete products -autocomplete-install
 complete -C /usr/local/bin/consul consul
 complete -C /usr/local/bin/nomad nomad
-complete -C /usr/local/bin/vault vault
+# complete -C /usr/local/bin/vault vault
 
 # bulk association
 alias -s {tf,tfvars,json,hcl}=code
@@ -116,15 +116,44 @@ alias tf='terraform'
 # vagrant extras (ontop of OMZSH)
 alias vgs-prune='vgs --prune'
 
-alias vault-api-help='echo "# vault <command> -output-curl-string" '
+if /opt/homebrew/opt/vault-enterprise/bin/vault -v 2>&1 | grep -q '\+ent'; then
+  alias vault='/opt/homebrew/opt/vault-enterprise/bin/vault'
+
+	complete -C /opt/homebrew/opt/vault-enterprise/bin/vault vault
+fi
+
+function vault-api-help() {
+  local previous_status=$?
+  local last_command
+  last_command="$(fc -ln -2 -2 | sed 's/^[[:space:]]*//')"
+
+  if [[ $previous_status -ne 0 ]]; then
+    echo "# last command failed; run vault-api-help after a successful vault command"
+    return 1
+  fi
+
+  if [[ "$last_command" != vault* ]]; then
+    echo "# last successful command is not a vault command"
+    return 1
+  fi
+
+  if [[ "$last_command" == *" -output-curl-string"* ]]; then
+    echo "# $last_command"
+    return 0
+  fi
+
+  echo "# ${last_command} -output-curl-string"
+}
 alias vault-curl-help='open https://www.vaultproject.io/api-docs#help'
 alias vault-auto-completion='echo "# vault -autocomplete-install" '
 alias doormat-help-acc='echo # doormat aws --account <aws-account> --tf-push --tf-organization <org> --tf-workspace <workspace>'
-alias hashicorp_downloads='echo  "https://releases.hashicorp.com/" '
+alias hashicorp_releases='open https://releases.hashicorp.com'
+alias terraform_registry='open https://registry.terraform.io'
 alias vault-flags-help='open https://www.vaultproject.io/docs/commands'
+
 alias tcpdump-vault="echo '# sudo tcpdump -A -s 0 'tcp dst port 8200 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -i lo0 ||  sudo tcpdump  -i lo0 port 8200' "
-alias vault-dev="echo '#export VAULT_ADDR=http://127.0.0.1:8200' && vault server -dev -dev-root-token-id=root "
-alias vault-dev-ent='echo # vault-ent server  -dev-three-node -dev-root-token-id="root" '
+alias vault-dev-help="echo '#export VAULT_ADDR=http://127.0.0.1:8200' && vault server -dev -dev-root-token-id=root "
+alias vault-dev-server="vault server -dev -dev-root-token-id=root"
 
 function vault_health () {
   if [[ -z "${VAULT_ADDR}" ]]; then

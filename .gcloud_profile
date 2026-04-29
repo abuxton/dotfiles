@@ -19,3 +19,4 @@ function gcp_project {
 
 
 
+autoload -U compinit; compinit
