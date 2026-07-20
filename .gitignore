@@ -31,3 +31,8 @@ node_modules
 
 **/.opencode/skill/**
 **/skills/**
+
+## BOB
+./agents/.bob/*.json
+agents/.bob/
+agents/.bob/tmp/**
