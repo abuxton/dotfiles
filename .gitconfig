@@ -223,8 +223,11 @@ user = abuxton
 [credential]
 
 [core]
+	hooksPath = /opt/vault-radar/hooks
 [credential]
 	helper = osxkeychain
+	helper =
+	helper = /usr/local/share/gcm-core/git-credential-manager
 [merge "theirs"]
 	driver = false
 [merge "ours"]
@@ -238,3 +241,5 @@ user = abuxton
 	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [init]
 	templateDir = /Users/abuxton/.git-templates/git-secrets
+[credential "https://dev.azure.com"]
+	useHttpPath = true
