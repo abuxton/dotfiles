@@ -118,9 +118,26 @@ alias vgs-prune='vgs --prune'
 
 if /opt/homebrew/opt/vault-enterprise/bin/vault -v 2>&1 | grep -q '\+ent'; then
   alias vault='/opt/homebrew/opt/vault-enterprise/bin/vault'
-
+  # https://developer.hashicorp.com/vault/docs/configuration#license_path
+	export VAULT_LICENSE_PATH="$HOME/Dropbox/work/hashi/licences/vault.hclic"
+	export VAULT_LICENSE="$(cat $HOME/Dropbox/work/hashi/licences/vault.hclic)"
+	export VAULT_CONFIG_PATH="$HOME/.config/vault-enterprise/server.hcl"
+	export VAULT_ADDR="https://localhost:8200"
+	export VAULT_CACERT="$HOME/.config/vault-enterprise/tls/ca.pem"
 	complete -C /opt/homebrew/opt/vault-enterprise/bin/vault vault
 fi
+
+function vault-certs() {
+	# create vault ca.pem, full-chain.pem and private-key.pem for vault server
+	if [[ -f "$HOME/.config/vault-enterprise/tls/ca.pem" ]]; then
+		echo "# vault certs already exist at $HOME/.config/vault-enterprise/tls/"
+	else
+		echo "# creating vault certs at $HOME/.config/vault-enterprise/"
+		mkdir -p $HOME/.config/vault-enterprise/tls
+		openssl req -x509 -newkey rsa:4096 -keyout $HOME/.config/vault-enterprise/tls/private-key.pem -out $HOME/.config/vault-enterprise/tls/ca.pem -nodes -subj "/CN=localhost CA" -addext "subjectAltName = DNS:vault-ca,DNS:localhost,DNS:vault,DNS:127.0.0.1"
+		cp $HOME/.config/vault-enterprise/tls/ca.pem $HOME/.config/vault-enterprise/tls/full-chain.pem
+	fi
+}
 
 function vault-api-help() {
   local previous_status=$?
@@ -153,7 +170,7 @@ alias vault-flags-help='open https://www.vaultproject.io/docs/commands'
 
 alias tcpdump-vault="echo '# sudo tcpdump -A -s 0 'tcp dst port 8200 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -i lo0 ||  sudo tcpdump  -i lo0 port 8200' "
 alias vault-dev-help="echo '#export VAULT_ADDR=http://127.0.0.1:8200' && vault server -dev -dev-root-token-id=root "
-alias vault-dev-server="vault server -dev -dev-root-token-id=root"
+alias vault-dev-server="unset VAULT_CONFIG_PATH && vault server -dev -dev-root-token-id=root"
 
 function vault_health () {
   if [[ -z "${VAULT_ADDR}" ]]; then
