@@ -79,5 +79,3 @@ if ! echo $PATH | grep -q ".rd/bin"; then
 export PATH="/Users/abuxton/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 fi;
-
-
