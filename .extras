@@ -74,6 +74,10 @@ if [ -f ~/.openai_profile ]; then
     # 	  echo "openai!"
     source ~/.openai_profile
 fi
+if [ -f ~/.osx_apfel_profile ]; then
+    # 	  echo "apfel!"
+    source ~/.osx_apfel_profile
+fi
 if [ -f ~/.github_profile ]; then
     # 	  echo "github!"
     source ~/.github_profile

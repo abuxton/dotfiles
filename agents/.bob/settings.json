@@ -1,11 +1,15 @@
 {
   "ibm": {
-    "isNotFirstTime": true
+    "isNotFirstTime": true,
+    "licenseConsent": true,
+    "instanceId": "37f54b01-2dec-4737-bf93-c094a5f95e7c",
+    "teamId": "019ddffb-8c71-79f6-bd0a-feb1a597b638"
   },
   "ibm_secrets": {},
   "security": {
     "auth": {
       "selectedType": "sso"
     }
-  }
+  },
+  "prev_version": "1.0.6"
 }
