@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Apfel on-device AI configuration
+# https://apfel.franzai.com/#oneliners
+#
+# Requires: apfel (brew install apfel)
+
+if command -v apfel >/dev/null 2>&1; then
+	alias apfel-code='apfel --code'
+	alias apfel-json='apfel -o json'
+	alias apfel-file='apfel -f'
+	alias apfel-chat='apfel --chat'
+	alias apfel-serve='apfel --serve'
+	alias apfel-update='apfel --update'
+	alias apfel-clipboard='pbpaste | apfel'
+	alias apfel-gitsum='git log --oneline -20 | apfel "summarize what I have been working on"'
+	alias apfel-oneliners='open https://apfel.franzai.com/#oneliners'
+	alias apfel-apple-docs='open https://developer.apple.com/documentation/foundationmodels'
+fi
+
+# To start the OpenAI-compatible server now and at login:
+# brew services start apfel
+# Or, run it only when needed:
+# /opt/homebrew/opt/apfel/bin/apfel --serve

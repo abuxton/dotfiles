@@ -33,18 +33,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
       "skillPath": "skills/ansible-automation/SKILL.md",
-      "skillFolderHash": "1769e294ab52cc17afe5a72b3623b2e6be6d678a",
+      "skillFolderHash": "a3fbfabf18e6250b86cfd6523b730714dbd5a114",
       "installedAt": "2026-02-26T11:35:52.640Z",
-      "updatedAt": "2026-02-26T11:35:52.640Z"
-    },
-    "appinsights-instrumentation": {
-      "source": "microsoft/GitHub-Copilot-for-Azure",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/microsoft/GitHub-Copilot-for-Azure.git",
-      "skillPath": "plugin/skills/appinsights-instrumentation/SKILL.md",
-      "skillFolderHash": "cbeb51faa472555f4263f32da44b8a04649911d6",
-      "installedAt": "2026-02-26T12:40:37.618Z",
-      "updatedAt": "2026-02-26T12:40:37.618Z"
+      "updatedAt": "2026-08-04T15:37:01.270Z"
     },
     "architecture-blueprint-generator": {
       "source": "github/awesome-copilot",
@@ -217,23 +208,14 @@
       "installedAt": "2026-04-13T14:04:32.739Z",
       "updatedAt": "2026-04-13T14:04:32.739Z"
     },
-    "create-github-pull-request-from-specification": {
-      "source": "github/awesome-copilot",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/github/awesome-copilot.git",
-      "skillPath": "skills/create-github-pull-request-from-specification/SKILL.md",
-      "skillFolderHash": "530438a8ddfd059e4c74d6b79e6156a24344ca28",
-      "installedAt": "2026-04-13T14:04:33.186Z",
-      "updatedAt": "2026-04-13T14:04:33.186Z"
-    },
     "create-implementation-plan": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "sourceUrl": "https://github.com/github/awesome-copilot.git",
       "skillPath": "skills/create-implementation-plan/SKILL.md",
-      "skillFolderHash": "dbd2ff5df455bcc96aaf084cf2f86c208062d06b",
+      "skillFolderHash": "87d75d82e4ef600fcf15503ba15cb1642b993bc1",
       "installedAt": "2026-04-13T14:04:33.692Z",
-      "updatedAt": "2026-04-13T14:04:33.692Z"
+      "updatedAt": "2026-08-04T15:36:45.761Z"
     },
     "create-readme": {
       "source": "github/awesome-copilot",
@@ -276,9 +258,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/github/awesome-copilot.git",
       "skillPath": "skills/dependabot/SKILL.md",
-      "skillFolderHash": "b45be188e2bbff8e56a4942cd063b8b289d79d57",
+      "skillFolderHash": "bae44cbf3624998d19712423d0d3170e2329d426",
       "installedAt": "2026-05-12T04:14:08Z",
-      "updatedAt": "2026-05-12T04:14:08Z"
+      "updatedAt": "2026-08-04T15:36:50.448Z"
     },
     "do-nothing-scripting": {
       "source": "abuxton/skills",
@@ -307,15 +289,6 @@
       "installedAt": "2026-04-13T14:04:36.185Z",
       "updatedAt": "2026-04-13T14:04:36.185Z"
     },
-    "entra-app-registration": {
-      "source": "microsoft/GitHub-Copilot-for-Azure",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/microsoft/GitHub-Copilot-for-Azure.git",
-      "skillPath": "plugin/skills/entra-app-registration/SKILL.md",
-      "skillFolderHash": "0a5ce9b5c7d2bb04c6d579107d4054fef715278e",
-      "installedAt": "2026-02-26T12:40:37.888Z",
-      "updatedAt": "2026-02-26T12:40:37.888Z"
-    },
     "finalize-agent-prompt": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
@@ -330,9 +303,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/skills.git",
       "skillPath": "skills/find-skills/SKILL.md",
-      "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-02-26T11:10:35.620Z",
-      "updatedAt": "2026-02-26T11:10:35.620Z"
+      "updatedAt": "2026-08-04T15:37:12.331Z"
     },
     "first-ask": {
       "source": "github/awesome-copilot",
@@ -351,15 +324,6 @@
       "skillFolderHash": "96b32fc0ba867252c91f84713ff25eb77dc4a4df",
       "installedAt": "2026-04-13T14:04:37.410Z",
       "updatedAt": "2026-04-13T14:04:37.410Z"
-    },
-    "gh-cli": {
-      "source": "github/awesome-copilot",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/github/awesome-copilot.git",
-      "skillPath": "skills/gh-cli/SKILL.md",
-      "skillFolderHash": "437437f7f20bcdbbdb3081cf164435a388c0a39a",
-      "installedAt": "2026-04-13T14:04:37.911Z",
-      "updatedAt": "2026-05-12T04:13:29Z"
     },
     "git-commit": {
       "source": "github/awesome-copilot",
@@ -411,9 +375,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/github/awesome-copilot.git",
       "skillPath": "skills/github-issues/SKILL.md",
-      "skillFolderHash": "44219c182a1435252a1751313b99fb0a79882bb5",
+      "skillFolderHash": "95fb5bd16c2cecb7c14c58d7e902a91daae2ec5e",
       "installedAt": "2026-04-13T14:04:39.037Z",
-      "updatedAt": "2026-04-13T14:04:39.037Z"
+      "updatedAt": "2026-08-04T15:36:54.632Z"
     },
     "issue-reply": {
       "source": "seabbs/skills",
@@ -465,9 +429,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
       "skillPath": "skills/markdown-documentation/SKILL.md",
-      "skillFolderHash": "a464981287a76c6a7efa16ec81fe67cae63d5665",
+      "skillFolderHash": "56362b3cecc153541f90694579501917769c1389",
       "installedAt": "2026-02-26T11:36:53.507Z",
-      "updatedAt": "2026-02-26T11:36:53.507Z"
+      "updatedAt": "2026-08-04T15:37:03.898Z"
     },
     "markdown-to-html": {
       "source": "github/awesome-copilot",
@@ -477,33 +441,6 @@
       "skillFolderHash": "bd8cd071f08f841753283719eeaa28adbb167051",
       "installedAt": "2026-05-12T04:14:05Z",
       "updatedAt": "2026-05-12T04:14:05Z"
-    },
-    "microsoft-foundry": {
-      "source": "microsoft/GitHub-Copilot-for-Azure",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/microsoft/GitHub-Copilot-for-Azure.git",
-      "skillPath": "plugin/skills/microsoft-foundry/SKILL.md",
-      "skillFolderHash": "3657742acbe0580f89594208adb5a1e203227aa2",
-      "installedAt": "2026-02-26T12:40:37.900Z",
-      "updatedAt": "2026-02-26T12:40:37.900Z"
-    },
-    "my-issues": {
-      "source": "github/awesome-copilot",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/github/awesome-copilot.git",
-      "skillPath": "skills/my-issues/SKILL.md",
-      "skillFolderHash": "10e07ccfdbfa7fe07f370dbfb10d4733bcb04d27",
-      "installedAt": "2026-04-13T14:04:39.938Z",
-      "updatedAt": "2026-04-13T14:04:39.938Z"
-    },
-    "my-pull-requests": {
-      "source": "github/awesome-copilot",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/github/awesome-copilot.git",
-      "skillPath": "skills/my-pull-requests/SKILL.md",
-      "skillFolderHash": "df4dd35b614200ce73b4c4c27f0f1749f95b7a81",
-      "installedAt": "2026-04-13T14:04:40.328Z",
-      "updatedAt": "2026-04-13T14:04:40.328Z"
     },
     "obs-memory": {
       "source": "adamtylerlynch/obsidian-agent-memory-skills",
@@ -519,9 +456,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
       "skillPath": "skills/obsidian-bases/SKILL.md",
-      "skillFolderHash": "4bef60bb848bfb02b4172b552626d5741b0d4057",
+      "skillFolderHash": "f3330f27de4d7907ead57d0f48672f4d3280bb77",
       "installedAt": "2026-04-17T15:14:03.386Z",
-      "updatedAt": "2026-04-17T15:14:03.386Z"
+      "updatedAt": "2026-08-04T15:37:13.610Z"
     },
     "obsidian-cli": {
       "source": "kepano/obsidian-skills",
@@ -537,18 +474,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
       "skillPath": "skills/obsidian-markdown/SKILL.md",
-      "skillFolderHash": "5caf5d9e7de204f3904216857545f2aa36bcfcac",
+      "skillFolderHash": "4723197c6dc59abc29819da87863b1ac20b96095",
       "installedAt": "2026-04-17T15:14:03.894Z",
-      "updatedAt": "2026-04-17T15:14:03.894Z"
+      "updatedAt": "2026-08-04T15:37:15.065Z"
     },
     "playwright-cli": {
       "source": "microsoft/playwright-cli",
       "sourceType": "github",
       "sourceUrl": "https://github.com/microsoft/playwright-cli.git",
       "skillPath": "skills/playwright-cli/SKILL.md",
-      "skillFolderHash": "a5a8823e403adc13b2488aae9968d6d92adbd2d7",
+      "skillFolderHash": "ef9a12fdadfb2ad4b67d512a10e840979f162c3a",
       "installedAt": "2026-02-26T11:12:43.652Z",
-      "updatedAt": "2026-02-26T11:12:43.652Z"
+      "updatedAt": "2026-08-04T15:37:16.016Z"
     },
     "pr": {
       "source": "seabbs/skills",
@@ -558,15 +495,6 @@
       "skillFolderHash": "3cff750f8a06d8fb88d1dd2bb91eea151fcb1c53",
       "installedAt": "2026-02-27T09:57:49.809Z",
       "updatedAt": "2026-02-27T09:57:49.809Z"
-    },
-    "prompt-builder": {
-      "source": "github/awesome-copilot",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/github/awesome-copilot.git",
-      "skillPath": "skills/prompt-builder/SKILL.md",
-      "skillFolderHash": "303a08be1132184366d4dc62abaa1ca2b9a41a21",
-      "installedAt": "2026-03-12T09:10:25.029Z",
-      "updatedAt": "2026-03-17T10:07:33.243Z"
     },
     "publishing-npm": {
       "source": "abuxton/skills",
@@ -600,18 +528,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
       "skillPath": "terraform/module-generation/skills/refactor-module/SKILL.md",
-      "skillFolderHash": "f0abaa84ffa8642ee10bac6b6c1e7c32b72461f2",
+      "skillFolderHash": "3b4f5f862b4c27a3fe3d4702c37ac3a8e11e03f7",
       "installedAt": "2026-02-26T11:58:20.885Z",
-      "updatedAt": "2026-02-26T11:58:20.885Z"
+      "updatedAt": "2026-08-04T15:37:07.926Z"
     },
     "refactor-plan": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "sourceUrl": "https://github.com/github/awesome-copilot.git",
       "skillPath": "skills/refactor-plan/SKILL.md",
-      "skillFolderHash": "ce6b9d59e00e87497a5612cc911419ad24d548c7",
+      "skillFolderHash": "a984f58fe6b8372e02dc807e991152a351a530b4",
       "installedAt": "2026-04-13T14:04:41.477Z",
-      "updatedAt": "2026-04-13T14:04:41.477Z"
+      "updatedAt": "2026-08-04T15:36:58.694Z"
     },
     "remember": {
       "source": "github/awesome-copilot",
@@ -645,9 +573,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
       "skillPath": "terraform/provider-development/skills/run-acceptance-tests/SKILL.md",
-      "skillFolderHash": "675112f945c8668ab68e616a4d8744e74c821eb6",
+      "skillFolderHash": "d03a2e4d86e071a2652507c185f151aacc477309",
       "installedAt": "2026-02-26T11:58:20.896Z",
-      "updatedAt": "2026-02-26T11:58:20.896Z"
+      "updatedAt": "2026-08-04T15:37:09.159Z"
     },
     "shields-badges": {
       "source": "abuxton/skills",
@@ -663,9 +591,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/anthropics/skills.git",
       "skillPath": "skills/skill-creator/SKILL.md",
-      "skillFolderHash": "5c26c1472b98de33a48074ba5d3efe3a727b8e37",
+      "skillFolderHash": "3cf9a8db32597ba3e24b584a3d696f4e11c7d7b6",
       "installedAt": "2026-02-26T11:30:34.131Z",
-      "updatedAt": "2026-02-26T11:30:34.131Z"
+      "updatedAt": "2026-08-04T15:37:17.885Z"
     },
     "suggest-awesome-github-copilot-instructions": {
       "source": "github/awesome-copilot",
@@ -708,18 +636,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
       "skillPath": "terraform/code-generation/skills/terraform-style-guide/SKILL.md",
-      "skillFolderHash": "41487ea35027d0ca9930aed05d16840209e0a181",
+      "skillFolderHash": "6479909cfba618b042f2272d160d68af1a48f96b",
       "installedAt": "2026-02-26T11:58:20.859Z",
-      "updatedAt": "2026-02-26T11:58:20.859Z"
+      "updatedAt": "2026-08-04T15:37:10.370Z"
     },
     "terraform-test": {
       "source": "hashicorp/agent-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/hashicorp/agent-skills.git",
       "skillPath": "terraform/code-generation/skills/terraform-test/SKILL.md",
-      "skillFolderHash": "4b296f72fefb4891ec985cd7f459599e269301e6",
+      "skillFolderHash": "e24dc7d3c72d1208736b329434667d43c7bfcfa4",
       "installedAt": "2026-02-26T11:58:20.871Z",
-      "updatedAt": "2026-02-26T11:58:20.871Z"
+      "updatedAt": "2026-08-04T15:37:11.544Z"
     },
     "tldr-prompt": {
       "source": "github/awesome-copilot",
@@ -735,9 +663,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/aj-geddes/useful-ai-prompts.git",
       "skillPath": "skills/user-story-writing/SKILL.md",
-      "skillFolderHash": "9e48382570fca082748e9c3b54f3ab70ee36895c",
+      "skillFolderHash": "1b0f80a710641b4092f3342f2cb1fc5c2b9e369f",
       "installedAt": "2026-02-26T11:39:13.539Z",
-      "updatedAt": "2026-02-26T11:39:13.539Z"
+      "updatedAt": "2026-08-04T15:37:06.421Z"
     },
     "write-coding-standards-from-file": {
       "source": "github/awesome-copilot",
@@ -780,189 +708,189 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/dispatching-parallel-agents/SKILL.md",
-      "skillFolderHash": "ebd0490e6b0bccfdb9f9c0cc9dd6a066036c8d89",
+      "skillFolderHash": "15697cb0726c26a66bff737494e8b5266667ba0c",
       "installedAt": "2026-05-27T08:51:49.346Z",
-      "updatedAt": "2026-05-27T08:51:49.346Z"
+      "updatedAt": "2026-08-04T15:37:19.142Z"
     },
     "finishing-a-development-branch": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/finishing-a-development-branch/SKILL.md",
-      "skillFolderHash": "782e09faa5dcf7e9a7a173bd14b5622e35b80169",
+      "skillFolderHash": "d596f4d5025669f6e14f5de11c39add50b5535c5",
       "installedAt": "2026-05-27T08:51:49.348Z",
-      "updatedAt": "2026-05-27T08:51:49.348Z"
+      "updatedAt": "2026-08-04T15:37:20.189Z"
     },
     "receiving-code-review": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/receiving-code-review/SKILL.md",
-      "skillFolderHash": "7750c56fddb8b2f1cbdb1550a6e3e40d2eeac5f1",
+      "skillFolderHash": "b5e154fc3ec7a6a0b1e710eebacc2168620cc428",
       "installedAt": "2026-05-27T08:51:49.350Z",
-      "updatedAt": "2026-05-27T08:51:49.350Z"
+      "updatedAt": "2026-08-04T15:37:21.371Z"
     },
     "requesting-code-review": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/requesting-code-review/SKILL.md",
-      "skillFolderHash": "ff419ec159bdf5ff2f2d83c7e544c586bcde69bb",
+      "skillFolderHash": "adfc337f87084b705c1a5811ba2436dc99fb7216",
       "installedAt": "2026-05-27T08:51:49.352Z",
-      "updatedAt": "2026-05-27T08:51:49.352Z"
+      "updatedAt": "2026-08-04T15:37:22.967Z"
     },
     "subagent-driven-development": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/subagent-driven-development/SKILL.md",
-      "skillFolderHash": "73b43347c1bdc10f6ab81a5cdb036dd1c8098cc0",
+      "skillFolderHash": "b54e8179ba48b0d96f4639d387f90a0a885eb8c6",
       "installedAt": "2026-05-27T08:51:49.353Z",
-      "updatedAt": "2026-05-27T08:51:49.353Z"
+      "updatedAt": "2026-08-04T15:37:24.183Z"
     },
     "using-git-worktrees": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/using-git-worktrees/SKILL.md",
-      "skillFolderHash": "13a9643fb9e4b236173f7d4b56b15dac10394f1b",
+      "skillFolderHash": "d2b8357b922667a091bfe967840abf5ae84ce99c",
       "installedAt": "2026-05-27T08:51:49.354Z",
-      "updatedAt": "2026-05-27T08:51:49.354Z"
+      "updatedAt": "2026-08-04T15:37:25.758Z"
     },
     "using-superpowers": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/using-superpowers/SKILL.md",
-      "skillFolderHash": "225dd70596c396940ff158335a954a64d93ece40",
+      "skillFolderHash": "a5e27b759e1c907c5076340848308f6aa37f33d4",
       "installedAt": "2026-05-27T08:51:49.354Z",
-      "updatedAt": "2026-05-27T08:51:49.354Z"
+      "updatedAt": "2026-08-04T15:37:27.069Z"
     },
     "verification-before-completion": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "sourceUrl": "https://github.com/obra/superpowers.git",
       "skillPath": "skills/verification-before-completion/SKILL.md",
-      "skillFolderHash": "ceb2f1f67f4cadb29b32a06e54d3d0be832071f5",
+      "skillFolderHash": "a4cb0b69aaefeab540947a7f1642bdaad810e37a",
       "installedAt": "2026-05-27T08:51:49.355Z",
-      "updatedAt": "2026-05-27T08:51:49.355Z"
+      "updatedAt": "2026-08-04T15:37:28.539Z"
     },
     "agent-teams": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/conjure/skills/agent-teams/SKILL.md",
-      "skillFolderHash": "bace0e38306beaf31773ccf68f634428869ad62e",
+      "skillFolderHash": "480bb18511afe3051388ee483e19f966f0f527a5",
       "installedAt": "2026-05-28T15:27:31.738Z",
-      "updatedAt": "2026-05-28T15:27:31.738Z"
+      "updatedAt": "2026-08-04T15:37:32.195Z"
     },
     "architecture-review": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/pensive/skills/architecture-review/SKILL.md",
-      "skillFolderHash": "32d8753ccf06ccc2d831ba1303d75dc71f6117bb",
+      "skillFolderHash": "253e1f553e772f58aaf1c1fd9c2f856c590af81a",
       "installedAt": "2026-05-28T15:27:31.741Z",
-      "updatedAt": "2026-05-28T15:27:31.741Z"
+      "updatedAt": "2026-08-04T15:37:36.045Z"
     },
     "blast-radius": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/pensive/skills/blast-radius/SKILL.md",
-      "skillFolderHash": "ffe8e63db03e483c53d4cfeb92a7fd8238d51c3e",
+      "skillFolderHash": "4c1239ea8f6082c76ab07334e7865f16a4259b4c",
       "installedAt": "2026-05-28T15:27:31.742Z",
-      "updatedAt": "2026-05-28T15:27:31.742Z"
+      "updatedAt": "2026-08-04T15:37:39.556Z"
     },
     "bug-review": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/pensive/skills/bug-review/SKILL.md",
-      "skillFolderHash": "3414b84b887281114e9b9ae53d810bdefcc8c984",
+      "skillFolderHash": "e2dd3d00c1ac4420d65a16a6887cd1d603d61146",
       "installedAt": "2026-05-28T15:27:31.743Z",
-      "updatedAt": "2026-05-28T15:27:31.743Z"
+      "updatedAt": "2026-08-04T15:37:42.691Z"
     },
     "doc-consolidation": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/sanctum/skills/doc-consolidation/SKILL.md",
-      "skillFolderHash": "9bee8f70ead789ede1751937c89fdde956c6052c",
+      "skillFolderHash": "69ae7903fab12dd7632a41e3e73742be56ff2e8f",
       "installedAt": "2026-05-28T15:27:31.744Z",
-      "updatedAt": "2026-05-28T15:27:31.744Z"
+      "updatedAt": "2026-08-04T15:37:46.257Z"
     },
     "doc-generator": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/scribe/skills/doc-generator/SKILL.md",
-      "skillFolderHash": "cd0ebc7309c508a994d431c06a1cbd78ec21e8c5",
+      "skillFolderHash": "81f2809e37d38956dcb24e1f9939594ded958115",
       "installedAt": "2026-05-28T15:27:31.745Z",
-      "updatedAt": "2026-05-28T15:27:31.745Z"
+      "updatedAt": "2026-08-04T15:37:49.835Z"
     },
     "doc-updates": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/sanctum/skills/doc-updates/SKILL.md",
-      "skillFolderHash": "46d83efda2e2ef6e06ea9046e4c442e827c57927",
+      "skillFolderHash": "03f3b358d4c4c3d745755ded8a512723c5c03b24",
       "installedAt": "2026-05-28T15:27:31.746Z",
-      "updatedAt": "2026-05-28T15:27:31.746Z"
+      "updatedAt": "2026-08-04T15:37:54.118Z"
     },
     "document-conversion": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/leyline/skills/document-conversion/SKILL.md",
-      "skillFolderHash": "a09b2ab34bfdb948311e27e748d52493945a829f",
+      "skillFolderHash": "15d8c03ada1ae4cb71f2f55ca7fcfa7d06a9c544",
       "installedAt": "2026-05-28T15:27:31.746Z",
-      "updatedAt": "2026-05-28T15:27:31.746Z"
+      "updatedAt": "2026-08-04T15:37:58.318Z"
     },
     "makefile-generation": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/attune/skills/makefile-generation/SKILL.md",
-      "skillFolderHash": "85e48e33c05aff13cbb548de0b6edf33611108e7",
+      "skillFolderHash": "f93be9c4fa0390de2cca6e318b40609ac858bb86",
       "installedAt": "2026-05-28T15:27:31.747Z",
-      "updatedAt": "2026-05-28T15:27:31.747Z"
+      "updatedAt": "2026-08-04T15:38:01.523Z"
     },
     "makefile-review": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/pensive/skills/makefile-review/SKILL.md",
-      "skillFolderHash": "8f3bda221d910d707a006a18f9f526e9630b8bbb",
+      "skillFolderHash": "6f9fec07a06ad155a276a0a81c23f8f946444290",
       "installedAt": "2026-05-28T15:27:31.748Z",
-      "updatedAt": "2026-05-28T15:27:31.748Z"
+      "updatedAt": "2026-08-04T15:38:05.334Z"
     },
     "onboard": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/gauntlet/skills/onboard/SKILL.md",
-      "skillFolderHash": "40feaa27d692bfcb327be4cf8d4e32fa138ce2a8",
+      "skillFolderHash": "537c09fc2a3121708390dd44e4e4f0fc245ad875",
       "installedAt": "2026-05-28T15:27:31.749Z",
-      "updatedAt": "2026-05-28T15:27:31.749Z"
+      "updatedAt": "2026-08-04T15:38:08.853Z"
     },
     "pr-prep": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/sanctum/skills/pr-prep/SKILL.md",
-      "skillFolderHash": "9b004bfc1a355442f3aff52d3f79bb0a949195c0",
+      "skillFolderHash": "07c2499ee071170708088b1b5a446a358f923ef2",
       "installedAt": "2026-05-28T15:27:31.751Z",
-      "updatedAt": "2026-05-28T15:27:31.751Z"
+      "updatedAt": "2026-08-04T15:38:12.290Z"
     },
     "pr-review": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/sanctum/skills/pr-review/SKILL.md",
-      "skillFolderHash": "b8f5fab19bd4b5d599e286c4b31dc560ce3c8935",
+      "skillFolderHash": "62c5bf446b16efaa99aab7b05ab32ec67f0715e6",
       "installedAt": "2026-05-28T15:27:31.752Z",
-      "updatedAt": "2026-05-28T15:27:31.752Z"
+      "updatedAt": "2026-08-04T15:38:15.441Z"
     },
     "vhs-recording": {
       "source": "athola/claude-night-market",
@@ -978,45 +906,45 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/attune/skills/war-room/SKILL.md",
-      "skillFolderHash": "7114b94e8f43111b10c54e100450e2f4865cf529",
+      "skillFolderHash": "4ff3e1fa9480c8c30de5c61698da3849d991814a",
       "installedAt": "2026-05-28T15:27:31.754Z",
-      "updatedAt": "2026-05-28T15:27:31.754Z"
+      "updatedAt": "2026-08-04T15:38:19.619Z"
     },
     "war-room-checkpoint": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/attune/skills/war-room-checkpoint/SKILL.md",
-      "skillFolderHash": "397cf2dcd873465777aa415c4402d1c647a5ccfd",
+      "skillFolderHash": "0f7eae4673bb2ae936718f298a6130787f336b88",
       "installedAt": "2026-05-28T15:27:31.754Z",
-      "updatedAt": "2026-05-28T15:27:31.754Z"
+      "updatedAt": "2026-08-04T15:38:23.182Z"
     },
     "workflow-diagram": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/cartograph/skills/workflow-diagram/SKILL.md",
-      "skillFolderHash": "10c04114cd2b9a4ea013ddfdf48f4f5a52c8a8db",
+      "skillFolderHash": "0bc74255b66dd4d1a0e209b9a500f0c66d2487eb",
       "installedAt": "2026-05-28T15:27:31.755Z",
-      "updatedAt": "2026-05-28T15:27:31.755Z"
+      "updatedAt": "2026-08-04T15:38:26.334Z"
     },
     "workflow-improvement": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/sanctum/skills/workflow-improvement/SKILL.md",
-      "skillFolderHash": "5a20bc8b155137c40d19895b0b14167832f14cb9",
+      "skillFolderHash": "21308cea3681131e1b48fbd21c1e9ab87c22fb9d",
       "installedAt": "2026-05-28T15:27:31.756Z",
-      "updatedAt": "2026-05-28T15:27:31.756Z"
+      "updatedAt": "2026-08-04T15:38:29.766Z"
     },
     "writing-rules": {
       "source": "athola/claude-night-market",
       "sourceType": "github",
       "sourceUrl": "https://github.com/athola/claude-night-market.git",
       "skillPath": "plugins/hookify/skills/writing-rules/SKILL.md",
-      "skillFolderHash": "0a881d5b5d9f8eb05fecdcb2a45e00af0318bb63",
+      "skillFolderHash": "7c7478368e9343a271a5f0fd4ef7024df802038e",
       "installedAt": "2026-05-28T15:27:31.756Z",
-      "updatedAt": "2026-05-28T15:27:31.756Z"
+      "updatedAt": "2026-08-04T15:38:33.150Z"
     }
   },
   "dismissed": {

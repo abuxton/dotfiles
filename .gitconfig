@@ -226,7 +226,7 @@ user = abuxton
 	hooksPath = /opt/vault-radar/hooks
 [credential]
 	helper = osxkeychain
-	helper =
+	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [merge "theirs"]
 	driver = false
