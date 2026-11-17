@@ -192,6 +192,36 @@ Shell functions are organized in `~/.functions.d/`:
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
+### macOS DNS
+
+After loading `.osx` in Bash or Zsh, use `dns` to configure the Wi-Fi network
+service (administrator authentication may be required):
+
+```bash
+dns --show                         # Show manually configured DNS servers
+dns --cloudflare                   # Cloudflare, unfiltered (default)
+dns --cloudflare --malware         # Cloudflare malware filtering
+dns --google                       # Google Public DNS
+dns --opendns                      # OpenDNS
+dns --automatic                    # Clear manual DNS and use network-provided DNS
+dns --reset                        # Restore and delete the saved DNS backup
+dns --google --service "Ethernet"  # Choose another network service
+dns                                # Show help (also: dns help, dns -h, dns --help)
+```
+
+`--unfiltered` can be specified explicitly with `--cloudflare`. Before the first
+change, `dns` saves the service's current manual DNS settings in
+`~/.config/dns/`. Further changes warn and ask for confirmation
+(default no), preserving the original backup. `--reset` restores that backup
+and deletes it only after restoration succeeds; use the same `--service` for
+both commands. If DNS was automatic, reset clears the manual DNS list.
+
+The public resolver options replace the selected service's manual DNS list with
+IPv4 servers. `--automatic` also takes a backup but clears the list instead of
+restoring previous custom settings. VPNs or other DNS configuration can
+override the selected service's resolver, and these settings do not enable
+encrypted DNS.
+
 ### Profile Management
 
 Dotfiles supports optional tool-specific profiles that extend configuration:

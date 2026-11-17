@@ -48,6 +48,190 @@ wifi() {
 	echo "IP: $(ipconfig getifaddr "$dev")"
 }
 
+# Configure DNS on one macOS network service.
+dns() {
+	local service="Wi-Fi" action="" filter="" backup_dir backup hash snapshot temp line answer has_backup=0
+	if [ "$#" -eq 0 ]; then
+		set -- --help
+	fi
+	while [ "$#" -gt 0 ]; do
+		case "$1" in
+			--cloudflare|--google|--opendns|--automatic|--show|--reset)
+				if [ -n "$action" ]; then
+					printf 'dns: choose exactly one action\n' >&2
+					return 2
+				fi
+				action=$1
+				;;
+			--malware|--unfiltered)
+				if [ -n "$filter" ]; then
+					printf 'dns: choose only one Cloudflare filter\n' >&2
+					return 2
+				fi
+				filter=$1
+				;;
+			--service)
+				if [ "$#" -lt 2 ] || [ -z "$2" ] || [ "${2#-}" != "$2" ]; then
+					printf 'dns: --service requires a network service name\n' >&2
+					return 2
+				fi
+				service=$2
+				shift
+				;;
+			help|-h|--help)
+				printf '%s\n' \
+					'Usage: dns (--cloudflare [--unfiltered|--malware] | --google | --opendns | --automatic | --show | --reset) [--service NAME]' \
+					'' \
+					'Actions:' \
+					'  --cloudflare    Use Cloudflare DNS (unfiltered by default)' \
+					'  --google        Use Google Public DNS' \
+					'  --opendns       Use OpenDNS' \
+					'  --automatic     Clear manual DNS and use network-provided DNS' \
+					'  --show          Show manually configured DNS servers' \
+					'  --reset         Restore and delete the saved DNS backup' \
+					'' \
+					'Options:' \
+					'  --unfiltered    Use unfiltered Cloudflare DNS' \
+					'  --malware       Use Cloudflare DNS with malware filtering' \
+					'  --service NAME  Network service to configure (default: Wi-Fi)' \
+					'  help, -h, --help  Show this help (also the default with no arguments)' \
+					'' \
+					'Changes require sudo and preserve the original DNS in a per-service backup.' \
+					'Existing backups are kept; further changes require confirmation.'
+				return 0
+				;;
+			*)
+				printf 'dns: unknown option: %s\n' "$1" >&2
+				return 2
+				;;
+		esac
+		shift
+	done
+
+	if [ -z "$action" ]; then
+		printf 'dns: choose an action; use dns --help for usage\n' >&2
+		return 2
+	fi
+	if [ -n "$filter" ] && [ "$action" != "--cloudflare" ]; then
+		printf 'dns: filtering options require --cloudflare\n' >&2
+		return 2
+	fi
+
+	if [ "$action" = "--show" ]; then
+		networksetup -getdnsservers "$service"
+		return $?
+	fi
+
+	backup_dir="$HOME/.config/dns"
+	if ! hash=$(printf '%s' "$service" | shasum -a 256); then
+		printf 'dns: failed to identify network service %s\n' "$service" >&2
+		return 1
+	fi
+	hash=${hash%% *}
+	backup="$backup_dir/$hash"
+
+	if [ "$action" = "--reset" ]; then
+		if [ ! -f "$backup" ] || [ -L "$backup" ]; then
+			printf 'dns: no DNS backup exists for %s\n' "$service" >&2
+			return 1
+		fi
+		if ! snapshot=$(cat "$backup"); then
+			printf 'dns: failed to read backup %s\n' "$backup" >&2
+			return 1
+		fi
+	else
+		if [ -e "$backup" ] || [ -L "$backup" ]; then
+			has_backup=1
+			if [ ! -f "$backup" ] || [ -L "$backup" ]; then
+				printf 'dns: invalid DNS backup at %s; no changes made\n' "$backup" >&2
+				return 1
+			fi
+			printf 'dns: backup already exists for %s: %s\n' "$service" "$backup" >&2
+			printf 'Keep the backup and change DNS anyway? [y/N] ' >&2
+			if ! IFS= read -r answer || { [ "$answer" != y ] && [ "$answer" != Y ] && [ "$answer" != yes ] && [ "$answer" != YES ]; }; then
+				printf 'dns: DNS unchanged\n' >&2
+				return 1
+			fi
+		else
+			if ! snapshot=$(LC_ALL=C networksetup -getdnsservers "$service"); then
+				printf 'dns: failed to read DNS for %s; no changes made\n' "$service" >&2
+				return 1
+			fi
+		fi
+	fi
+
+	if [ "$action" = "--reset" ] || [ "$has_backup" -eq 0 ]; then
+		if [ "$snapshot" != "There aren't any DNS Servers set on $service." ]; then
+			if [ -z "$snapshot" ] || printf '%s\n' "$snapshot" | LC_ALL=C grep -qvE '^[[:xdigit:]:.]+(%[[:alnum:]_.-]+)?$'; then
+				printf 'dns: unrecognized DNS data for %s; no changes made\n' "$service" >&2
+				return 1
+			fi
+		fi
+	fi
+
+	if [ "$action" != "--reset" ] && [ "$has_backup" -eq 0 ]; then
+		if ! (umask 077; mkdir -p "$backup_dir"); then
+			printf 'dns: failed to create backup directory %s\n' "$backup_dir" >&2
+			return 1
+		fi
+		if ! temp=$(mktemp "$backup_dir/.dns.XXXXXXXX"); then
+			printf 'dns: failed to create DNS backup for %s\n' "$service" >&2
+			return 1
+		fi
+		if ! printf '%s\n' "$snapshot" > "$temp" || ! ln "$temp" "$backup"; then
+			printf 'dns: failed to save DNS backup for %s; no changes made\n' "$service" >&2
+			if ! rm "$temp"; then
+				printf 'dns: failed to remove temporary backup %s; no changes made\n' "$temp" >&2
+				return 1
+			fi
+			return 1
+		fi
+		if ! rm "$temp"; then
+			printf 'dns: failed to remove temporary backup %s; no changes made\n' "$temp" >&2
+			return 1
+		fi
+		printf 'Created DNS backup for %s: %s\n' "$service" "$backup"
+	fi
+
+	case "$action" in
+		--reset)
+			set --
+			if [ "$snapshot" = "There aren't any DNS Servers set on $service." ]; then
+				set -- empty
+			else
+				while IFS= read -r line || [ -n "$line" ]; do
+					set -- "$@" "$line"
+				done <<EOF
+$snapshot
+EOF
+			fi
+			;;
+		--automatic) set -- empty ;;
+		--cloudflare)
+			if [ "$filter" = "--malware" ]; then
+				set -- 1.1.1.2 1.0.0.2
+			else
+				set -- 1.1.1.1 1.0.0.1
+			fi
+			;;
+		--google) set -- 8.8.8.8 8.8.4.4 ;;
+		--opendns) set -- 208.67.222.222 208.67.220.220 ;;
+	esac
+	if ! \sudo networksetup -setdnsservers "$service" "$@"; then
+		printf 'dns: failed to update DNS for %s\n' "$service" >&2
+		return 1
+	fi
+	if [ "$action" = "--reset" ]; then
+		if ! rm "$backup"; then
+			printf 'dns: DNS restored, but failed to delete backup %s\n' "$backup" >&2
+			return 1
+		fi
+		printf 'DNS restored for %s; backup deleted\n' "$service"
+		return 0
+	fi
+	printf 'DNS updated for %s (%s)\n' "$service" "$action"
+}
+
 # List processes listening on TCP ports.
 lsports() {
 	sudo lsof -iTCP -sTCP:LISTEN -nP | awk 'NR==1 || !seen[$1 $9]++' | column -t
