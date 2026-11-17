@@ -195,8 +195,6 @@ done
 unset optional_profile
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-# Lean archey banner (no network lookups); run `sysinfo` for the full report
-[[ -o interactive && "$TERM_PROGRAM" != vscode && -z "$VSCODE_INJECTION" ]] && command -v archey >/dev/null && archey
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 
@@ -206,8 +204,34 @@ source ${ZSH}/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 # cheat.sh support
 export CHTSH_CONF='~/.cht.sh.conf'
 
-if [[ -o interactive && "$TERM_PROGRAM" != vscode && -z "$VSCODE_INJECTION" ]] && (( $+functions[clocks] )); then
-    clocks
+if [[ -o interactive && "$TERM_PROGRAM" != vscode && -z "$VSCODE_INJECTION" ]];  then
+    print -P -- '%F{cyan}Starting interactive session...%f'
+	if (( $+aliases[kgaa] )); then
+		print -P -- '%F{green}Reviewing K8s resources%f'
+		KUBECTL_CURRENT_CONTEXT=$(kubectl config current-context)
+		print -Pn -- '%F{green}Current Kubernetes context:%f '
+		printf '%s\n\n' "$KUBECTL_CURRENT_CONTEXT"
+		kgaa
+	fi
+    if (( $+aliases[docker-psa] )); then
+        print -P -- $'\n%F{cyan}Reviewing Docker resources%f\n'
+        docker-psa
+    fi
+	if (( $+aliases[vgs] )); then
+		print -P -- $'\n%F{magenta}Reviewing Vagrant guests%f\n'
+		vgs
+	fi
+	if command -v archey >/dev/null 2>&1; then
+	# Lean archey banner (no network lookups); run `sysinfo` for the full report
+	    print -P -- $'\n%F{cyan}Reviewing OSX system information%f\n'
+		print -P -- $'%F{green}Lean archey banner (no network lookups); run sysinfo() for the full report%f\n'
+	    archey
+	fi
+	if (( $+functions[clocks] )); then
+	    print -P -- $'\n%F{yellow}Reviewing timezones%f\n'
+	    clocks
+	fi
+
 fi
 
 #BMOTD # Bob quote of the day
