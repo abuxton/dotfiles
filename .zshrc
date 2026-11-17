@@ -19,7 +19,7 @@ fi
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/abuxton/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -110,6 +110,8 @@ plugins=(
 	iterm2
     kubectl
 	macos
+	mongo-atlas
+	mongocli
 	nomad
 	podman
 	pyenv
@@ -126,9 +128,8 @@ plugins=(
   codex
   gemini
 )
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
-source $ZPLUG_HOME/init.zsh
 export ZSH_PLUGINS=$plugins
+fpath=(~/.zsh.d/ $fpath)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -188,37 +189,26 @@ done
 unset profile
 
 # Load additional optional profiles (these are supplementary, failures won't break setup)
-for optional_profile in ~/.{openai,claude,instruqt,bob,vscode,atlasssian,hashicorp,rancher,vagrant,uv,github,perl}_profile; do
+for optional_profile in ~/.{openai,claude,instruqt,bob,vscode,atlasssian,hashicorp,rancher,vagrant,github}_profile; do
   [ -r "$optional_profile" ] && [ -f "$optional_profile" ] && source "$optional_profile";
 done
 unset optional_profile
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 # Lean archey banner (no network lookups); run `sysinfo` for the full report
-[[ -o interactive && -z "$VSCODE_INJECTION" ]] && command -v archey >/dev/null && archey
+[[ -o interactive && "$TERM_PROGRAM" != vscode && -z "$VSCODE_INJECTION" ]] && command -v archey >/dev/null && archey
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-autoload -U +X bashcompinit && bashcompinit
 
 source ${ZSH}/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 #source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # cheat.sh support
-fpath=(~/.zsh.d/ $fpath)
 export CHTSH_CONF='~/.cht.sh.conf'
 
-pyenv version
-rbenv version
-PT=`env TZ=US/Pacific date`
-KR=`env TZ=Europe/Berlin date`
-IN=`env TZ=Asia/Calcutta date`
-UT=`env TZ=Etc/GMT date`
-AU=`env LC_TIME=C TZ=Australia/Sydney date`
-echo “SFO:     $PT”
-echo “UTC:    $UT”
-echo “Berlin: $KR”
-echo “India:  $IN”
-echo “NSW:  $AU”
+if [[ -o interactive && "$TERM_PROGRAM" != vscode && -z "$VSCODE_INJECTION" ]] && (( $+functions[clocks] )); then
+    clocks
+fi
 
 #BMOTD # Bob quote of the day
 

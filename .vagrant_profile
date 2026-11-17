@@ -2,4 +2,3 @@ alias v='vagrant'
 alias vgs='vagrant global-status'
 alias vagrant-get-ssh='echo "# vagrant status --machine-readable | grep 'state,running' | cut -d',' -f2| vagrant ssh-config | tee  -a ~/.ssh/config" '
 #
-vgs

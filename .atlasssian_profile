@@ -5,20 +5,29 @@ export JIRA_API_TOKEN=$(cat ~/Dropbox/profile/atlassian/jira_api_token.txt)
 
 
 function atlassian_profile() {
-
-  echo "Setting up atlassian profile"
-  mkdir -p ~/.config/.jira
-  echo "Generating jira completion script"
-  jira completion zsh > ~/.config/.jira/.jira_completion
-  source ~/.config/.jira/.jira_completion
-  echo "Generating jira config file"
-  if [ ! -f ~/.config/.jira/.config.yml ]; then
-		touch ~/.config/.jira/.config.yml
-		cat ~/Dropbox/profile/atlassian/.jira/.config.yml > ~/.config/.jira/.config.yml
-	fi
-
-
-  echo "Atlassian profile setup complete"
+  local jira_dir="$HOME/.config/.jira"
+  local completion="$jira_dir/.jira_completion"
+  local temporary
+  mkdir -p "$jira_dir" || return
+  if [ -n "$ZSH_VERSION" ]; then
+    if [ ! -s "$completion" ] || [ "$(command -v jira)" -nt "$completion" ] || [ -n "$(find "$completion" -mtime +0 -print)" ]; then
+      temporary=$(mktemp "$completion.XXXXXX") || return
+      if jira completion zsh > "$temporary" && [ -s "$temporary" ]; then
+        if ! mv "$temporary" "$completion"; then
+          rm -f "$temporary"
+          return 1
+        fi
+      else
+        rm -f "$temporary"
+        echo "Failed to generate Jira completion" >&2
+        return 1
+      fi
+    fi
+    source "$completion"
+  fi
+  if [ ! -f "$jira_dir/.config.yml" ]; then
+    cp "$HOME/Dropbox/profile/atlassian/.jira/.config.yml" "$jira_dir/.config.yml" || return
+  fi
 }
 
 if 	[ -x "$(command -v jira)" ]; then

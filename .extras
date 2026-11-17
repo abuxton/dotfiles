@@ -18,86 +18,11 @@ function binday() {
   echo "This function has been disabled."
   open "https://sms-wrp.whitespacews.com/mop.php"
 }
-if [ -f ~/.atlasssian_profile ]; then
-    # 	  echo "jira!"
-    source ~/.atlasssian_profile
-fi
-if [ -f ~/.bob_profile ]; then
-    # 	  echo "bob!"
-    source ~/.bob_profile
-fi
-if [ -f ~/.docker_profile ]; then
-    # 	  echo "docker!"
-    source ~/.docker_profile
-fi
-if [ -f ~/.python_profile ]; then
-    # 	  echo "python!"
-    source ~/.python_profile
-fi
-if [ -f ~/.vagrant_profile ]; then
-    # 	  echo "vagrant!"
-    source ~/.vagrant_profile
-fi
-if [ -f ~/.go_profile ]; then
-    #     echo "go!"
-    source ~/.go_profile
-fi
-if [ -f ~/.ruby_profile ]; then
-    #     echo "ruby!"
-    source ~/.ruby_profile
-fi
-if [ -f ~/.instruqt_profile ]; then
-    # 	  echo "instruqt!"
-    source ~/.instruqt_profile
-fi
-if [ -f ~/.azure_profile ]; then
-    # 	  echo "azure!"
-    source ~/.azure_profile
-fi
-if [ -f ~/.aws_profile ]; then
-    # 	  echo "aws!"
-    source ~/.aws_profile
-fi
-if [[ -f ~/.brew_profile ]]; then
-    #   echo "Brew!"
-    source ~/.brew_profile
-fi
-if [[ -f ~/.hashicorp_profile ]]; then
-    #   echo "hashicorp!"
-    source ~/.hashicorp_profile
-fi
 if [[ -f ~/.kubectl_completion ]]; then
     #   echo "kubectl!"
     source ~/.kubectl_completion
-fi
-if [ -f ~/.openai_profile ]; then
-    # 	  echo "openai!"
-    source ~/.openai_profile
 fi
 if [ -f ~/.osx_apfel_profile ]; then
     # 	  echo "apfel!"
     source ~/.osx_apfel_profile
 fi
-if [ -f ~/.github_profile ]; then
-    # 	  echo "github!"
-    source ~/.github_profile
-fi
-if [ -f ~/.gcloud_profile ]; then
-    # 	  echo "gcloud!"
-    source ~/.gcloud_profile
-fi
-if [ -f ~/.vscode_profile ]; then
-    # 	  echo "vscode!"
-    source ~/.vscode_profile
-fi
-if [ -f ~/.rust_profile ]; then
-    # 	  echo "rust!"
-    source ~/.rust_profile
-fi
-if [ -f ~/.rancher_profile ]; then
-    # 	  echo "rancher!"
-    source ~/.rancher_profile
-fi
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
