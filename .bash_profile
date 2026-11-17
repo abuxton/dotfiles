@@ -7,7 +7,7 @@ export PATH="$HOME/bin:$PATH";
 # * ~/.aliases contains common aliases
 # * ~/.functions.d/ contains modular shell functions
 # * ~/.extra can be used for other settings you don't want to commit.
-for file in ~/.{path,bash_prompt,exports,aliases,extra}; do
+for file in ~/.{path,bash_prompt,exports,aliases,extra,osx}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;

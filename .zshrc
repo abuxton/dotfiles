@@ -160,7 +160,7 @@ source $ZSH/oh-my-zsh.sh
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-for file in ~/.{path,exports,aliases,functions,extras}; do
+for file in ~/.{path,exports,aliases,functions,extras,osx}; do
     [ -r "${file}" ] && [ -f "${file}" ] && source "${file}";
 done;
 unset file;
@@ -194,8 +194,8 @@ done
 unset optional_profile
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-#test -x /Users/abuxton/.pyenv/shims/archey && zsh -c archey
-test -x $(brew --prefix)/opt/archey4/bin/archey && zsh -c archey
+# Lean archey banner (no network lookups); run `sysinfo` for the full report
+[[ -o interactive && -z "$VSCODE_INJECTION" ]] && command -v archey >/dev/null && archey
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 autoload -U +X bashcompinit && bashcompinit

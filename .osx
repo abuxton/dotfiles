@@ -1,1 +1,86 @@
 # 301 https://github.com/mathiasbynens/dotfiles/blob/master/.macos
+
+# List mounted devices: physical disk-backed volumes by default,
+# pass -a to show every mount (including system/virtual filesystems).
+lsmounts() {
+	if [ "$1" = "-a" ]; then
+		mount | sort
+		return
+	fi
+	df -h | awk 'NR==1 || /^\/dev\//' | sed 's/^Filesystem/Device    /' | column -t
+}
+
+# List connected USB devices as a tree; pass -v for full system_profiler detail.
+lsusb() {
+	if [ "$1" = "-v" ]; then
+		system_profiler SPUSBHostDataType SPUSBDataType 2>/dev/null
+		return
+	fi
+	ioreg -p IOUSB -w0 | sed -E 's/@[0-9a-f]+  <class.*//; /^\+-o Root/d; /XHCI|EHCI/d'
+}
+
+# Eject all external (removable/disk-image excluded) physical disks.
+ejectall() {
+	local disk found=0
+	for disk in $(diskutil list external physical | awk '/^\/dev\/disk/ {print $1}'); do
+		found=1
+		diskutil eject "$disk"
+	done
+	[ "$found" -eq 0 ] && echo "No external disks found"
+	return 0
+}
+
+# Battery charge, state, cycle count and condition.
+battery() {
+	pmset -g batt | sed -n '2p'
+	system_profiler SPPowerDataType | awk -F': ' '/Cycle Count|Condition|Maximum Capacity/ {gsub(/^ +/, "", $1); print $1 ": " $2}'
+}
+
+# Wi-Fi summary: interface, SSID, IP; "wifi on|off" toggles the radio.
+wifi() {
+	local dev
+	dev=$(networksetup -listallhardwareports | awk '/Wi-Fi/ {getline; print $2}')
+	case "$1" in
+		on|off) networksetup -setairportpower "$dev" "$1"; return ;;
+	esac
+	echo "Interface: $dev"
+	networksetup -getairportnetwork "$dev"
+	echo "IP: $(ipconfig getifaddr "$dev")"
+}
+
+# List processes listening on TCP ports.
+lsports() {
+	sudo lsof -iTCP -sTCP:LISTEN -nP | awk 'NR==1 || !seen[$1 $9]++' | column -t
+}
+
+# Keep the Mac awake for N minutes (default: until Ctrl-C).
+caff() {
+	if [ -n "$1" ]; then
+		caffeinate -d -t $(( $1 * 60 ))
+	else
+		caffeinate -d
+	fi
+}
+
+# Desktop notification: notify "message" [title]
+notify() {
+	osascript -e "display notification \"${1:-Done}\" with title \"${2:-Terminal}\" sound name \"Glass\""
+}
+
+# Move files to the Trash instead of deleting them.
+trash() {
+	local f
+	for f in "$@"; do
+		osascript -e "tell application \"Finder\" to delete POSIX file \"$(cd "$(dirname "$f")" && pwd)/$(basename "$f")\"" >/dev/null
+	done
+}
+
+# Restart the CoreAudio daemon to fix sound glitches.
+reset-audio() {
+	sudo killall coreaudiod
+}
+
+# Full system report via archey4, including WAN IP (network lookup).
+sysinfo() {
+	archey -c ~/.config/archey4/config-full.json "$@"
+}
