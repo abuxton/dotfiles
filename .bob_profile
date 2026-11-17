@@ -7,3 +7,5 @@ BMOTD() {
     echo "Bob CLI not installed. To install, run: go install github.com/whitespace-llc/bob@latest"
   fi
 }
+
+alias bob-ide="/Applications/IBM\ Bob.app/Contents/Resources/app/bin/bobide"
