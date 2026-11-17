@@ -44,11 +44,11 @@ export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:/Users/abuxton/.local/bin:$PATH"
 
-# Initialize pyenv in shell (enables switching Python versions)
-eval "$(pyenv init --path)"
-
-# ZSH completions
-autoload -U compinit && compinit
+# The oh-my-zsh pyenv plugin initializes pyenv for zsh.
+# Other shells initialize it if it is not already initialized.
+if ! typeset -f pyenv >/dev/null; then
+  eval "$(pyenv init - --no-rehash)"
+fi
 
 # Python argcomplete for pip
 eval "$(register-python-argcomplete pipx)"
@@ -74,8 +74,9 @@ eval "$(register-python-argcomplete pipx)"
 
 **Initialization**:
 ```bash
-# Initialize rbenv in shell (enables switching Ruby versions)
-eval "$(rbenv init -)"
+# Add rbenv shims immediately; initialize the shell function on first use.
+export RBENV_ROOT="${RBENV_ROOT:-$HOME/.rbenv}"
+export PATH="$RBENV_ROOT/shims:$PATH"
 ```
 
 **Key Features**:
@@ -209,16 +210,10 @@ The `.python_profile` is layered:
    ```
    Without these, `pyenv install` fails on some Python versions.
 
-2. **pyenv Initialization** - Enables version switching
-   ```bash
-   eval "$(pyenv init --path)"  # Initialize (first time)
-   eval "$(pyenv init --path)"  # Note: appears twice (not a duplicate, both needed)
-   ```
+2. **pyenv Initialization** - The oh-my-zsh plugin initializes pyenv in zsh;
+   the profile initializes it in other shells when needed.
 
-3. **Shell Completions** - ZSH-specific
-   ```bash
-   autoload -U compinit && compinit  # Load ZSH completions
-   ```
+3. **Shell Completions** - Oh My Zsh initializes zsh completions once.
 
 4. **Tool Completions** - pip with argcomplete
    ```bash
@@ -227,7 +222,7 @@ The `.python_profile` is layered:
 
 5. **UV Integration** - ZSH-specific package manager
    ```bash
-   source ~/.uv_profile  # At the end for tool loading
+   [ -n "$ZSH_VERSION" ] && source ~/.uv_profile
    ```
 
 \### Ruby Profile Deep Dive

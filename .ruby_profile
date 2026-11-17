@@ -1,5 +1,17 @@
 
-eval "$(rbenv init -)"
+if command -v rbenv >/dev/null 2>&1; then
+  export RBENV_ROOT="${RBENV_ROOT:-$HOME/.rbenv}"
+  export RBENV_SHELL="${ZSH_VERSION:+zsh}"
+  [ -n "$RBENV_SHELL" ] || export RBENV_SHELL=bash
+  export PATH="$RBENV_ROOT/shims:$PATH"
+  rbenv() {
+    local init
+    init=$(command rbenv init --no-rehash - "$RBENV_SHELL") || return
+    unset -f rbenv
+    eval "$init"
+    rbenv "$@"
+  }
+fi
 
 if [ -x "$(command -v colorls)" ]; then
 # https://github.com/athityakumar/colorls#installation

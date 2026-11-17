@@ -5,9 +5,9 @@ export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:/Users/abuxton/.local/bin:$PATH"
 
-eval "$(pyenv init --path)"
-eval "$(pyenv init --path)"
-autoload -U compinit && compinit
+if ! typeset -f pyenv >/dev/null; then
+  eval "$(pyenv init - --no-rehash)"
+fi
 # https://pypi.org/project/argcomplete/
 # pip install argcomplete
 # activate-global-python-argcomplete
@@ -49,4 +49,6 @@ alias octoprint='open http://127.0.0.1:5000'
 #fi
 
 alias pip-install="echo '# pip install ~/.pip_requirements' "
-source ~/.uv_profile # for uv
+if [ -n "$ZSH_VERSION" ] && [ -r "$HOME/.uv_profile" ]; then
+  source "$HOME/.uv_profile"
+fi

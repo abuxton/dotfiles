@@ -84,3 +84,22 @@ reset-audio() {
 sysinfo() {
 	archey -c ~/.config/archey4/config-full.json "$@"
 }
+
+clocks() {
+	local clock city timezone
+	for clock in \
+		'SFO|US/Pacific' \
+		'UTC|Etc/GMT' \
+		'Berlin|Europe/Berlin' \
+		'India|Asia/Calcutta' \
+		'NSW|Australia/Sydney'
+	do
+		city=${clock%%|*}
+		timezone=${clock#*|}
+		if [ "$city" = NSW ]; then
+			printf '%-7s %s\n' "$city:" "$(LC_TIME=C TZ="$timezone" date)"
+		else
+			printf '%-7s %s\n' "$city:" "$(TZ="$timezone" date)"
+		fi
+	done
+}
