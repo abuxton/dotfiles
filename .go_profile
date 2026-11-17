@@ -36,7 +36,7 @@ fi
 # 	go get -u github.com/ericchiang/pup
 # fi
 alias go_gup="${GOBIN}/gup"
-if ! [ -x "$(command -v go-gup)" ]; then
+if ! [ -x "$(command -v gup)" ]; then
     go install github.com/nao1215/gup@latest
 fi
 # go get -u github.com/gulyasm/jsonui
