@@ -272,7 +272,6 @@ function doIt() {
 		  --exclude "openspec/" \
 		  --exclude ".dependabot/" \
 	    --exclude ".DS_Store" \
-	    --exclude ".osx" \
 		  --exclude "assets/" \
 		  --exclude "*.sh" \
 		  --exclude "README.md" \
