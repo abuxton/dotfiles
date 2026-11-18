@@ -216,7 +216,7 @@ show_phase_plan() {
 
   printf '\n==> %s\n' "$phase"
   printf 'Commands:\n'
-  grep -nE '(^|[;[:space:]])(sudo[[:space:]]+)?(defaults[[:space:]]+write|pmset|systemsetup|networksetup|launchctl|mdutil|chflags|osascript|diskutil|ln[[:space:]]+-s|rm[[:space:]]|find[[:space:]])' "$fragment" || true
+  cat "$fragment"
   printf 'Validation: %s\n' "$(validation_command "$phase")"
 }
 

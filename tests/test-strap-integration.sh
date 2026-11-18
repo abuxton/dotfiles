@@ -34,6 +34,11 @@ grep -q '^==> spotlight$' <<<"$macos_output"
 grep -q '^==> development-tools$' <<<"$macos_output"
 grep -q '^==> applications$' <<<"$macos_output"
 grep -q 'Validation: defaults read NSGlobalDomain AppleShowScrollBars' <<<"$macos_output"
-! grep -qE 'LSQuarantine|skip-verify|hibernatemode|sleepimage|twitter-mac|TweetbotMac' "$repo/.macos"
+grep -q '"name" = "SYSTEM_PREFS"' <<<"$macos_output"
+grep -q 'killall "${app}" &> /dev/null || true' <<<"$macos_output"
+if grep -qE 'LSQuarantine|skip-verify|hibernatemode|sleepimage|twitter-mac|TweetbotMac' "$repo/.macos"; then
+  printf 'Prohibited macOS settings are present\n' >&2
+  exit 1
+fi
 
 printf 'Strap integration tests passed\n'
