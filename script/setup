@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+# ============================================================================
+# Strap adapter: script/setup
+# ============================================================================
+#
+# Strap looks for an executable script/setup (or script/bootstrap) immediately
+# after cloning ~/.dotfiles. This adapter preserves the dotfiles repository's
+# explicit three-stage workflow while giving Strap one stable entrypoint:
+#
+#   bootstrap.sh       Initial deployment, Oh My Zsh, and npm bootstrap
+#   setup.sh           Backup-safe symlinks, profiles, and validation
+#   deploy-agents.sh   Agent configuration and skill deployment
+#
+# Strap installs ~/.Brewfile after this adapter returns. Therefore setup.sh is
+# called with --skip-brew so Homebrew Bundle remains owned by Strap rather than
+# being prompted for or installed twice.
+#
+# The adapter also supports --dry-run and --do-nothing. These modes are useful
+# when an operator wants to inspect or manually perform the same sequence
+# before allowing Strap to execute it automatically.
+# ============================================================================
+
+set -euo pipefail
+
+DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly DOTFILES_DIR
+MODE="execute"
+
+wait_for_enter() {
+  read -r -p "Press Enter after completing the command above: "
+}
+
+show_commands() {
+  local command
+  for command in "$@"; do
+    printf '    %s\n' "$command"
+  done
+}
+
+run_stage() {
+  local title="$1"
+  shift
+  printf '\n==> %s\n' "$title"
+  case "$MODE" in
+    do-nothing)
+      show_commands "$@"
+      wait_for_enter
+      ;;
+    dry-run)
+      show_commands "$@"
+      ;;
+    execute)
+      "$@"
+      ;;
+  esac
+}
+
+run_bootstrap() {
+  bash "$DOTFILES_DIR/bootstrap.sh" --force
+}
+
+run_setup() {
+  bash "$DOTFILES_DIR/setup.sh" --skip-brew
+}
+
+run_agents() {
+  bash "$DOTFILES_DIR/deploy-agents.sh" --force
+}
+
+show_help() {
+  cat <<'EOF'
+Strap dotfiles adapter
+
+USAGE:
+  script/setup              Run the three dotfiles deployment stages
+  script/setup --dry-run    Preview each underlying stage
+  script/setup --do-nothing
+                            Print each command and wait for manual completion
+  script/setup --help       Show this help
+
+Strap owns Homebrew Bundle installation after this script returns. The setup
+stage therefore receives --skip-brew.
+EOF
+}
+
+main() {
+  while (($#)); do
+    case "$1" in
+      --dry-run) MODE="dry-run" ;;
+      --do-nothing) MODE="do-nothing" ;;
+      --help|-h) show_help; return 0 ;;
+      *) printf 'Unknown option: %s\n' "$1" >&2; show_help >&2; return 2 ;;
+    esac
+    shift
+  done
+
+  if [[ "$MODE" == "execute" ]]; then
+    run_stage "Initial dotfiles bootstrap" run_bootstrap
+    run_stage "Idempotent dotfiles setup" run_setup
+    run_stage "Agent configuration deployment" run_agents
+  else
+    run_stage "Initial dotfiles bootstrap" \
+      "cd $DOTFILES_DIR && bash bootstrap.sh --force"
+    if [[ "$MODE" == "dry-run" ]]; then
+      run_stage "Idempotent dotfiles setup" \
+        "cd $DOTFILES_DIR && bash setup.sh --skip-brew --dry-run"
+      run_stage "Agent configuration deployment" \
+        "cd $DOTFILES_DIR && bash deploy-agents.sh --force --dry-run"
+    else
+      run_stage "Idempotent dotfiles setup" \
+        "cd $DOTFILES_DIR && bash setup.sh --skip-brew"
+      run_stage "Agent configuration deployment" \
+        "cd $DOTFILES_DIR && bash deploy-agents.sh --force"
+    fi
+  fi
+}
+
+main "$@"

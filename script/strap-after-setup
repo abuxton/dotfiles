@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# ============================================================================
+# Strap post-install adapter: script/strap-after-setup
+# ============================================================================
+#
+# Strap runs this hook after it has linked ~/.Brewfile and completed:
+#
+#   brew bundle --global
+#
+# The main script/setup adapter already deploys dotfiles and agent files. This
+# hook intentionally remains small and validates the final state after all
+# Homebrew dependencies are available. It also exposes --do-nothing so an
+# operator can perform the final validation manually.
+# ============================================================================
+
+set -euo pipefail
+
+DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly DOTFILES_DIR
+MODE="execute"
+
+wait_for_enter() {
+  read -r -p "Press Enter after completing the command above: "
+}
+
+show_commands() {
+  local command
+  for command in "$@"; do
+    printf '    %s\n' "$command"
+  done
+}
+
+show_help() {
+  cat <<'EOF'
+Strap post-install dotfiles adapter
+
+USAGE:
+  script/strap-after-setup              Validate the deployed environment
+  script/strap-after-setup --dry-run   Show the validation command
+  script/strap-after-setup --do-nothing
+                                        Print and pause for manual validation
+  script/strap-after-setup --help       Show this help
+EOF
+}
+
+main() {
+  while (($#)); do
+    case "$1" in
+      --dry-run) MODE="dry-run" ;;
+      --do-nothing) MODE="do-nothing" ;;
+      --help|-h) show_help; return 0 ;;
+      *) printf 'Unknown option: %s\n' "$1" >&2; show_help >&2; return 2 ;;
+    esac
+    shift
+  done
+
+  printf '\n==> Validate Strap-managed dotfiles setup\n'
+  case "$MODE" in
+    execute)
+      bash "$DOTFILES_DIR/validate-dotfiles.sh"
+      ;;
+    dry-run)
+      printf '    bash %s/validate-dotfiles.sh\n' "$DOTFILES_DIR"
+      ;;
+    do-nothing)
+      printf '    bash %s/validate-dotfiles.sh\n' "$DOTFILES_DIR"
+      wait_for_enter
+      ;;
+  esac
+}
+
+main "$@"

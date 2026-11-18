@@ -28,6 +28,32 @@ bash deploy-agents.sh   # Deploy AI agent configurations
 
 See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow documentation.
 
+## Strap integration
+
+Strap automatically looks for executable `script/setup` after cloning this
+repository and runs `script/strap-after-setup` after installing the linked
+Homebrew Bundle. This repository keeps its explicit three-stage workflow while
+providing adapters for Strap:
+
+```text
+script/setup
+  ├─ bootstrap.sh --force
+  ├─ setup.sh --skip-brew
+  └─ deploy-agents.sh --force
+
+Strap → brew bundle --global
+  └─ script/strap-after-setup → validate-dotfiles.sh
+```
+
+The `--skip-brew` option prevents `setup.sh` from competing with Strap over
+Homebrew package ownership. The adapters also support manual rehearsal:
+
+```bash
+./script/setup --dry-run
+./script/setup --do-nothing
+./script/strap-after-setup --do-nothing
+```
+
 ## Agent Configuration
 
 This repository includes AI agent configurations for multiple agent platforms (Claude, OpenAI via Git-Copilot, OpenCode, etc.). Run `bash deploy-agents.sh` to deploy these configurations.
