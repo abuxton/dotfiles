@@ -24,7 +24,15 @@ grep -q 'macos-setup.sh --apply' <<<"$after_output"
 grep -q 'validate-dotfiles.sh' <<<"$after_output"
 
 macos_output="$("$repo/macos-setup.sh" --dry-run)"
-grep -q 'Audited script:' <<<"$macos_output"
-grep -q 'defaults write' <<<"$macos_output"
+grep -q '^==> security$' <<<"$macos_output"
+grep -q '^==> ui$' <<<"$macos_output"
+grep -q '^==> power$' <<<"$macos_output"
+grep -q '^==> finder$' <<<"$macos_output"
+grep -q '^==> safari$' <<<"$macos_output"
+grep -q '^==> spotlight$' <<<"$macos_output"
+grep -q '^==> development-tools$' <<<"$macos_output"
+grep -q '^==> applications$' <<<"$macos_output"
+grep -q 'Validation: defaults read NSGlobalDomain AppleShowScrollBars' <<<"$macos_output"
+! grep -qE 'LSQuarantine|skip-verify|hibernatemode|sleepimage|twitter-mac|TweetbotMac' "$repo/.macos"
 
 printf 'Strap integration tests passed\n'

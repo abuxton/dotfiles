@@ -66,6 +66,22 @@ automatically. Use the wrapper to review or apply them explicitly:
 ./macos-setup.sh --apply
 ```
 
+The wrapper applies the source script in phases and validates each phase before
+continuing:
+
+```text
+security -> UI -> power -> Finder -> Safari -> Spotlight
+          -> development tools -> applications
+```
+
+The audit also removed settings that were unsafe or tied to retired macOS
+behavior: disabling Launch Services quarantine, bypassing disk-image
+verification, forcing computer sleep/hibernation state, editing the Dropbox
+application bundle, loading retired launch daemons, Safari Java/plugin flags,
+full Spotlight rebuilds, local-backup disabling, and Twitter/Tweetbot settings.
+Optional application preferences are applied only when the related application
+or configuration file is present.
+
 After Strap has completed Homebrew Bundle, the preferences can be applied
 through the post-install adapter:
 
