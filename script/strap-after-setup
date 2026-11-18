@@ -11,7 +11,8 @@
 # hook intentionally remains small and validates the final state after all
 # Homebrew dependencies are available. npm-dependent setup is completed here,
 # after Homebrew has installed Node. Personal macOS preferences remain opt-in
-# through --apply-macos; they are never applied by Strap's default invocation.
+# through --apply-macos or DOTFILES_APPLY_MACOS=true; they are never applied
+# by Strap's default invocation.
 # The hook also exposes --do-nothing so an operator can perform each action
 # manually.
 # ============================================================================
@@ -21,7 +22,7 @@ set -euo pipefail
 DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly DOTFILES_DIR
 MODE="execute"
-APPLY_MACOS=false
+APPLY_MACOS="${DOTFILES_APPLY_MACOS:-false}"
 
 wait_for_enter() {
   read -r -p "Press Enter after completing the command above: "
