@@ -488,7 +488,7 @@ main() {
     read -p "Install Homebrew packages from Brewfile? (y/n) " -n 1 -r
     echo
   fi
-  if [ "$DRY_RUN" = false ] && [[ $REPLY =~ ^[Yy]$ ]]; then
+  if [ "$SKIP_BREW" = false ] && [ "$DRY_RUN" = false ] && [[ $REPLY =~ ^[Yy]$ ]]; then
     if [ -f "$DOTFILES_DIR/brewfile-setup.sh" ]; then
       log_info "Setting up Homebrew packages..."
       # Source the brewfile setup script

@@ -7,7 +7,7 @@
 # after cloning ~/.dotfiles. This adapter preserves the dotfiles repository's
 # explicit three-stage workflow while giving Strap one stable entrypoint:
 #
-#   bootstrap.sh       Initial deployment, Oh My Zsh, and npm bootstrap
+#   bootstrap.sh       Initial deployment and Oh My Zsh bootstrap
 #   setup.sh           Backup-safe symlinks, profiles, and validation
 #   deploy-agents.sh   Agent configuration and skill deployment
 #
@@ -56,7 +56,7 @@ run_stage() {
 }
 
 run_bootstrap() {
-  bash "$DOTFILES_DIR/bootstrap.sh" --force
+  RUNZSH=no CHSH=no bash "$DOTFILES_DIR/bootstrap.sh" --force --skip-npm
 }
 
 run_setup() {
@@ -100,7 +100,7 @@ main() {
     run_stage "Agent configuration deployment" run_agents
   else
     run_stage "Initial dotfiles bootstrap" \
-      "cd $DOTFILES_DIR && bash bootstrap.sh --force"
+      "cd $DOTFILES_DIR && RUNZSH=no CHSH=no bash bootstrap.sh --force --skip-npm"
     if [[ "$MODE" == "dry-run" ]]; then
       run_stage "Idempotent dotfiles setup" \
         "cd $DOTFILES_DIR && bash setup.sh --skip-brew --dry-run"

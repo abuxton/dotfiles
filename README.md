@@ -54,6 +54,29 @@ Homebrew package ownership. The adapters also support manual rehearsal:
 ./script/strap-after-setup --do-nothing
 ```
 
+## Optional macOS preferences
+
+The `.macos` script contains personal Finder, Dock, Safari, Mail, Spotlight,
+power, and development-tool preferences. Strap does not apply these settings
+automatically. Use the wrapper to review or apply them explicitly:
+
+```bash
+./macos-setup.sh --dry-run
+./macos-setup.sh --do-nothing
+./macos-setup.sh --apply
+```
+
+After Strap has completed Homebrew Bundle, the preferences can be applied
+through the post-install adapter:
+
+```bash
+./script/strap-after-setup --apply-macos
+```
+
+The post-install adapter also installs the `add-gitignore` npm global after
+Homebrew has installed Node. This avoids the fresh-machine ordering problem
+where `bootstrap.sh` runs before `npm` exists.
+
 ## Agent Configuration
 
 This repository includes AI agent configurations for multiple agent platforms (Claude, OpenAI via Git-Copilot, OpenCode, etc.). Run `bash deploy-agents.sh` to deploy these configurations.
