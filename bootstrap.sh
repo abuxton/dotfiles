@@ -82,11 +82,12 @@
 #   ✓ All profiles (.*_profile files)
 #   ✓ All config files (.gitconfig, .curlrc, etc.)
 #   ✓ Makefile, shell scripts (brew.sh, etc.)
-#   ✗ EXCLUDED: .git, .DS_Store, assets, *.md, bootstrap.sh, LICENSE
+#   ✗ EXCLUDED: .git, .DS_Store, .macos, assets, *.md, bootstrap.sh, LICENSE
 #
 # WHAT DOES NOT GET DEPLOYED:
 #   ✗ Documentation files (*.md) → handled separately
 #   ✗ This script (bootstrap.sh) → can't overwrite running script
+#   ✗ .macos → remains in the repository for explicit interactive execution
 #   ✗ git metadata (.git/) → not needed in home directory
 #
 # IDEMPOTENCY:
@@ -152,7 +153,7 @@ WHAT GETS DEPLOYED:
   ✓ All profiles (.*_profile files - python, ruby, aws, etc.)
   ✓ All config files (.gitconfig, .curlrc, etc.)
   ✓ Supporting scripts (brew.sh, etc.)
-  ✗ EXCLUDED: .git, .DS_Store, *.md files, bootstrap.sh itself
+  ✗ EXCLUDED: .git, .DS_Store, .macos, *.md files, bootstrap.sh itself
 
 CAUTION:
   This script OVERWRITES existing files in your home directory.
@@ -281,6 +282,7 @@ function doIt() {
 		  --exclude ".dependabot/" \
 	    --exclude ".DS_Store" \
 		  --exclude "assets/" \
+		  --exclude ".macos" \
 		  --exclude "*.sh" \
 		  --exclude "README.md" \
 		  --exclude "LICENSE*" \

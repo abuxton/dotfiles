@@ -22,6 +22,7 @@ after_output="$("$repo/script/strap-after-setup" --dry-run --apply-macos)"
 grep -q 'npm i -g add-gitignore' <<<"$after_output"
 grep -q 'macos-setup.sh --apply' <<<"$after_output"
 grep -q 'validate-dotfiles.sh' <<<"$after_output"
+grep -q -- '--exclude ".macos"' "$repo/bootstrap.sh"
 
 macos_output="$("$repo/macos-setup.sh" --dry-run)"
 grep -q '^==> security$' <<<"$macos_output"

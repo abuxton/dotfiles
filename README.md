@@ -82,6 +82,12 @@ full Spotlight rebuilds, local-backup disabling, and Twitter/Tweetbot settings.
 Optional application preferences are applied only when the related application
 or configuration file is present.
 
+`.macos` is intentionally excluded from `bootstrap.sh`'s home-directory
+`rsync`. It remains versioned inside the dotfiles checkout and is executed only
+through `macos-setup.sh`, so an interactive macOS phase run cannot be mistaken
+for a normal shell dotfile deployment. Existing `~/.macos` files from older
+bootstraps are not deleted automatically.
+
 After Strap has completed Homebrew Bundle, the preferences can be applied
 through the post-install adapter:
 
