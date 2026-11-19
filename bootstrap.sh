@@ -10,7 +10,7 @@
 #     1. Updating the dotfiles repository to latest version (git pull)
 #     2. Installing Oh My Zsh shell framework
 #     3. Deploying all dotfiles to home directory via rsync (non-symlink)
-#     4. Installing global npm packages
+#     4. Installing global npm packages (unless --skip-npm is supplied)
 #     5. Reloading shell environment
 #
 # USAGE:
@@ -18,6 +18,7 @@
 #   bash bootstrap.sh --force         # Run without confirmation
 #   bash bootstrap.sh -f              # Alias for --force
 #   bash bootstrap.sh --dry-run       # Preview what would happen
+#   bash bootstrap.sh --skip-npm      # Defer npm globals until Homebrew is ready
 #   bash bootstrap.sh --help          # Show this help message
 #
 # RELATIONSHIP WITH setup.sh:
@@ -73,7 +74,7 @@
 #   - If confirmed:
 #       1. makeItHappen() → Install oh-my-zsh
 #       2. doIt() → Rsync dotfiles
-#       3. nodeKnows() → Install npm globals
+#       3. nodeKnows() → Install npm globals, unless deferred
 #   - source ~/.zshrc
 #
 # WHAT GETS DEPLOYED (rsync):
@@ -81,11 +82,12 @@
 #   ✓ All profiles (.*_profile files)
 #   ✓ All config files (.gitconfig, .curlrc, etc.)
 #   ✓ Makefile, shell scripts (brew.sh, etc.)
-#   ✗ EXCLUDED: .git, .DS_Store, assets, *.md, bootstrap.sh, LICENSE
+#   ✗ EXCLUDED: .git, .DS_Store, .macos, assets, *.md, bootstrap.sh, LICENSE
 #
 # WHAT DOES NOT GET DEPLOYED:
 #   ✗ Documentation files (*.md) → handled separately
 #   ✗ This script (bootstrap.sh) → can't overwrite running script
+#   ✗ .macos → remains in the repository for explicit interactive execution
 #   ✗ git metadata (.git/) → not needed in home directory
 #
 # IDEMPOTENCY:
@@ -126,7 +128,8 @@ Bootstrap Dotfiles - Initial Setup & Deployment
 
 DESCRIPTION:
   First-time deployment and repository synchronization for dotfiles.
-  Handles git pull, oh-my-zsh installation, rsync deployment, and npm globals.
+  Handles git pull, oh-my-zsh installation, rsync deployment, and optional npm
+  globals. Strap uses --skip-npm because Node is installed by Homebrew Bundle.
 
 USAGE:
   bash bootstrap.sh [OPTIONS]
@@ -135,6 +138,7 @@ OPTIONS:
   --help           Show this help message and exit
   --dry-run        Preview what would be deployed without making changes
   --force, -f      Run without interactive confirmation prompt
+  --skip-npm       Defer npm globals until Homebrew Bundle installs Node
   (default)        Run with confirmation prompt
 
 WORKFLOW:
@@ -149,7 +153,7 @@ WHAT GETS DEPLOYED:
   ✓ All profiles (.*_profile files - python, ruby, aws, etc.)
   ✓ All config files (.gitconfig, .curlrc, etc.)
   ✓ Supporting scripts (brew.sh, etc.)
-  ✗ EXCLUDED: .git, .DS_Store, *.md files, bootstrap.sh itself
+  ✗ EXCLUDED: .git, .DS_Store, .macos, *.md files, bootstrap.sh itself
 
 CAUTION:
   This script OVERWRITES existing files in your home directory.
@@ -173,6 +177,7 @@ EOF
 
 DRY_RUN=false
 FORCE=false
+SKIP_NPM=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -186,6 +191,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --force|-f)
       FORCE=true
+      shift
+      ;;
+    --skip-npm)
+      SKIP_NPM=true
       shift
       ;;
     *)
@@ -273,6 +282,7 @@ function doIt() {
 		  --exclude ".dependabot/" \
 	    --exclude ".DS_Store" \
 		  --exclude "assets/" \
+		  --exclude ".macos" \
 		  --exclude "*.sh" \
 		  --exclude "README.md" \
 		  --exclude "LICENSE*" \
@@ -326,7 +336,11 @@ if [ "$DRY_RUN" = true ]; then
   echo "Executing deployment preview..."
   makeItHappen;
   doIt;
-  nodeKnows;
+  if [ "$SKIP_NPM" = true ]; then
+    echo "   [DRY RUN] npm installation deferred until Homebrew Bundle completes"
+  else
+    nodeKnows
+  fi
   echo ""
   echo "✓ DRY RUN COMPLETE - No changes were made"
   echo "To apply these changes, run: bash bootstrap.sh"
@@ -335,7 +349,11 @@ elif [ "$FORCE" = true ]; then
   echo "Executing deployment (force mode)..."
   makeItHappen;
   doIt;
-  nodeKnows;
+  if [ "$SKIP_NPM" = true ]; then
+    echo "Skipping npm globals (deferred until Homebrew Bundle completes)."
+  else
+    nodeKnows
+  fi
   echo ""
   echo "✓ Deployment complete! Next step: bash setup.sh"
 else
@@ -346,7 +364,11 @@ else
     # Execute: oh-my-zsh install → rsync deploy → npm globals
     makeItHappen;
     doIt;
-    nodeKnows;
+    if [ "$SKIP_NPM" = true ]; then
+      echo "Skipping npm globals (deferred until Homebrew Bundle completes)."
+    else
+      nodeKnows
+    fi
     echo ""
     echo "✓ Deployment complete! Next step: bash setup.sh"
   else

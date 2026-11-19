@@ -28,6 +28,77 @@ bash deploy-agents.sh   # Deploy AI agent configurations
 
 See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment workflow documentation.
 
+## Strap integration
+
+Strap automatically looks for executable `script/setup` after cloning this
+repository and runs `script/strap-after-setup` after installing the linked
+Homebrew Bundle. This repository keeps its explicit three-stage workflow while
+providing adapters for Strap:
+
+```text
+script/setup
+  ├─ bootstrap.sh --force
+  ├─ setup.sh --skip-brew
+  └─ deploy-agents.sh --force
+
+Strap → brew bundle --global
+  └─ script/strap-after-setup → validate-dotfiles.sh
+```
+
+The `--skip-brew` option prevents `setup.sh` from competing with Strap over
+Homebrew package ownership. The adapters also support manual rehearsal:
+
+```bash
+./script/setup --dry-run
+./script/setup --do-nothing
+./script/strap-after-setup --do-nothing
+```
+
+## Optional macOS preferences
+
+The `.macos` script contains personal Finder, Dock, Safari, Mail, Spotlight,
+power, and development-tool preferences. Strap does not apply these settings
+automatically. Use the wrapper to review or apply them explicitly:
+
+```bash
+./macos-setup.sh --dry-run
+./macos-setup.sh --do-nothing
+./macos-setup.sh --apply
+```
+
+The wrapper applies the source script in phases and validates each phase before
+continuing:
+
+```text
+security -> UI -> power -> Finder -> Safari -> Spotlight
+          -> development tools -> applications
+```
+
+The audit also removed settings that were unsafe or tied to retired macOS
+behavior: disabling Launch Services quarantine, bypassing disk-image
+verification, forcing computer sleep/hibernation state, editing the Dropbox
+application bundle, loading retired launch daemons, Safari Java/plugin flags,
+full Spotlight rebuilds, local-backup disabling, and Twitter/Tweetbot settings.
+Optional application preferences are applied only when the related application
+or configuration file is present.
+
+`.macos` is intentionally excluded from `bootstrap.sh`'s home-directory
+`rsync`. It remains versioned inside the dotfiles checkout and is executed only
+through `macos-setup.sh`, so an interactive macOS phase run cannot be mistaken
+for a normal shell dotfile deployment. Existing `~/.macos` files from older
+bootstraps are not deleted automatically.
+
+After Strap has completed Homebrew Bundle, the preferences can be applied
+through the post-install adapter:
+
+```bash
+./script/strap-after-setup --apply-macos
+```
+
+The post-install adapter also installs the `add-gitignore` npm global after
+Homebrew has installed Node. This avoids the fresh-machine ordering problem
+where `bootstrap.sh` runs before `npm` exists.
+
 ## Agent Configuration
 
 This repository includes AI agent configurations for multiple agent platforms (Claude, OpenAI via Git-Copilot, OpenCode, etc.). Run `bash deploy-agents.sh` to deploy these configurations.

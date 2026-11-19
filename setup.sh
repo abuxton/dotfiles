@@ -11,11 +11,18 @@
 # USAGE:
 #   bash setup.sh           # Run interactive setup
 #   bash setup.sh --dry-run # Preview changes without applying
+#   bash setup.sh --skip-brew # Skip Homebrew management when Strap owns it
 #   bash setup.sh --help    # Show this help message
 #
 # RELATIONSHIP WITH bootstrap.sh:
 #   bootstrap.sh is FIRST (repo sync + rsync deploy)
 #   setup.sh is SECOND (symlinks + profiles + configuration)
+#
+#   When invoked by Strap through script/setup, Strap owns the Homebrew Bundle
+#   lifecycle. In that case setup.sh must still configure dotfiles, but must
+#   not prompt for or independently install the Brewfile. The --skip-brew flag
+#   makes that ownership explicit while preserving the existing standalone
+#   workflow.
 #
 #   Typical workflow:
 #     1. bash bootstrap.sh     ← git pull, rsync, oh-my-zsh, npm globals
@@ -181,6 +188,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles.backup"
 TIMESTAMP=$(date +%s)
 DRY_RUN=false
+SKIP_BREW=false
 
 # Color output for clarity
 GREEN='\033[0;32m'
@@ -218,6 +226,7 @@ USAGE:
 
 OPTIONS:
   --dry-run                       Show what would be done without making changes
+  --skip-brew                     Skip Homebrew management when Strap owns it
   --help                          Display this help message
 
 WHAT THE SCRIPT DOES:
@@ -255,6 +264,10 @@ parse_args() {
     case "$1" in
       --dry-run)
         DRY_RUN=true
+        shift
+        ;;
+      --skip-brew)
+        SKIP_BREW=true
         shift
         ;;
       --help)
@@ -463,15 +476,19 @@ main() {
   fi
   echo ""
 
-  # Step 6: Optional Homebrew setup (initializes ~/.homebrew with git repo)
+  # Step 6: Optional Homebrew setup (initializes ~/.homebrew with git repo).
+  # Strap runs this repository's Brewfile after script/setup returns, so the
+  # Strap adapter passes --skip-brew to prevent duplicate prompts and installs.
   echo ""
-  if [ "$DRY_RUN" = true ]; then
+  if [ "$SKIP_BREW" = true ]; then
+    log_info "Skipping Homebrew setup (owned by Strap)"
+  elif [ "$DRY_RUN" = true ]; then
     log_warn "[DRY RUN] Skipping Homebrew setup (would prompt for installation)"
   else
     read -p "Install Homebrew packages from Brewfile? (y/n) " -n 1 -r
     echo
   fi
-  if [ "$DRY_RUN" = false ] && [[ $REPLY =~ ^[Yy]$ ]]; then
+  if [ "$SKIP_BREW" = false ] && [ "$DRY_RUN" = false ] && [[ $REPLY =~ ^[Yy]$ ]]; then
     if [ -f "$DOTFILES_DIR/brewfile-setup.sh" ]; then
       log_info "Setting up Homebrew packages..."
       # Source the brewfile setup script

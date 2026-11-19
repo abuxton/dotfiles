@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# ============================================================================
+# Strap post-install adapter: script/strap-after-setup
+# ============================================================================
+#
+# Strap runs this hook after it has linked ~/.Brewfile and completed:
+#
+#   brew bundle --global
+#
+# The main script/setup adapter already deploys dotfiles and agent files. This
+# hook intentionally remains small and validates the final state after all
+# Homebrew dependencies are available. npm-dependent setup is completed here,
+# after Homebrew has installed Node. Personal macOS preferences remain opt-in
+# through --apply-macos or DOTFILES_APPLY_MACOS=true; they are never applied
+# by Strap's default invocation.
+# The hook also exposes --do-nothing so an operator can perform each action
+# manually.
+# ============================================================================
+
+set -euo pipefail
+
+DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+readonly DOTFILES_DIR
+MODE="execute"
+APPLY_MACOS="${DOTFILES_APPLY_MACOS:-false}"
+
+wait_for_enter() {
+  read -r -p "Press Enter after completing the command above: "
+}
+
+show_commands() {
+  local command
+  for command in "$@"; do
+    printf '    %s\n' "$command"
+  done
+}
+
+show_help() {
+  cat <<'EOF'
+Strap post-install dotfiles adapter
+
+USAGE:
+  script/strap-after-setup              Validate the deployed environment
+  script/strap-after-setup --dry-run   Show the validation command
+  script/strap-after-setup --do-nothing
+                                        Print and pause for manual validation
+  script/strap-after-setup --apply-macos
+                                        Apply opt-in .macos preferences
+  script/strap-after-setup --help       Show this help
+EOF
+}
+
+install_deferred_npm() {
+  if ! command -v npm >/dev/null 2>&1; then
+    printf 'npm is unavailable after Homebrew Bundle; cannot install add-gitignore.\n' >&2
+    return 1
+  fi
+  if command -v add-gitignore >/dev/null 2>&1; then
+    printf 'add-gitignore is already installed.\n'
+  else
+    npm i -g add-gitignore
+  fi
+}
+
+run_macos_preferences() {
+  bash "$DOTFILES_DIR/macos-setup.sh" --apply
+}
+
+main() {
+  while (($#)); do
+    case "$1" in
+      --dry-run) MODE="dry-run" ;;
+      --do-nothing) MODE="do-nothing" ;;
+      --apply-macos) APPLY_MACOS=true ;;
+      --help|-h) show_help; return 0 ;;
+      *) printf 'Unknown option: %s\n' "$1" >&2; show_help >&2; return 2 ;;
+    esac
+    shift
+  done
+
+  printf '\n==> Complete post-Homebrew dotfiles setup\n'
+  case "$MODE" in
+    execute)
+      install_deferred_npm
+      if [[ "$APPLY_MACOS" == true ]]; then
+        run_macos_preferences
+      fi
+      /bin/zsh -lic "bash '$DOTFILES_DIR/validate-dotfiles.sh'"
+      ;;
+    dry-run)
+      printf '    npm i -g add-gitignore (after Homebrew Bundle)\n'
+      if [[ "$APPLY_MACOS" == true ]]; then
+        printf '    bash %s/macos-setup.sh --apply\n' "$DOTFILES_DIR"
+      fi
+      printf '    bash %s/validate-dotfiles.sh\n' "$DOTFILES_DIR"
+      ;;
+    do-nothing)
+      printf '    npm i -g add-gitignore (after Homebrew Bundle)\n'
+      wait_for_enter
+      if [[ "$APPLY_MACOS" == true ]]; then
+        printf '    bash %s/macos-setup.sh --apply\n' "$DOTFILES_DIR"
+        wait_for_enter
+      fi
+      printf '    bash %s/validate-dotfiles.sh\n' "$DOTFILES_DIR"
+      wait_for_enter
+      ;;
+  esac
+}
+
+main "$@"
